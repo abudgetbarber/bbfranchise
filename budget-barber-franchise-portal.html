@@ -1,0 +1,2800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Budget Barber – Franchise Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bb-green: #0d3b2e;
+    --bb-yellow: #f5c800;
+    --bb-light: #f8f6f0;
+    --bb-white: #ffffff;
+    --bb-gray: #e8e4db;
+    --bb-text: #1a1a1a;
+    --bb-muted: #6b6b6b;
+    --bb-accent: #e8b800;
+    --bb-danger: #c0392b;
+    --bb-success: #27ae60;
+    --radius: 12px;
+    --shadow: 0 4px 24px rgba(13,59,46,0.10);
+    --shadow-lg: 0 12px 48px rgba(13,59,46,0.16);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bb-light);
+    color: var(--bb-text);
+    min-height: 100vh;
+  }
+
+  /* ─── SCREENS ─── */
+  .screen { display:none; min-height:100vh; }
+  .screen.active { display:flex; flex-direction:column; }
+
+  /* ─── LOGIN SCREEN ─── */
+  #loginScreen {
+    background: linear-gradient(135deg, #f8f6f0 0%, #eee9db 100%);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .login-card {
+    background: var(--bb-white);
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+    border-top: 6px solid var(--bb-yellow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .login-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--bb-green);
+  }
+
+  .login-logo {
+    display: inline-flex;
+    flex-direction: column;
+    background: var(--bb-yellow);
+    padding: 12px 20px 0;
+    border-radius: 8px;
+    margin-bottom: 28px;
+    border: 3px solid var(--bb-green);
+  }
+
+  .login-logo .logo-budget {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--bb-green);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .login-logo .logo-barber {
+    background: var(--bb-green);
+    color: var(--bb-yellow);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 4px;
+    padding: 4px 16px;
+    margin: 6px -20px 0;
+  }
+
+  .login-logo .logo-tagline {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--bb-green);
+    padding: 5px 0 8px;
+    text-transform: uppercase;
+  }
+
+  .login-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--bb-green);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .login-subtitle {
+    color: var(--bb-muted);
+    font-size: 14px;
+    margin-bottom: 32px;
+    font-weight: 400;
+  }
+
+  /* Language selector on login */
+  .lang-select-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .lang-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 2px solid var(--bb-gray);
+    background: var(--bb-white);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--bb-muted);
+    transition: all .2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .lang-btn.active {
+    background: var(--bb-green);
+    border-color: var(--bb-green);
+    color: var(--bb-yellow);
+  }
+
+  /* PIN input */
+  .pin-inputs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .pin-digit {
+    width: 52px;
+    height: 62px;
+    border: 2px solid var(--bb-gray);
+    border-radius: 10px;
+    text-align: center;
+    font-size: 28px;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    color: var(--bb-green);
+    background: var(--bb-light);
+    outline: none;
+    transition: all .2s;
+    -webkit-text-security: disc;
+    letter-spacing: 0;
+  }
+
+  .pin-digit:focus {
+    border-color: var(--bb-yellow);
+    background: #fffbea;
+    box-shadow: 0 0 0 3px rgba(245,200,0,0.25);
+  }
+
+  .pin-digit.filled {
+    border-color: var(--bb-green);
+    background: var(--bb-white);
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--bb-green);
+    color: var(--bb-yellow);
+    border: none;
+    border-radius: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all .2s;
+    margin-bottom: 16px;
+  }
+
+  .login-btn:hover { background: #0a2d22; transform: translateY(-1px); box-shadow: var(--shadow); }
+  .login-btn:active { transform: translateY(0); }
+
+  .login-error {
+    color: var(--bb-danger);
+    font-size: 13px;
+    margin-top: 8px;
+    min-height: 20px;
+    font-weight: 600;
+  }
+
+  .admin-link {
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--bb-muted);
+  }
+
+  .admin-link a {
+    color: var(--bb-green);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  /* ─── PORTAL SCREEN ─── */
+  #portalScreen { background: var(--bb-light); }
+
+  .portal-header {
+    background: var(--bb-green);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    min-height: 64px;
+  }
+
+  .portal-logo-small {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .portal-logo-small .logo-box {
+    background: var(--bb-yellow);
+    padding: 4px 10px 2px;
+    border-radius: 5px;
+  }
+
+  .portal-logo-small .logo-box span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--bb-green);
+    letter-spacing: 1px;
+    display: block;
+    line-height: 1;
+  }
+
+  .portal-logo-small .logo-box small {
+    display: block;
+    background: var(--bb-green);
+    color: var(--bb-yellow);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 1px 4px;
+    margin: 2px -10px 0;
+    text-align: center;
+  }
+
+  .portal-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header-lang-select {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: white;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .header-lang-select option { color: var(--bb-text); background: white; }
+
+  .welcome-chip {
+    background: rgba(245,200,0,0.18);
+    border: 1px solid rgba(245,200,0,0.4);
+    color: var(--bb-yellow);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .logout-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.8);
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    transition: all .2s;
+  }
+
+  .logout-btn:hover { background: rgba(255,255,255,0.18); color: white; }
+
+  /* Progress bar */
+  .progress-bar-wrap {
+    background: var(--bb-green);
+    padding: 0 24px 12px;
+    border-bottom: 3px solid var(--bb-yellow);
+  }
+
+  .progress-steps {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .progress-steps::-webkit-scrollbar { display:none; }
+
+  .progress-step {
+    flex: 1;
+    min-width: 80px;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    padding: 8px 4px;
+  }
+
+  .progress-step::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 2px;
+  }
+
+  .progress-step.visited::after { background: rgba(245,200,0,0.5); }
+  .progress-step.active::after { background: var(--bb-yellow); }
+
+  .progress-step-icon {
+    font-size: 18px;
+    margin-bottom: 3px;
+  }
+
+  .progress-step-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+  }
+
+  .progress-step.visited .progress-step-label { color: rgba(255,255,255,0.75); }
+  .progress-step.active .progress-step-label { color: var(--bb-yellow); }
+
+  /* Content area */
+  .portal-content {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ─── SECTION CARD ─── */
+  .section-hero {
+    background: linear-gradient(135deg, var(--bb-green) 0%, #0a4535 100%);
+    color: white;
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-hero::before {
+    content: '';
+    position: absolute;
+    right: -40px; top: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(245,200,0,0.08);
+  }
+
+  .section-hero::after {
+    content: '';
+    position: absolute;
+    right: 40px; top: 40px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(245,200,0,0.05);
+  }
+
+  .section-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    color: rgba(245,200,0,0.2);
+    position: absolute;
+    right: 28px;
+    top: 10px;
+    line-height: 1;
+  }
+
+  .section-badge {
+    display: inline-block;
+    background: var(--bb-yellow);
+    color: var(--bb-green);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .section-desc {
+    color: rgba(255,255,255,0.75);
+    font-size: 15px;
+    max-width: 500px;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 28px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 700px) {
+    .content-grid { grid-template-columns: 1fr; }
+    .login-card { padding: 36px 24px; }
+    .section-title { font-size: 28px; }
+    .section-hero { padding: 28px 20px; }
+    .pin-inputs { gap: 6px; }
+    .pin-digit { width: 44px; height: 54px; font-size: 22px; }
+  }
+
+  .info-card {
+    background: var(--bb-white);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--bb-yellow);
+    transition: transform .2s, box-shadow .2s;
+  }
+
+  .info-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .info-card.full-width { grid-column: 1 / -1; }
+
+  .info-card-icon { font-size: 28px; margin-bottom: 10px; }
+
+  .info-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--bb-green);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .info-card-body {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--bb-text);
+  }
+
+  .info-card-body ul { padding-left: 18px; margin-top: 8px; }
+  .info-card-body li { margin-bottom: 6px; }
+
+  /* Highlight boxes */
+  .highlight-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 0 24px 28px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 600px) { .highlight-row { grid-template-columns: 1fr 1fr; } }
+
+  .highlight-box {
+    background: var(--bb-white);
+    border-radius: 10px;
+    padding: 18px 16px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border-top: 3px solid var(--bb-yellow);
+  }
+
+  .highlight-box .big-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--bb-green);
+    line-height: 1;
+  }
+
+  .highlight-box .big-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--bb-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* Video placeholder */
+  .video-card {
+    background: var(--bb-green);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    grid-column: 1 / -1;
+  }
+
+  .video-thumb {
+    position: relative;
+    background: linear-gradient(135deg, #0a2d22, #0d3b2e);
+    aspect-ratio: 16/9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .video-thumb::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(245,200,0,0.02) 0px,
+      rgba(245,200,0,0.02) 1px,
+      transparent 1px,
+      transparent 20px
+    );
+  }
+
+  .play-btn {
+    width: 70px; height: 70px;
+    background: var(--bb-yellow);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 14px;
+    box-shadow: 0 6px 20px rgba(245,200,0,0.4);
+    transition: transform .2s;
+    position: relative;
+  }
+
+  .play-btn::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid rgba(245,200,0,0.3);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+
+  .video-thumb:hover .play-btn { transform: scale(1.08); }
+
+  .video-title {
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    position: relative;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .video-sub {
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    margin-top: 6px;
+    position: relative;
+  }
+
+  .video-meta {
+    background: rgba(0,0,0,0.3);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .video-meta-item {
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Audio player card */
+  .audio-card {
+    background: var(--bb-white);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-left: 4px solid var(--bb-green);
+  }
+
+  .audio-icon {
+    width: 48px; height: 48px;
+    background: var(--bb-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform .2s;
+  }
+
+  .audio-icon:hover { transform: scale(1.05); }
+
+  .audio-info { flex: 1; }
+
+  .audio-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--bb-text);
+    margin-bottom: 4px;
+  }
+
+  .audio-lang {
+    font-size: 12px;
+    color: var(--bb-muted);
+    margin-bottom: 8px;
+  }
+
+  .audio-bar {
+    height: 4px;
+    background: var(--bb-gray);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .audio-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--bb-yellow);
+    border-radius: 2px;
+    transition: width .3s;
+  }
+
+  /* CTA section */
+  .cta-section {
+    background: var(--bb-green);
+    padding: 40px 24px;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .cta-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: var(--bb-yellow);
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+
+  .cta-section p {
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 24px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    background: var(--bb-yellow);
+    color: var(--bb-green);
+    padding: 14px 36px;
+    border-radius: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border: none;
+    transition: all .2s;
+    text-decoration: none;
+  }
+
+  .cta-btn:hover { background: white; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+
+  /* Navigation arrows */
+  .nav-arrows {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-top: 1px solid var(--bb-gray);
+    background: var(--bb-white);
+  }
+
+  .nav-arrow-btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: 2px solid var(--bb-green);
+    background: transparent;
+    color: var(--bb-green);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all .2s;
+  }
+
+  .nav-arrow-btn:hover { background: var(--bb-green); color: var(--bb-yellow); }
+  .nav-arrow-btn:disabled { opacity: 0.3; pointer-events: none; }
+  .nav-arrow-btn.primary { background: var(--bb-green); color: var(--bb-yellow); }
+  .nav-arrow-btn.primary:hover { background: #0a2d22; }
+
+  /* ─── ADMIN SCREEN ─── */
+  #adminScreen { background: #f0ece4; }
+
+  .admin-header {
+    background: #111;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .admin-header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--bb-yellow);
+    letter-spacing: 3px;
+  }
+
+  .admin-header-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .admin-body {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: calc(100vh - 60px);
+  }
+
+  @media (max-width: 700px) { .admin-body { grid-template-columns: 1fr; } }
+
+  .admin-sidebar {
+    background: #1a1a1a;
+    padding: 20px 0;
+  }
+
+  .admin-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    border-left: 3px solid transparent;
+    transition: all .2s;
+  }
+
+  .admin-nav-item:hover { color: white; background: rgba(255,255,255,0.05); }
+  .admin-nav-item.active { color: var(--bb-yellow); border-left-color: var(--bb-yellow); background: rgba(245,200,0,0.06); }
+
+  .admin-panel { display: none; padding: 28px; }
+  .admin-panel.active { display: block; }
+
+  .admin-section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--bb-green);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    border-bottom: 3px solid var(--bb-yellow);
+    padding-bottom: 10px;
+  }
+
+  /* PIN management */
+  .pin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+  }
+
+  .pin-table th {
+    background: var(--bb-green);
+    color: var(--bb-yellow);
+    padding: 12px 16px;
+    text-align: left;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    letter-spacing: 1px;
+  }
+
+  .pin-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--bb-gray);
+    font-size: 14px;
+  }
+
+  .pin-table tr:last-child td { border-bottom: none; }
+  .pin-table tr:hover td { background: #fffbea; }
+
+  .pin-code {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--bb-green);
+    letter-spacing: 4px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .badge-active { background: #d4edda; color: #155724; }
+  .badge-used { background: #d1ecf1; color: #0c5460; }
+  .badge-expired { background: #f8d7da; color: #721c24; }
+
+  .admin-form {
+    background: white;
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 13px; font-weight: 700; color: var(--bb-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  .form-input, .form-textarea, .form-select {
+    padding: 10px 14px;
+    border: 2px solid var(--bb-gray);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--bb-text);
+    background: var(--bb-light);
+    outline: none;
+    transition: border-color .2s;
+  }
+
+  .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--bb-yellow); background: white; }
+  .form-textarea { resize: vertical; min-height: 80px; }
+
+  .btn-primary {
+    background: var(--bb-green);
+    color: var(--bb-yellow);
+    padding: 11px 24px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 17px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .btn-primary:hover { background: #0a2d22; }
+
+  .btn-danger {
+    background: transparent;
+    color: var(--bb-danger);
+    padding: 6px 14px;
+    border: 2px solid var(--bb-danger);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .btn-danger:hover { background: var(--bb-danger); color: white; }
+
+  .btn-sm {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    background: var(--bb-green);
+    color: var(--bb-yellow);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .btn-sm:hover { background: #0a2d22; }
+
+  /* Content editor */
+  .segment-editor {
+    background: white;
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    border-left: 4px solid var(--bb-yellow);
+  }
+
+  .segment-editor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .segment-editor-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--bb-green);
+    letter-spacing: 1px;
+  }
+
+  .tabs-lang {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 14px;
+  }
+
+  .tab-lang-btn {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 2px solid var(--bb-gray);
+    background: var(--bb-light);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--bb-muted);
+    transition: all .2s;
+  }
+
+  .tab-lang-btn.active {
+    background: var(--bb-green);
+    border-color: var(--bb-green);
+    color: var(--bb-yellow);
+  }
+
+  /* URL input for video */
+  .url-input-wrap {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .url-input-wrap .form-input { flex: 1; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--bb-green);
+    color: var(--bb-yellow);
+    padding: 14px 22px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: var(--shadow-lg);
+    z-index: 9999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all .3s;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* Admin login overlay */
+  .admin-login-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+  }
+
+  .admin-login-box {
+    background: white;
+    border-radius: 16px;
+    padding: 36px;
+    width: 360px;
+    text-align: center;
+    border-top: 6px solid var(--bb-yellow);
+  }
+
+  .admin-login-box h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--bb-green);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .admin-login-box p { color: var(--bb-muted); font-size: 14px; margin-bottom: 20px; }
+
+  /* Checklist */
+  .checklist {
+    list-style: none;
+    padding: 0;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--bb-gray);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .checklist li:last-child { border-bottom: none; }
+
+  .check-icon {
+    width: 22px;
+    height: 22px;
+    background: var(--bb-yellow);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* FAQ */
+  .faq-item {
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .faq-q {
+    padding: 16px 20px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--bb-green);
+    font-size: 15px;
+    transition: background .2s;
+  }
+
+  .faq-q:hover { background: #fffbea; }
+
+  .faq-a {
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--bb-text);
+    transition: all .3s;
+    background: #fffbea;
+  }
+
+  .faq-a.open { max-height: 300px; padding: 14px 20px; }
+
+  .faq-icon { transition: transform .3s; font-style: normal; }
+  .faq-icon.open { transform: rotate(180deg); }
+
+  /* Interest form */
+  .interest-form-wrap {
+    background: white;
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    border-top: 4px solid var(--bb-yellow);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .interest-form-wrap h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--bb-green);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .interest-form-wrap p { color: var(--bb-muted); font-size: 14px; margin-bottom: 20px; }
+
+  /* Steps tracker */
+  .steps-track {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    margin-bottom: 28px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .step-track-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 70px;
+    position: relative;
+  }
+
+  .step-track-item::before {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    right: -50%;
+    height: 2px;
+    background: var(--bb-gray);
+  }
+
+  .step-track-item:last-child::before { display: none; }
+  .step-track-item.done::before { background: var(--bb-yellow); }
+
+  .step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bb-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--bb-muted);
+    position: relative;
+    z-index: 1;
+    margin-bottom: 6px;
+  }
+
+  .step-track-item.done .step-circle { background: var(--bb-yellow); color: var(--bb-green); }
+  .step-track-item.current .step-circle { background: var(--bb-green); color: var(--bb-yellow); }
+
+  .step-label { font-size: 10px; text-align: center; color: var(--bb-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .step-track-item.current .step-label { color: var(--bb-green); }
+
+  /* Notification banner */
+  .notify-banner {
+    background: linear-gradient(90deg, #fffbea, #fff8d6);
+    border: 1px solid var(--bb-yellow);
+    border-radius: 8px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 24px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--bb-green);
+  }
+
+  .notify-icon { font-size: 20px; }
+
+  /* Stat row */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 12px;
+    padding: 0 24px 24px;
+  }
+
+  @media (max-width: 700px) { .stat-row { grid-template-columns: repeat(2,1fr); } }
+
+  .stat-box {
+    background: white;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    border-top: 3px solid var(--bb-green);
+    text-align: center;
+  }
+
+  .stat-box .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--bb-green);
+    line-height: 1;
+  }
+
+  .stat-box .stat-unit {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--bb-yellow);
+  }
+
+  .stat-box .stat-label { font-size: 11px; color: var(--bb-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+  /* Animations */
+  @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  .tab-panel.active { animation: fadeIn .3s ease; }
+
+  /* Responsive admin */
+  @media (max-width: 700px) {
+    .admin-sidebar { display: flex; overflow-x: auto; padding: 0; }
+    .admin-nav-item { flex-direction: column; gap: 4px; font-size: 11px; padding: 10px 16px; white-space: nowrap; border-left: none; border-bottom: 3px solid transparent; }
+    .admin-nav-item.active { border-left: none; border-bottom-color: var(--bb-yellow); }
+    .admin-body { grid-template-columns: 1fr; }
+    .admin-panel { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- LOGIN SCREEN -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="loginScreen" class="screen active">
+  <div class="login-card">
+    <div class="login-logo">
+      <span class="logo-budget">BUDGET</span>
+      <span class="logo-barber">BARBER</span>
+      <span class="logo-tagline">Digital Men's Salon</span>
+    </div>
+
+    <h2 class="login-title">FRANCHISE PORTAL</h2>
+    <p class="login-subtitle" id="loginSubtitle">Enter your 6-digit PIN to access franchise information</p>
+
+    <div class="lang-select-row" id="langSelectRow">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('te')">తెలుగు</button>
+      <button class="lang-btn" onclick="setLang('hi')">हिंदी</button>
+      <button class="lang-btn" onclick="setLang('ta')">தமிழ்</button>
+      <button class="lang-btn" onclick="setLang('kn')">ಕನ್ನಡ</button>
+    </div>
+
+    <div class="pin-inputs" id="pinInputs">
+      <input type="number" class="pin-digit" maxlength="1" min="0" max="9" id="d0" onkeyup="pinKey(event,0)" oninput="pinInput(event,0)" autofocus>
+      <input type="number" class="pin-digit" maxlength="1" min="0" max="9" id="d1" onkeyup="pinKey(event,1)" oninput="pinInput(event,1)">
+      <input type="number" class="pin-digit" maxlength="1" min="0" max="9" id="d2" onkeyup="pinKey(event,2)" oninput="pinInput(event,2)">
+      <input type="number" class="pin-digit" maxlength="1" min="0" max="9" id="d3" onkeyup="pinKey(event,3)" oninput="pinInput(event,3)">
+      <input type="number" class="pin-digit" maxlength="1" min="0" max="9" id="d4" onkeyup="pinKey(event,4)" oninput="pinInput(event,4)">
+      <input type="number" class="pin-digit" maxlength="1" min="0" max="9" id="d5" onkeyup="pinKey(event,5)" oninput="pinInput(event,5)">
+    </div>
+
+    <button class="login-btn" onclick="tryLogin()">🔓 ACCESS PORTAL</button>
+    <div class="login-error" id="loginError"></div>
+
+    <div class="admin-link">
+      Admin? <a href="#" onclick="showAdminLogin()">Go to Admin Panel →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- PORTAL SCREEN -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="portalScreen" class="screen">
+  <!-- Header -->
+  <div class="portal-header">
+    <div class="portal-logo-small">
+      <div class="logo-box">
+        <span>BUDGET</span>
+        <small>BARBER</small>
+      </div>
+      <div style="color:rgba(255,255,255,0.6);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Franchise Portal</div>
+    </div>
+    <div class="portal-header-right">
+      <select class="header-lang-select" id="headerLang" onchange="changeLang(this.value)">
+        <option value="en">English</option>
+        <option value="te">తెలుగు</option>
+        <option value="hi">हिंदी</option>
+        <option value="ta">தமிழ்</option>
+        <option value="kn">ಕನ್ನಡ</option>
+      </select>
+      <div class="welcome-chip" id="welcomeChip">👋 Welcome</div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <!-- Progress / Tab Navigation -->
+  <div class="progress-bar-wrap">
+    <div class="progress-steps" id="progressSteps">
+      <div class="progress-step active" onclick="gotoTab(0)" id="step0">
+        <div class="progress-step-icon">👁️</div>
+        <div class="progress-step-label" data-i18n="tab0">Overview</div>
+      </div>
+      <div class="progress-step" onclick="gotoTab(1)" id="step1">
+        <div class="progress-step-icon">💰</div>
+        <div class="progress-step-label" data-i18n="tab1">Investment</div>
+      </div>
+      <div class="progress-step" onclick="gotoTab(2)" id="step2">
+        <div class="progress-step-icon">📈</div>
+        <div class="progress-step-label" data-i18n="tab2">Returns</div>
+      </div>
+      <div class="progress-step" onclick="gotoTab(3)" id="step3">
+        <div class="progress-step-icon">🏪</div>
+        <div class="progress-step-label" data-i18n="tab3">Setup</div>
+      </div>
+      <div class="progress-step" onclick="gotoTab(4)" id="step4">
+        <div class="progress-step-icon">🤝</div>
+        <div class="progress-step-label" data-i18n="tab4">Support</div>
+      </div>
+      <div class="progress-step" onclick="gotoTab(5)" id="step5">
+        <div class="progress-step-icon">❓</div>
+        <div class="progress-step-label" data-i18n="tab5">FAQs</div>
+      </div>
+      <div class="progress-step" onclick="gotoTab(6)" id="step6">
+        <div class="progress-step-icon">✅</div>
+        <div class="progress-step-label" data-i18n="tab6">Next Steps</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="portal-content">
+
+    <!-- TAB 0: OVERVIEW -->
+    <div class="tab-panel active" id="tab0">
+      <div class="section-hero">
+        <span class="section-number">01</span>
+        <div class="section-badge" data-i18n="badge0">Who We Are</div>
+        <h1 class="section-title" data-i18n="title0">Budget Barber — India's Digital Men's Salon</h1>
+        <p class="section-desc" data-i18n="desc0">A tech-driven, affordable grooming brand built for Tier 2 & Tier 3 cities. Modern experience at budget prices — and a franchise model that actually works.</p>
+      </div>
+
+      <div class="notify-banner">
+        <span class="notify-icon">🎙️</span>
+        <span data-i18n="audioHint">Listen to the founder's message in your language by pressing play below.</span>
+      </div>
+
+      <!-- Founder video -->
+      <div style="padding: 0 24px; max-width: 900px; margin: 0 auto 20px;">
+        <div class="video-card">
+          <div class="video-thumb" onclick="openVideo('overview')" id="videoThumb0">
+            <div class="play-btn">▶</div>
+            <div class="video-title" data-i18n="founderVideoTitle">Founder's Message — Why Budget Barber?</div>
+            <div class="video-sub" id="videoUrl0" data-url="" style="margin-top:8px;font-size:12px;opacity:0.5">Click to watch</div>
+          </div>
+          <div class="video-meta">
+            <span class="video-meta-item">🎬 <span data-i18n="founderMsg">From the Desk of Founder</span></span>
+            <span class="video-meta-item">🕐 <span data-i18n="duration">~8 mins</span></span>
+            <span class="video-meta-item">🌐 <span id="currentLangLabel">English</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audio guide -->
+      <div style="padding: 0 24px; max-width: 900px; margin: 0 auto 24px;">
+        <div class="audio-card" onclick="toggleAudio('overview')">
+          <div class="audio-icon">🎧</div>
+          <div class="audio-info">
+            <div class="audio-title" data-i18n="audioOverviewTitle">Voice Overview — Budget Barber Franchise</div>
+            <div class="audio-lang" id="audioLangLabel">Available in your selected language</div>
+            <div class="audio-bar"><div class="audio-bar-fill" id="audioBar0"></div></div>
+          </div>
+          <div style="font-size:13px;font-weight:600;color:var(--bb-muted);" id="audioTime0">0:00</div>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="stat-num">50<span class="stat-unit">+</span></div>
+          <div class="stat-label" data-i18n="stat0a">Outlets Live</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">8<span class="stat-unit">yr</span></div>
+          <div class="stat-label" data-i18n="stat0b">In Business</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">4.7<span class="stat-unit">★</span></div>
+          <div class="stat-label" data-i18n="stat0c">Avg Rating</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">₹99<span class="stat-unit">+</span></div>
+          <div class="stat-label" data-i18n="stat0d">Starting Price</div>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <div class="info-card">
+          <div class="info-card-icon">🎯</div>
+          <div class="info-card-title" data-i18n="card0a_title">Our Mission</div>
+          <div class="info-card-body" data-i18n="card0a_body">To bring professional, hygienic, and tech-enabled grooming to every Indian man — regardless of city size or income level. We deliver quality without the premium price tag.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">📱</div>
+          <div class="info-card-title" data-i18n="card0b_title">What Makes Us Digital</div>
+          <div class="info-card-body" data-i18n="card0b_body">App-based booking, digital billing, CRM for repeat customers, real-time dashboard for franchise owner — all built-in from Day 1. No complicated tech skills needed.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🏆</div>
+          <div class="info-card-title" data-i18n="card0c_title">Why a Franchise — Not a Regular Salon?</div>
+          <div class="info-card-body" data-i18n="card0c_body">You get a tested brand, a proven system, trained staff, marketing support, and a technology platform — instead of starting from zero and guessing what works.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">📍</div>
+          <div class="info-card-title" data-i18n="card0d_title">Target Markets</div>
+          <div class="info-card-body">
+            <ul>
+              <li data-i18n="target1">Tier 2 & Tier 3 cities</li>
+              <li data-i18n="target2">High footfall areas: near colleges, offices, residential zones</li>
+              <li data-i18n="target3">Locations with limited quality grooming options</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-arrows">
+        <button class="nav-arrow-btn" disabled>← Previous</button>
+        <button class="nav-arrow-btn primary" onclick="gotoTab(1)">Investment Details →</button>
+      </div>
+    </div>
+
+    <!-- TAB 1: INVESTMENT -->
+    <div class="tab-panel" id="tab1">
+      <div class="section-hero">
+        <span class="section-number">02</span>
+        <div class="section-badge" data-i18n="badge1">Investment Details</div>
+        <h1 class="section-title" data-i18n="title1">What You Need to Get Started</h1>
+        <p class="section-desc" data-i18n="desc1">Transparent breakdown of every rupee — franchise fee, setup cost, working capital. No hidden surprises.</p>
+      </div>
+
+      <div class="highlight-row">
+        <div class="highlight-box">
+          <div class="big-num" id="totalInvestment">₹8L–12L</div>
+          <div class="big-label" data-i18n="totalInv">Total Investment</div>
+        </div>
+        <div class="highlight-box">
+          <div class="big-num" id="franchiseFee">₹2L</div>
+          <div class="big-label" data-i18n="franFee">Franchise Fee</div>
+        </div>
+        <div class="highlight-box">
+          <div class="big-num" id="royaltyPct">8%</div>
+          <div class="big-label" data-i18n="royalty">Monthly Royalty</div>
+        </div>
+      </div>
+
+      <div style="padding: 0 24px; max-width: 900px; margin: 0 auto 16px;">
+        <div class="audio-card" onclick="toggleAudio('investment')">
+          <div class="audio-icon">🎙️</div>
+          <div class="audio-info">
+            <div class="audio-title" data-i18n="audioInvTitle">Investment Explained — In Your Language</div>
+            <div class="audio-lang">Listen to detailed investment breakdown</div>
+            <div class="audio-bar"><div class="audio-bar-fill" id="audioBar1"></div></div>
+          </div>
+          <div style="font-size:13px;font-weight:600;color:var(--bb-muted);">0:00</div>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <div class="info-card">
+          <div class="info-card-icon">🏷️</div>
+          <div class="info-card-title" data-i18n="invCard1_title">Franchise Fee</div>
+          <div class="info-card-body" data-i18n="invCard1_body">One-time fee of ₹2 Lakhs to join the Budget Barber family. This grants you the rights to use our brand, systems, and support for the contract period.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🪑</div>
+          <div class="info-card-title" data-i18n="invCard2_title">Setup & Interior Cost</div>
+          <div class="info-card-body" data-i18n="invCard2_body">₹4–6 Lakhs for interior, furniture, equipment, branding, signage, and initial stock. Varies based on city and salon size (200–400 sq ft typical).</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🔄</div>
+          <div class="info-card-title" data-i18n="invCard3_title">Working Capital</div>
+          <div class="info-card-body" data-i18n="invCard3_body">₹1.5–2.5 Lakhs for 3 months of running expenses — salaries, rent, utilities, and consumables — while you build your customer base.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">📋</div>
+          <div class="info-card-title" data-i18n="invCard4_title">Monthly Royalty</div>
+          <div class="info-card-body" data-i18n="invCard4_body">8% of gross monthly revenue. This covers ongoing access to our brand, technology platform, marketing support, and training programs.</div>
+        </div>
+
+        <div class="info-card full-width">
+          <div class="info-card-icon">✅</div>
+          <div class="info-card-title" data-i18n="inclTitle">What's Included in the Package</div>
+          <div class="info-card-body">
+            <ul>
+              <li data-i18n="incl1">Complete interior design plan + execution support</li>
+              <li data-i18n="incl2">All branded equipment and furniture at negotiated rates</li>
+              <li data-i18n="incl3">10-day staff training at our training center</li>
+              <li data-i18n="incl4">App & digital tools setup (booking, billing, CRM)</li>
+              <li data-i18n="incl5">Launch marketing — social media, local promotions</li>
+              <li data-i18n="incl6">Dedicated relationship manager for first 90 days</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-arrows">
+        <button class="nav-arrow-btn" onclick="gotoTab(0)">← Overview</button>
+        <button class="nav-arrow-btn primary" onclick="gotoTab(2)">Returns & Earnings →</button>
+      </div>
+    </div>
+
+    <!-- TAB 2: RETURNS -->
+    <div class="tab-panel" id="tab2">
+      <div class="section-hero">
+        <span class="section-number">03</span>
+        <div class="section-badge" data-i18n="badge2">Earnings Potential</div>
+        <h1 class="section-title" data-i18n="title2">What You Can Earn</h1>
+        <p class="section-desc" data-i18n="desc2">Real numbers from real franchise partners. See how quickly you can recover your investment and what monthly profits look like.</p>
+      </div>
+
+      <div class="highlight-row">
+        <div class="highlight-box">
+          <div class="big-num">₹60K+</div>
+          <div class="big-label" data-i18n="monthlyRev">Avg Monthly Revenue</div>
+        </div>
+        <div class="highlight-box">
+          <div class="big-num">₹18K+</div>
+          <div class="big-label" data-i18n="monthlyProfit">Avg Monthly Profit</div>
+        </div>
+        <div class="highlight-box">
+          <div class="big-num">18–24</div>
+          <div class="big-label" data-i18n="roiMonths">Months to ROI</div>
+        </div>
+      </div>
+
+      <div style="padding: 0 24px; max-width: 900px; margin: 0 auto 16px;">
+        <div class="audio-card" onclick="toggleAudio('returns')">
+          <div class="audio-icon">🎙️</div>
+          <div class="audio-info">
+            <div class="audio-title" data-i18n="audioRetTitle">Earnings Explained by Franchise Partner</div>
+            <div class="audio-lang">Real stories, real numbers</div>
+            <div class="audio-bar"><div class="audio-bar-fill" id="audioBar2"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <div class="info-card">
+          <div class="info-card-icon">📊</div>
+          <div class="info-card-title" data-i18n="retCard1">Monthly Revenue Breakdown</div>
+          <div class="info-card-body">
+            <ul>
+              <li data-i18n="rev1">Average footfall: 15–25 customers/day</li>
+              <li data-i18n="rev2">Average ticket size: ₹120–180</li>
+              <li data-i18n="rev3">Monthly revenue potential: ₹55,000–₹1,10,000</li>
+              <li data-i18n="rev4">Product retail sales: additional 10–15%</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">💸</div>
+          <div class="info-card-title" data-i18n="retCard2">Monthly Expenses</div>
+          <div class="info-card-body">
+            <ul>
+              <li data-i18n="exp1">Rent: ₹8,000–₹20,000</li>
+              <li data-i18n="exp2">Staff salaries: ₹15,000–₹25,000</li>
+              <li data-i18n="exp3">Consumables & products: ₹5,000–₹8,000</li>
+              <li data-i18n="exp4">Royalty (8%): ₹4,400–₹8,800</li>
+              <li data-i18n="exp5">Utilities + misc: ₹3,000–₹5,000</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-card-icon">🚀</div>
+          <div class="info-card-title" data-i18n="growthTitle">Growth Trajectory</div>
+          <div class="info-card-body" data-i18n="growthBody">Month 1–3: Building customer base, expect 40–60% capacity. Month 4–6: Word of mouth kicks in, 65–80% capacity. Month 7+: Optimal operations, 80–95% capacity. Many franchisees open a 2nd outlet within 2 years.</div>
+        </div>
+      </div>
+
+      <div class="nav-arrows">
+        <button class="nav-arrow-btn" onclick="gotoTab(1)">← Investment</button>
+        <button class="nav-arrow-btn primary" onclick="gotoTab(3)">Setup Process →</button>
+      </div>
+    </div>
+
+    <!-- TAB 3: SETUP -->
+    <div class="tab-panel" id="tab3">
+      <div class="section-hero">
+        <span class="section-number">04</span>
+        <div class="section-badge" data-i18n="badge3">Setup Process</div>
+        <h1 class="section-title" data-i18n="title3">From Signing to Launch</h1>
+        <p class="section-desc" data-i18n="desc3">A clear, step-by-step roadmap of exactly what happens after you say yes. Typical timeline: 45–60 days.</p>
+      </div>
+
+      <div style="padding: 28px 24px 0; max-width: 900px; margin: 0 auto;">
+        <div class="steps-track">
+          <div class="step-track-item done">
+            <div class="step-circle">1</div>
+            <div class="step-label" data-i18n="setupS1">LOI Signed</div>
+          </div>
+          <div class="step-track-item done">
+            <div class="step-circle">2</div>
+            <div class="step-label" data-i18n="setupS2">Location Finalized</div>
+          </div>
+          <div class="step-track-item current">
+            <div class="step-circle">3</div>
+            <div class="step-label" data-i18n="setupS3">Agreement & Payment</div>
+          </div>
+          <div class="step-track-item">
+            <div class="step-circle">4</div>
+            <div class="step-label" data-i18n="setupS4">Interior Work</div>
+          </div>
+          <div class="step-track-item">
+            <div class="step-circle">5</div>
+            <div class="step-label" data-i18n="setupS5">Staff Training</div>
+          </div>
+          <div class="step-track-item">
+            <div class="step-circle">6</div>
+            <div class="step-label" data-i18n="setupS6">Grand Launch</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <div class="info-card">
+          <div class="info-card-icon">📄</div>
+          <div class="info-card-title" data-i18n="setupCard1">Days 1–7: Documentation</div>
+          <div class="info-card-body" data-i18n="setupCard1b">Franchise agreement signing, payment of franchise fee, location agreement, GST registration support, and license checklist provided.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🔨</div>
+          <div class="info-card-title" data-i18n="setupCard2">Days 8–35: Interior & Setup</div>
+          <div class="info-card-body" data-i18n="setupCard2b">Our empaneled interior team executes the design. Branded equipment delivered. Signage installed. Tech setup: POS, app, billing, CRM — all configured.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🎓</div>
+          <div class="info-card-title" data-i18n="setupCard3">Days 20–30: Training</div>
+          <div class="info-card-body" data-i18n="setupCard3b">10-day training for barbers at our center — haircuts, styling, hygiene, customer service. Owner gets business ops training separately. All in Telugu/Hindi/local language.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🎉</div>
+          <div class="info-card-title" data-i18n="setupCard4">Days 45–60: Launch!</div>
+          <div class="info-card-body" data-i18n="setupCard4b">Pre-launch WhatsApp campaign, social media blitz, in-store offers. Our team is present on Day 1 to ensure smooth operations. You're live!</div>
+        </div>
+      </div>
+
+      <div class="nav-arrows">
+        <button class="nav-arrow-btn" onclick="gotoTab(2)">← Returns</button>
+        <button class="nav-arrow-btn primary" onclick="gotoTab(4)">Ongoing Support →</button>
+      </div>
+    </div>
+
+    <!-- TAB 4: SUPPORT -->
+    <div class="tab-panel" id="tab4">
+      <div class="section-hero">
+        <span class="section-number">05</span>
+        <div class="section-badge" data-i18n="badge4">Ongoing Support</div>
+        <h1 class="section-title" data-i18n="title4">We're With You Every Step</h1>
+        <p class="section-desc" data-i18n="desc4">Joining Budget Barber is not a one-time deal. We're your business partner with ongoing training, marketing, tech, and operations support.</p>
+      </div>
+
+      <div class="content-grid">
+        <div class="info-card">
+          <div class="info-card-icon">📱</div>
+          <div class="info-card-title" data-i18n="supCard1">Technology Platform</div>
+          <div class="info-card-body">
+            <ul>
+              <li data-i18n="tech1">Franchise owner app — live revenue, bookings, staff</li>
+              <li data-i18n="tech2">Customer app — book appointments, loyalty points</li>
+              <li data-i18n="tech3">Digital billing & GST invoicing</li>
+              <li data-i18n="tech4">Inventory management system</li>
+              <li data-i18n="tech5">Monthly performance reports</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">📣</div>
+          <div class="info-card-title" data-i18n="supCard2">Marketing Support</div>
+          <div class="info-card-body">
+            <ul>
+              <li data-i18n="mkt1">National brand campaigns (social + digital)</li>
+              <li data-i18n="mkt2">Local area marketing templates provided</li>
+              <li data-i18n="mkt3">Festival & seasonal promotion designs</li>
+              <li data-i18n="mkt4">Google Business & local SEO setup</li>
+              <li data-i18n="mkt5">WhatsApp broadcast tools for regulars</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🎓</div>
+          <div class="info-card-title" data-i18n="supCard3">Training & Upskilling</div>
+          <div class="info-card-body">
+            <ul>
+              <li data-i18n="tr1">Quarterly refresher training for barbers</li>
+              <li data-i18n="tr2">New service launches — training before rollout</li>
+              <li data-i18n="tr3">Business owner webinars (monthly)</li>
+              <li data-i18n="tr4">WhatsApp group with all franchise partners</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">📞</div>
+          <div class="info-card-title" data-i18n="supCard4">Dedicated Support</div>
+          <div class="info-card-body" data-i18n="supCard4b">A dedicated Relationship Manager assigned to you. Reach them via WhatsApp, call, or app. First 90 days: daily check-in. After that: weekly review calls + on-demand support.</div>
+        </div>
+      </div>
+
+      <div class="nav-arrows">
+        <button class="nav-arrow-btn" onclick="gotoTab(3)">← Setup</button>
+        <button class="nav-arrow-btn primary" onclick="gotoTab(5)">FAQs →</button>
+      </div>
+    </div>
+
+    <!-- TAB 5: FAQs -->
+    <div class="tab-panel" id="tab5">
+      <div class="section-hero">
+        <span class="section-number">06</span>
+        <div class="section-badge" data-i18n="badge5">FAQs</div>
+        <h1 class="section-title" data-i18n="title5">Your Questions, Answered</h1>
+        <p class="section-desc" data-i18n="desc5">Common questions from franchise leads like you — answered honestly.</p>
+      </div>
+
+      <div style="padding: 28px 24px; max-width: 800px; margin: 0 auto;" id="faqContainer">
+        <!-- FAQs rendered by JS -->
+      </div>
+
+      <div class="nav-arrows">
+        <button class="nav-arrow-btn" onclick="gotoTab(4)">← Support</button>
+        <button class="nav-arrow-btn primary" onclick="gotoTab(6)">Next Steps →</button>
+      </div>
+    </div>
+
+    <!-- TAB 6: NEXT STEPS -->
+    <div class="tab-panel" id="tab6">
+      <div class="section-hero">
+        <span class="section-number">07</span>
+        <div class="section-badge" data-i18n="badge6">Ready to Join?</div>
+        <h1 class="section-title" data-i18n="title6">Take the Next Step</h1>
+        <p class="section-desc" data-i18n="desc6">You've seen everything. Now tell us you're interested and our team will call you within 24 hours.</p>
+      </div>
+
+      <div style="padding: 28px 24px; max-width: 700px; margin: 0 auto;">
+        <div class="interest-form-wrap">
+          <h3 data-i18n="formTitle">Express Your Interest</h3>
+          <p data-i18n="formDesc">Fill this short form. No commitment — just a conversation to explore if we're a great match.</p>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label data-i18n="formName">Full Name</label>
+              <input type="text" class="form-input" id="intName" placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label data-i18n="formPhone">WhatsApp Number</label>
+              <input type="tel" class="form-input" id="intPhone" placeholder="+91 9999999999">
+            </div>
+            <div class="form-group">
+              <label data-i18n="formCity">Your City</label>
+              <input type="text" class="form-input" id="intCity" placeholder="Guntur, Vijayawada...">
+            </div>
+            <div class="form-group">
+              <label data-i18n="formBudget">Investment Budget</label>
+              <select class="form-select" id="intBudget">
+                <option value="">Select range</option>
+                <option value="8-10L">₹8–10 Lakhs</option>
+                <option value="10-12L">₹10–12 Lakhs</option>
+                <option value="12L+">₹12+ Lakhs</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:16px;">
+            <label data-i18n="formQuestion">Any specific question?</label>
+            <textarea class="form-textarea" id="intQuestion" placeholder="Optional..."></textarea>
+          </div>
+
+          <button class="btn-primary" style="width:100%;font-size:18px;padding:14px;" onclick="submitInterest()">🚀 YES, I'M INTERESTED!</button>
+
+          <div id="intSuccess" style="display:none;margin-top:16px;text-align:center;color:var(--bb-success);font-weight:700;font-size:15px;">
+            ✅ Received! Our team will WhatsApp you within 24 hours.
+          </div>
+        </div>
+
+        <div style="margin-top:24px;background:white;border-radius:12px;padding:20px;box-shadow:var(--shadow);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--bb-green);letter-spacing:2px;margin-bottom:12px;" data-i18n="quickContactTitle">QUICK CONTACT</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <a href="tel:+919999999999" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--bb-text);font-weight:600;font-size:15px;">
+              📞 <span>+91 99999 99999</span>
+            </a>
+            <a href="https://wa.me/919999999999" target="_blank" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--bb-text);font-weight:600;font-size:15px;">
+              💬 <span>WhatsApp Us</span>
+            </a>
+            <a href="mailto:franchise@budgetbarber.in" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--bb-text);font-weight:600;font-size:15px;">
+              📧 <span>franchise@budgetbarber.in</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-arrows">
+        <button class="nav-arrow-btn" onclick="gotoTab(5)">← FAQs</button>
+        <button class="nav-arrow-btn" onclick="gotoTab(0)">↩ Start Over</button>
+      </div>
+    </div>
+
+  </div><!-- /portal-content -->
+</div><!-- /portalScreen -->
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- ADMIN SCREEN -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="adminScreen" class="screen">
+  <!-- Admin Login Overlay -->
+  <div class="admin-login-overlay" id="adminLoginOverlay">
+    <div class="admin-login-box">
+      <h2>ADMIN ACCESS</h2>
+      <p>Enter admin password to manage franchise portal</p>
+      <div class="form-group" style="margin-bottom:16px;text-align:left;">
+        <label>Admin Password</label>
+        <input type="password" class="form-input" id="adminPassInput" placeholder="Enter password" onkeyup="if(event.key==='Enter')verifyAdmin()">
+      </div>
+      <button class="btn-primary" style="width:100%;" onclick="verifyAdmin()">UNLOCK ADMIN</button>
+      <div class="login-error" id="adminPassError"></div>
+      <div style="margin-top:16px;">
+        <a href="#" onclick="showLoginScreen()" style="color:var(--bb-muted);font-size:13px;">← Back to Lead Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-header">
+    <h1>⚙️ BUDGET BARBER — ADMIN PANEL</h1>
+    <div class="admin-header-logo">v1.0 · Franchise Management</div>
+  </div>
+
+  <div class="admin-body">
+    <div class="admin-sidebar">
+      <div class="admin-nav-item active" onclick="adminTab('pins')">🔐 <span>PIN Manager</span></div>
+      <div class="admin-nav-item" onclick="adminTab('content')">📝 <span>Content</span></div>
+      <div class="admin-nav-item" onclick="adminTab('videos')">🎬 <span>Videos / Audio</span></div>
+      <div class="admin-nav-item" onclick="adminTab('faqs')">❓ <span>FAQs</span></div>
+      <div class="admin-nav-item" onclick="adminTab('leads')">📋 <span>Leads</span></div>
+      <div class="admin-nav-item" onclick="adminTab('settings')">⚙️ <span>Settings</span></div>
+      <div class="admin-nav-item" onclick="showLoginScreen()" style="margin-top:auto;color:#e74c3c;">🚪 <span>Exit Admin</span></div>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;">
+
+      <!-- PINS PANEL -->
+      <div class="admin-panel active" id="adminPanel-pins">
+        <div class="admin-section-title">PIN MANAGER</div>
+
+        <div class="admin-form">
+          <div style="font-weight:700;font-size:15px;margin-bottom:14px;color:var(--bb-green);">Generate New PIN for Franchise Lead</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Lead Name</label>
+              <input type="text" class="form-input" id="newLeadName" placeholder="e.g. Ravi Kumar">
+            </div>
+            <div class="form-group">
+              <label>Phone / WhatsApp</label>
+              <input type="tel" class="form-input" id="newLeadPhone" placeholder="+91 9999999999">
+            </div>
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" class="form-input" id="newLeadCity" placeholder="e.g. Guntur">
+            </div>
+            <div class="form-group">
+              <label>PIN (6 digits, blank = auto)</label>
+              <input type="text" class="form-input" id="newLeadPin" placeholder="Auto-generate" maxlength="6">
+            </div>
+            <div class="form-group">
+              <label>Expiry</label>
+              <select class="form-select" id="newLeadExpiry">
+                <option value="7">7 days</option>
+                <option value="14" selected>14 days</option>
+                <option value="30">30 days</option>
+                <option value="0">No expiry</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Language (default)</label>
+              <select class="form-select" id="newLeadLang">
+                <option value="en">English</option>
+                <option value="te">Telugu</option>
+                <option value="hi">Hindi</option>
+                <option value="ta">Tamil</option>
+                <option value="kn">Kannada</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn-primary" onclick="createPin()">+ CREATE PIN</button>
+        </div>
+
+        <table class="pin-table" id="pinTable">
+          <thead>
+            <tr>
+              <th>PIN</th>
+              <th>Lead Name</th>
+              <th>Phone</th>
+              <th>City</th>
+              <th>Expiry</th>
+              <th>Status</th>
+              <th>Logins</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="pinTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- CONTENT PANEL -->
+      <div class="admin-panel" id="adminPanel-content">
+        <div class="admin-section-title">CONTENT MANAGER</div>
+        <p style="color:var(--bb-muted);margin-bottom:20px;font-size:14px;">Edit key stats and figures that appear in the portal. Changes apply immediately for all leads.</p>
+
+        <div class="admin-form">
+          <div style="font-weight:700;font-size:15px;margin-bottom:14px;color:var(--bb-green);">Key Investment Figures</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Total Investment Range</label>
+              <input type="text" class="form-input" id="cfTotalInv" value="₹8L–12L">
+            </div>
+            <div class="form-group">
+              <label>Franchise Fee</label>
+              <input type="text" class="form-input" id="cfFranFee" value="₹2L">
+            </div>
+            <div class="form-group">
+              <label>Royalty %</label>
+              <input type="text" class="form-input" id="cfRoyalty" value="8%">
+            </div>
+            <div class="form-group">
+              <label>Avg Monthly Revenue</label>
+              <input type="text" class="form-input" id="cfRevenue" value="₹60K+">
+            </div>
+            <div class="form-group">
+              <label>Avg Monthly Profit</label>
+              <input type="text" class="form-input" id="cfProfit" value="₹18K+">
+            </div>
+            <div class="form-group">
+              <label>ROI Months</label>
+              <input type="text" class="form-input" id="cfROI" value="18–24">
+            </div>
+          </div>
+          <button class="btn-primary" onclick="saveContentFigures()">SAVE FIGURES</button>
+        </div>
+
+        <div class="admin-form">
+          <div style="font-weight:700;font-size:15px;margin-bottom:14px;color:var(--bb-green);">Contact Details (shown in Next Steps)</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="text" class="form-input" id="cfPhone" value="+91 99999 99999">
+            </div>
+            <div class="form-group">
+              <label>WhatsApp Number (digits only)</label>
+              <input type="text" class="form-input" id="cfWA" value="919999999999">
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label>Email</label>
+              <input type="text" class="form-input" id="cfEmail" value="franchise@budgetbarber.in">
+            </div>
+          </div>
+          <button class="btn-primary" onclick="saveContactDetails()">SAVE CONTACT</button>
+        </div>
+      </div>
+
+      <!-- VIDEOS PANEL -->
+      <div class="admin-panel" id="adminPanel-videos">
+        <div class="admin-section-title">VIDEO & AUDIO MANAGER</div>
+        <p style="color:var(--bb-muted);margin-bottom:20px;font-size:14px;">Add YouTube/Drive video URLs and audio URLs for each section and language.</p>
+
+        <div id="videoAdminSections"></div>
+      </div>
+
+      <!-- FAQs PANEL -->
+      <div class="admin-panel" id="adminPanel-faqs">
+        <div class="admin-section-title">FAQ MANAGER</div>
+
+        <div class="admin-form">
+          <div style="font-weight:700;font-size:15px;margin-bottom:14px;color:var(--bb-green);">Add New FAQ</div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label>Question (English)</label>
+            <input type="text" class="form-input" id="faqQ" placeholder="e.g. Do I need prior salon experience?">
+          </div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label>Answer (English)</label>
+            <textarea class="form-textarea" id="faqA" placeholder="Answer..."></textarea>
+          </div>
+          <button class="btn-primary" onclick="addFaq()">+ ADD FAQ</button>
+        </div>
+
+        <div id="faqAdminList"></div>
+      </div>
+
+      <!-- LEADS PANEL -->
+      <div class="admin-panel" id="adminPanel-leads">
+        <div class="admin-section-title">FRANCHISE LEADS</div>
+        <p style="color:var(--bb-muted);margin-bottom:20px;font-size:14px;">Leads who submitted interest forms through the portal.</p>
+        <table class="pin-table" id="leadsTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>City</th>
+              <th>Budget</th>
+              <th>Question</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- SETTINGS PANEL -->
+      <div class="admin-panel" id="adminPanel-settings">
+        <div class="admin-section-title">SETTINGS</div>
+
+        <div class="admin-form">
+          <div style="font-weight:700;font-size:15px;margin-bottom:14px;color:var(--bb-green);">Change Admin Password</div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label>Current Password</label>
+            <input type="password" class="form-input" id="oldPass" placeholder="Current password">
+          </div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label>New Password</label>
+            <input type="password" class="form-input" id="newPass" placeholder="New password">
+          </div>
+          <button class="btn-primary" onclick="changeAdminPass()">CHANGE PASSWORD</button>
+        </div>
+
+        <div class="admin-form">
+          <div style="font-weight:700;font-size:15px;margin-bottom:14px;color:var(--bb-green);">Data Management</div>
+          <button class="btn-sm" onclick="exportData()">📥 Export All Data (JSON)</button>
+          &nbsp;
+          <button class="btn-danger" onclick="if(confirm('Reset ALL data? This cannot be undone!'))resetData()">🗑️ Reset All Data</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /adminScreen -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Video Modal -->
+<div id="videoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9000;align-items:center;justify-content:center;flex-direction:column;">
+  <div style="position:relative;width:90%;max-width:800px;">
+    <button onclick="closeVideo()" style="position:absolute;top:-40px;right:0;background:none;border:none;color:white;font-size:24px;cursor:pointer;">✕ Close</button>
+    <div id="videoFrame" style="aspect-ratio:16/9;background:#000;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:15px;padding:20px;text-align:center;">
+      No video URL configured for this section yet. Add one in Admin → Videos.
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// DATA STORE (localStorage based)
+// ═══════════════════════════════════════════════════════════════
+
+const STORE_KEY = 'bbfp_data';
+
+function loadStore() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return getDefaultStore();
+}
+
+function saveStore(data) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(data));
+}
+
+function getDefaultStore() {
+  return {
+    adminPass: 'admin123',
+    pins: [
+      { pin:'112233', name:'Demo Lead', phone:'9999999999', city:'Guntur', expiry:'0', lang:'en', status:'active', logins:0, created: Date.now() }
+    ],
+    faqs: [
+      { q:'Do I need salon or grooming experience to open a Budget Barber?', a:'No prior experience is needed. We train you and your staff completely — from grooming skills to business operations. Many successful franchisees came from completely different backgrounds.' },
+      { q:'Can I hire my own barbers, or do you provide them?', a:'You hire your own barbers. We help with the hiring criteria, interview process, and provide complete training. We also assist with finding candidates in some cities.' },
+      { q:'What if my salon is not performing well?', a:'Your dedicated Relationship Manager steps in immediately. We do a performance review, analyse the issue (footfall, pricing, service mix), and create a turnaround plan. No franchisee is left alone.' },
+      { q:'Is there a territory protection — will you open another outlet near mine?', a:'Yes. You get an exclusive radius of 1.5 km in metro areas and 3 km in smaller cities. We will not open or approve another outlet within your protected zone.' },
+      { q:'What is the contract period?', a:'The franchise agreement is for 5 years, renewable with mutual consent. Renewal terms are discussed well in advance.' },
+      { q:'Can I sell my franchise if I want to exit?', a:'Yes, subject to our approval of the new franchisee. We have a defined process for transfer, and we help screen and qualify potential buyers.' },
+    ],
+    videos: {
+      overview: { en:'', te:'', hi:'', ta:'', kn:'' },
+      investment: { en:'', te:'', hi:'', ta:'', kn:'' },
+      returns: { en:'', te:'', hi:'', ta:'', kn:'' },
+      setup: { en:'', te:'', hi:'', ta:'', kn:'' },
+      support: { en:'', te:'', hi:'', ta:'', kn:'' },
+    },
+    audio: {
+      overview: { en:'', te:'', hi:'', ta:'', kn:'' },
+      investment: { en:'', te:'', hi:'', ta:'', kn:'' },
+      returns: { en:'', te:'', hi:'', ta:'', kn:'' },
+    },
+    figures: {
+      totalInv: '₹8L–12L',
+      franFee: '₹2L',
+      royalty: '8%',
+      revenue: '₹60K+',
+      profit: '₹18K+',
+      roi: '18–24',
+    },
+    contact: {
+      phone: '+91 99999 99999',
+      wa: '919999999999',
+      email: 'franchise@budgetbarber.in',
+    },
+    leads: [],
+  };
+}
+
+let store = loadStore();
+
+// ═══════════════════════════════════════════════════════════════
+// i18n
+// ═══════════════════════════════════════════════════════════════
+
+const i18n = {
+  en: {
+    loginSubtitle: 'Enter your 6-digit PIN to access franchise information',
+    tab0:'Overview', tab1:'Investment', tab2:'Returns', tab3:'Setup', tab4:'Support', tab5:'FAQs', tab6:'Next Steps',
+    badge0:'Who We Are', badge1:'Investment Details', badge2:'Earnings Potential', badge3:'Setup Process', badge4:'Ongoing Support', badge5:'FAQs', badge6:'Ready to Join?',
+    title0:'Budget Barber — India\'s Digital Men\'s Salon', title1:'What You Need to Get Started', title2:'What You Can Earn', title3:'From Signing to Launch', title4:'We\'re With You Every Step', title5:'Your Questions, Answered', title6:'Take the Next Step',
+    desc0:'A tech-driven, affordable grooming brand built for Tier 2 & Tier 3 cities.', desc1:'Transparent breakdown of every rupee.', desc2:'Real numbers from real franchise partners.', desc3:'A clear step-by-step roadmap. Timeline: 45–60 days.', desc4:'Joining Budget Barber is not a one-time deal.', desc5:'Common questions from franchise leads like you.', desc6:'You\'ve seen everything. Tell us you\'re interested.',
+    audioHint:'Listen to the founder\'s message in your language by pressing play.',
+    founderVideoTitle:'Founder\'s Message — Why Budget Barber?',
+    audioOverviewTitle:'Voice Overview — Budget Barber Franchise',
+    formTitle:'Express Your Interest', formDesc:'Fill this short form. No commitment.',
+    formName:'Full Name', formPhone:'WhatsApp Number', formCity:'Your City', formBudget:'Investment Budget', formQuestion:'Any specific question?',
+    quickContactTitle:'QUICK CONTACT',
+  },
+  te: {
+    loginSubtitle: 'ఫ్రాంచైజ్ సమాచారం యాక్సెస్ చేయడానికి మీ 6-అంకెల PIN నమోదు చేయండి',
+    tab0:'అవలోకనం', tab1:'పెట్టుబడి', tab2:'రాబడులు', tab3:'సెటప్', tab4:'మద్దతు', tab5:'FAQs', tab6:'తదుపరి అడుగులు',
+    badge0:'మేము ఎవరు', badge1:'పెట్టుబడి వివరాలు', badge2:'సంపాదన సామర్థ్యం', badge3:'సెటప్ ప్రక్రియ', badge4:'నిరంతర మద్దతు', badge5:'తరచూ అడిగే ప్రశ్నలు', badge6:'చేరడానికి సిద్ధంగా ఉన్నారా?',
+    title0:'బడ్జెట్ బార్బర్ — భారతదేశపు డిజిటల్ మెన్స్ సెలూన్', title1:'ప్రారంభించడానికి ఏమి అవసరం', title2:'మీరు ఏమి సంపాదించవచ్చు', title3:'సైనింగ్ నుండి లాంచ్ వరకు', title4:'మేము మీతో ప్రతి అడుగులో ఉంటాం', title5:'మీ ప్రశ్నలకు సమాధానాలు', title6:'తదుపరి అడుగు వేయండి',
+    desc0:'టెక్ ఆధారిత, అందుబాటు ధరల గ్రూమింగ్ బ్రాండ్.', desc1:'ప్రతి రూపాయి యొక్క పారదర్శక విభజన.', desc2:'నిజమైన ఫ్రాంచైజ్ భాగస్వాముల నిజమైన సంఖ్యలు.', desc3:'స్పష్టమైన దశల వారీ రోడ్ మ్యాప్. టైమ్‌లైన్: 45–60 రోజులు.', desc4:'బడ్జెట్ బార్బర్‌లో చేరడం ఒక్కసారి వ్యవహారం కాదు.', desc5:'మీ వంటి ఫ్రాంచైజ్ లీడ్‌ల నుండి సాధారణ ప్రశ్నలు.', desc6:'మీరు అన్నీ చూశారు. మీరు ఆసక్తిగా ఉన్నారని చెప్పండి.',
+    audioHint:'క్రింద play నొక్కడం ద్వారా మీ భాషలో వ్యవస్థాపకుని సందేశం వినండి.',
+    founderVideoTitle:'వ్యవస్థాపకుని సందేశం — బడ్జెట్ బార్బర్ ఎందుకు?',
+    audioOverviewTitle:'వాయిస్ అవలోకనం — బడ్జెట్ బార్బర్ ఫ్రాంచైజ్',
+    formTitle:'మీ ఆసక్తిని వ్యక్తం చేయండి', formDesc:'ఈ చిన్న ఫారమ్ పూరించండి. నిబద్ధత లేదు.',
+    formName:'పూర్తి పేరు', formPhone:'WhatsApp నంబర్', formCity:'మీ నగరం', formBudget:'పెట్టుబడి బడ్జెట్', formQuestion:'ఏదైనా నిర్దిష్ట ప్రశ్న?',
+    quickContactTitle:'త్వరిత సంప్రదింపు',
+  },
+  hi: {
+    loginSubtitle: 'फ्रेंचाइज़ जानकारी एक्सेस करने के लिए अपना 6-अंकीय PIN दर्ज करें',
+    tab0:'अवलोकन', tab1:'निवेश', tab2:'रिटर्न', tab3:'सेटअप', tab4:'सहायता', tab5:'FAQs', tab6:'अगले कदम',
+    badge0:'हम कौन हैं', badge1:'निवेश विवरण', badge2:'कमाई की संभावना', badge3:'सेटअप प्रक्रिया', badge4:'निरंतर सहायता', badge5:'अक्सर पूछे जाने वाले प्रश्न', badge6:'जुड़ने के लिए तैयार?',
+    title0:'बजट बार्बर — भारत का डिजिटल मेन्स सैलून', title1:'शुरुआत के लिए क्या चाहिए', title2:'आप क्या कमा सकते हैं', title3:'साइनिंग से लॉन्च तक', title4:'हम हर कदम पर आपके साथ हैं', title5:'आपके सवालों के जवाब', title6:'अगला कदम उठाएं',
+    desc0:'टेक-संचालित, किफायती ग्रूमिंग ब्रांड।', desc1:'हर रुपए का पारदर्शी विवरण।', desc2:'असली फ्रेंचाइज़ पार्टनर्स के असली नंबर।', desc3:'स्पष्ट चरण-दर-चरण रोडमैप। समयरेखा: 45–60 दिन।', desc4:'बजट बार्बर में शामिल होना एक बार का सौदा नहीं है।', desc5:'आप जैसे फ्रेंचाइज़ लीड्स के सामान्य प्रश्न।', desc6:'आपने सब कुछ देखा। बताएं कि आप इच्छुक हैं।',
+    audioHint:'नीचे play दबाकर अपनी भाषा में संस्थापक का संदेश सुनें।',
+    founderVideoTitle:'संस्थापक का संदेश — बजट बार्बर क्यों?',
+    audioOverviewTitle:'वॉयस अवलोकन — बजट बार्बर फ्रेंचाइज़',
+    formTitle:'अपनी रुचि व्यक्त करें', formDesc:'यह छोटा फॉर्म भरें। कोई प्रतिबद्धता नहीं।',
+    formName:'पूरा नाम', formPhone:'WhatsApp नंबर', formCity:'आपका शहर', formBudget:'निवेश बजट', formQuestion:'कोई विशेष प्रश्न?',
+    quickContactTitle:'त्वरित संपर्क',
+  },
+  ta: {
+    loginSubtitle: 'ஃப்ரான்சைஸ் தகவலை அணுக உங்கள் 6-இலக்க PIN-ஐ உள்ளிடவும்',
+    tab0:'கண்ணோட்டம்', tab1:'முதலீடு', tab2:'வருவாய்', tab3:'அமைவு', tab4:'ஆதரவு', tab5:'FAQs', tab6:'அடுத்த படிகள்',
+    badge0:'நாங்கள் யார்', badge1:'முதலீட்டு விவரங்கள்', badge2:'வருவாய் திறன்', badge3:'அமைவு செயல்முறை', badge4:'தொடர்ந்து ஆதரவு', badge5:'அடிக்கடி கேட்கப்படும் கேள்விகள்', badge6:'சேரத் தயாரா?',
+    title0:'பட்ஜெட் பார்பர் — இந்தியாவின் டிஜிட்டல் மென்ஸ் சலூன்', title1:'தொடங்குவதற்கு என்ன தேவை', title2:'நீங்கள் என்ன சம்பாதிக்கலாம்', title3:'கையொப்பமிட்டதிலிருந்து தொடக்கம் வரை', title4:'ஒவ்வொரு படியிலும் உங்களுடன் இருக்கிறோம்', title5:'உங்கள் கேள்விகளுக்கு பதில்கள்', title6:'அடுத்த படி எடுங்கள்',
+    desc0:'தொழில்நுட்பம் மற்றும் மலிவான ஃப்ரேந்ட்.', desc1:'ஒவ்வொரு ரூபாயின் வெளிப்படையான விவரம்.', desc2:'உண்மையான பிரான்சைசி கூட்டாளர்களிடமிருந்து உண்மையான எண்கள்.', desc3:'தெளிவான படிப்படியான வழிகாட்டுதல்.', desc4:'பட்ஜெட் பார்பரில் சேருவது ஒரு முறை மட்டுமல்ல.', desc5:'உங்களுக்கும் இதே கேள்விகள் இருக்கலாம்.', desc6:'நீங்கள் எல்லாவற்றையும் பார்த்தீர்கள். ஆர்வமிருக்கிறீர்கள் என்று சொல்லுங்கள்.',
+    audioHint:'கீழே play கிளிக் செய்து தமிழில் நிறுவனர் செய்தியைக் கேளுங்கள்.',
+    founderVideoTitle:'நிறுவனர் செய்தி — பட்ஜெட் பார்பர் ஏன்?',
+    audioOverviewTitle:'குரல் கண்ணோட்டம் — பட்ஜெட் பார்பர் ஃப்ரான்சைஸ்',
+    formTitle:'உங்கள் ஆர்வத்தை வெளிப்படுத்துங்கள்', formDesc:'இந்த சிறிய படிவத்தை நிரப்பவும். எந்த கட்டுப்பாடும் இல்லை.',
+    formName:'முழு பெயர்', formPhone:'WhatsApp எண்', formCity:'உங்கள் நகரம்', formBudget:'முதலீட்டு பட்ஜெட்', formQuestion:'குறிப்பிட்ட கேள்வி ஏதேனும்?',
+    quickContactTitle:'விரைவு தொடர்பு',
+  },
+  kn: {
+    loginSubtitle: 'ಫ್ರ್ಯಾಂಚೈಸಿ ಮಾಹಿತಿಗೆ ಪ್ರವೇಶಿಸಲು ನಿಮ್ಮ 6-ಅಂಕಿ PIN ನಮೂದಿಸಿ',
+    tab0:'ಅವಲೋಕನ', tab1:'ಹೂಡಿಕೆ', tab2:'ಲಾಭ', tab3:'ಸ್ಥಾಪನೆ', tab4:'ಬೆಂಬಲ', tab5:'FAQs', tab6:'ಮುಂದಿನ ಹಂತಗಳು',
+    badge0:'ನಾವು ಯಾರು', badge1:'ಹೂಡಿಕೆ ವಿವರಗಳು', badge2:'ಗಳಿಕೆ ಸಾಮರ್ಥ್ಯ', badge3:'ಸ್ಥಾಪನೆ ಪ್ರಕ್ರಿಯೆ', badge4:'ನಿರಂತರ ಬೆಂಬಲ', badge5:'FAQ ಗಳು', badge6:'ಸೇರಲು ಸಿದ್ಧವೇ?',
+    title0:'ಬಜೆಟ್ ಬಾರ್ಬರ್ — ಭಾರತದ ಡಿಜಿಟಲ್ ಮೆನ್ಸ್ ಸಲೂನ್', title1:'ಪ್ರಾರಂಭಿಸಲು ಏನು ಬೇಕು', title2:'ನೀವು ಏನು ಗಳಿಸಬಹುದು', title3:'ಸಹಿಯಿಂದ ಪ್ರಾರಂಭದವರೆಗೆ', title4:'ಪ್ರತಿ ಹಂತದಲ್ಲಿ ನಾವು ನಿಮ್ಮ ಜೊತೆ', title5:'ನಿಮ್ಮ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಗಳು', title6:'ಮುಂದಿನ ಹಂತ ತೆಗೆದುಕೊಳ್ಳಿ',
+    desc0:'ತಂತ್ರಜ್ಞಾನ ಆಧಾರಿತ, ಕೈಗೆಟಕುವ ಗ್ರೂಮಿಂಗ್ ಬ್ರ್ಯಾಂಡ್.', desc1:'ಪ್ರತಿ ರೂಪಾಯಿಯ ಪಾರದರ್ಶಕ ವಿವರ.', desc2:'ನಿಜವಾದ ಫ್ರ್ಯಾಂಚೈಸಿ ಪಾಲುದಾರರ ನಿಜವಾದ ಸಂಖ್ಯೆಗಳು.', desc3:'ಸ್ಪಷ್ಟ ಹಂತ-ಹಂತ ರೋಡ್ ಮ್ಯಾಪ್.', desc4:'ಬಜೆಟ್ ಬಾರ್ಬರ್‌ಗೆ ಸೇರುವುದು ಒಂದು ಬಾರಿಯ ವ್ಯವಹಾರವಲ್ಲ.', desc5:'ನಿಮ್ಮಂತಹ ಫ್ರ್ಯಾಂಚೈಸಿ ಲೀಡ್‌ಗಳ ಸಾಮಾನ್ಯ ಪ್ರಶ್ನೆಗಳು.', desc6:'ನೀವು ಎಲ್ಲವನ್ನೂ ನೋಡಿದ್ದೀರಿ. ನಿಮ್ಮ ಆಸಕ್ತಿ ತಿಳಿಸಿ.',
+    audioHint:'ಕೆಳಗೆ play ಒತ್ತಿ ಕನ್ನಡದಲ್ಲಿ ಸ್ಥಾಪಕರ ಸಂದೇಶ ಕೇಳಿ.',
+    founderVideoTitle:'ಸ್ಥಾಪಕರ ಸಂದೇಶ — ಬಜೆಟ್ ಬಾರ್ಬರ್ ಏಕೆ?',
+    audioOverviewTitle:'ಧ್ವನಿ ಅವಲೋಕನ — ಬಜೆಟ್ ಬಾರ್ಬರ್ ಫ್ರ್ಯಾಂಚೈಸ್',
+    formTitle:'ನಿಮ್ಮ ಆಸಕ್ತಿ ವ್ಯಕ್ತಪಡಿಸಿ', formDesc:'ಈ ಸಣ್ಣ ಅರ್ಜಿ ಭರ್ತಿ ಮಾಡಿ. ಯಾವುದೇ ಬದ್ಧತೆ ಇಲ್ಲ.',
+    formName:'ಪೂರ್ಣ ಹೆಸರು', formPhone:'WhatsApp ಸಂಖ್ಯೆ', formCity:'ನಿಮ್ಮ ನಗರ', formBudget:'ಹೂಡಿಕೆ ಬಜೆಟ್', formQuestion:'ಯಾವುದಾದರೂ ನಿರ್ದಿಷ್ಟ ಪ್ರಶ್ನೆ?',
+    quickContactTitle:'ತ್ವರಿತ ಸಂಪರ್ಕ',
+  }
+};
+
+let currentLang = 'en';
+let currentTab = 0;
+let currentLeadPin = null;
+let audioPlaying = {};
+
+// ═══════════════════════════════════════════════════════════════
+// LANGUAGE
+// ═══════════════════════════════════════════════════════════════
+
+const langNames = { en:'English', te:'తెలుగు', hi:'हिंदी', ta:'தமிழ்', kn:'ಕನ್ನಡ' };
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn').forEach(b => { if(b.textContent.trim().startsWith(lang === 'en' ? 'EN' : langNames[lang].charAt(0))) {} });
+  // simpler: by onclick
+  const langMap = { en:0, te:1, hi:2, ta:3, kn:4 };
+  document.querySelectorAll('.lang-btn')[langMap[lang]]?.classList.add('active');
+  document.getElementById('loginSubtitle').textContent = i18n[lang]?.loginSubtitle || i18n.en.loginSubtitle;
+}
+
+function changeLang(lang) {
+  currentLang = lang;
+  document.getElementById('currentLangLabel').textContent = langNames[lang];
+  document.getElementById('headerLang').value = lang;
+  applyI18n();
+  renderFaqs();
+}
+
+function applyI18n() {
+  const t = i18n[currentLang] || i18n.en;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(t[key]) el.textContent = t[key];
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PIN LOGIN
+// ═══════════════════════════════════════════════════════════════
+
+function pinInput(e, idx) {
+  const val = e.target.value;
+  e.target.value = val.slice(-1);
+  if(val) {
+    e.target.classList.add('filled');
+    if(idx < 5) document.getElementById('d'+(idx+1)).focus();
+    if(idx === 5) tryLogin();
+  }
+}
+
+function pinKey(e, idx) {
+  if(e.key === 'Backspace' && !e.target.value && idx > 0) {
+    document.getElementById('d'+(idx-1)).focus();
+    document.getElementById('d'+(idx-1)).classList.remove('filled');
+  }
+}
+
+function getPin() {
+  return [0,1,2,3,4,5].map(i => document.getElementById('d'+i).value).join('');
+}
+
+function tryLogin() {
+  const pin = getPin();
+  if(pin.length < 6) { showErr('Please enter all 6 digits'); return; }
+
+  const now = Date.now();
+  const found = store.pins.find(p => {
+    if(p.pin !== pin) return false;
+    if(p.status === 'expired') return false;
+    if(p.expiry !== '0') {
+      const expiryMs = p.created + parseInt(p.expiry) * 86400000;
+      if(now > expiryMs) { p.status = 'expired'; return false; }
+    }
+    return true;
+  });
+
+  if(!found) {
+    showErr('Invalid or expired PIN. Please contact our team.');
+    [0,1,2,3,4,5].forEach(i => { document.getElementById('d'+i).value=''; document.getElementById('d'+i).classList.remove('filled'); });
+    document.getElementById('d0').focus();
+    return;
+  }
+
+  found.logins = (found.logins||0) + 1;
+  found.status = 'used';
+  saveStore(store);
+
+  currentLeadPin = found;
+  currentLang = found.lang || 'en';
+
+  showPortal(found);
+}
+
+function showErr(msg) {
+  document.getElementById('loginError').textContent = msg;
+  setTimeout(() => document.getElementById('loginError').textContent = '', 3000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PORTAL
+// ═══════════════════════════════════════════════════════════════
+
+function showPortal(lead) {
+  showScreen('portalScreen');
+  document.getElementById('welcomeChip').textContent = '👋 ' + lead.name;
+  document.getElementById('headerLang').value = currentLang;
+  applyI18n();
+  applyFigures();
+  renderFaqs();
+  gotoTab(0);
+}
+
+function applyFigures() {
+  const f = store.figures;
+  if(document.getElementById('totalInvestment')) document.getElementById('totalInvestment').textContent = f.totalInv;
+  if(document.getElementById('franchiseFee')) document.getElementById('franchiseFee').textContent = f.franFee;
+  if(document.getElementById('royaltyPct')) document.getElementById('royaltyPct').textContent = f.royalty;
+}
+
+function gotoTab(idx) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab'+idx).classList.add('active');
+  document.querySelectorAll('.progress-step').forEach((s,i) => {
+    s.classList.remove('active');
+    if(i < idx) s.classList.add('visited');
+    else s.classList.remove('visited');
+  });
+  document.getElementById('step'+idx).classList.add('active');
+  currentTab = idx;
+  document.querySelector('.portal-content').scrollTop = 0;
+}
+
+function logout() {
+  showScreen('loginScreen');
+  [0,1,2,3,4,5].forEach(i => { document.getElementById('d'+i).value=''; document.getElementById('d'+i).classList.remove('filled'); });
+  document.getElementById('d0').focus();
+  currentLeadPin = null;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VIDEO
+// ═══════════════════════════════════════════════════════════════
+
+function openVideo(section) {
+  const url = store.videos[section]?.[currentLang] || store.videos[section]?.en || '';
+  const modal = document.getElementById('videoModal');
+  const frame = document.getElementById('videoFrame');
+
+  if(!url) {
+    frame.innerHTML = '<div style="padding:40px;text-align:center;"><div style="font-size:40px;margin-bottom:16px;">🎬</div><div style="font-size:15px;color:rgba(255,255,255,0.7);">No video URL configured for this section in ' + langNames[currentLang] + '.<br>The admin can add it in Admin → Videos.</div></div>';
+  } else {
+    // Support YouTube URLs
+    let embedUrl = url;
+    const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+    if(ytMatch) embedUrl = 'https://www.youtube.com/embed/' + ytMatch[1] + '?autoplay=1';
+    frame.innerHTML = '<iframe src="'+embedUrl+'" style="width:100%;height:100%;border:none;border-radius:8px;" allow="autoplay;fullscreen" allowfullscreen></iframe>';
+  }
+
+  modal.style.display = 'flex';
+}
+
+function closeVideo() {
+  document.getElementById('videoModal').style.display = 'none';
+  document.getElementById('videoFrame').innerHTML = '';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// AUDIO (simulated — plays actual URL if provided)
+// ═══════════════════════════════════════════════════════════════
+
+let activeAudio = null;
+
+function toggleAudio(section) {
+  if(activeAudio) { activeAudio.pause(); activeAudio = null; }
+  const url = store.audio?.[section]?.[currentLang] || store.audio?.[section]?.en || '';
+  if(!url) { showToast('No audio configured for this section yet. Admin can add in Videos/Audio panel.'); return; }
+  activeAudio = new Audio(url);
+  activeAudio.play();
+  showToast('🎧 Playing audio...');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FAQs
+// ═══════════════════════════════════════════════════════════════
+
+function renderFaqs() {
+  const container = document.getElementById('faqContainer');
+  if(!container) return;
+  container.innerHTML = '';
+  store.faqs.forEach((faq, i) => {
+    const div = document.createElement('div');
+    div.className = 'faq-item';
+    div.innerHTML = `
+      <div class="faq-q" onclick="toggleFaq(${i})">
+        <span>${faq.q}</span>
+        <i class="faq-icon" id="faqIcon${i}">▾</i>
+      </div>
+      <div class="faq-a" id="faqA${i}">${faq.a}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function toggleFaq(i) {
+  const el = document.getElementById('faqA'+i);
+  const icon = document.getElementById('faqIcon'+i);
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(e => e.classList.remove('open'));
+  document.querySelectorAll('.faq-icon').forEach(e => e.classList.remove('open'));
+  if(!isOpen) { el.classList.add('open'); icon.classList.add('open'); }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INTEREST FORM
+// ═══════════════════════════════════════════════════════════════
+
+function submitInterest() {
+  const name = document.getElementById('intName').value.trim();
+  const phone = document.getElementById('intPhone').value.trim();
+  const city = document.getElementById('intCity').value.trim();
+  const budget = document.getElementById('intBudget').value;
+  const question = document.getElementById('intQuestion').value.trim();
+
+  if(!name || !phone || !city) { showToast('Please fill Name, Phone, and City.'); return; }
+
+  store.leads.push({ name, phone, city, budget, question, time: new Date().toLocaleString(), pin: currentLeadPin?.pin });
+  saveStore(store);
+
+  document.getElementById('intSuccess').style.display = 'block';
+  showToast('✅ Interest submitted! We will contact you soon.');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ADMIN
+// ═══════════════════════════════════════════════════════════════
+
+function showAdminLogin() {
+  showScreen('adminScreen');
+  document.getElementById('adminLoginOverlay').style.display = 'flex';
+}
+
+function verifyAdmin() {
+  const pass = document.getElementById('adminPassInput').value;
+  if(pass === store.adminPass) {
+    document.getElementById('adminLoginOverlay').style.display = 'none';
+    document.getElementById('adminPassInput').value = '';
+    renderAdminPins();
+    renderVideoAdmin();
+    renderFaqAdmin();
+    renderLeadsAdmin();
+  } else {
+    document.getElementById('adminPassError').textContent = 'Wrong password. Try again.';
+    setTimeout(() => document.getElementById('adminPassError').textContent = '', 3000);
+  }
+}
+
+function showLoginScreen() {
+  showScreen('loginScreen');
+}
+
+function adminTab(tab) {
+  document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('adminPanel-'+tab).classList.add('active');
+
+  if(tab === 'pins') renderAdminPins();
+  if(tab === 'videos') renderVideoAdmin();
+  if(tab === 'faqs') renderFaqAdmin();
+  if(tab === 'leads') renderLeadsAdmin();
+}
+
+// PIN management
+function createPin() {
+  const name = document.getElementById('newLeadName').value.trim();
+  const phone = document.getElementById('newLeadPhone').value.trim();
+  const city = document.getElementById('newLeadCity').value.trim();
+  let pin = document.getElementById('newLeadPin').value.trim();
+  const expiry = document.getElementById('newLeadExpiry').value;
+  const lang = document.getElementById('newLeadLang').value;
+
+  if(!name) { showToast('Lead name required'); return; }
+
+  if(!pin || pin.length !== 6 || isNaN(pin)) {
+    pin = String(Math.floor(100000 + Math.random() * 900000));
+  }
+
+  // Check dupe
+  if(store.pins.find(p => p.pin === pin)) { showToast('PIN already exists. Use a different one.'); return; }
+
+  store.pins.unshift({ pin, name, phone, city, expiry, lang, status:'active', logins:0, created: Date.now() });
+  saveStore(store);
+  renderAdminPins();
+  showToast('✅ PIN ' + pin + ' created for ' + name);
+
+  document.getElementById('newLeadName').value='';
+  document.getElementById('newLeadPhone').value='';
+  document.getElementById('newLeadCity').value='';
+  document.getElementById('newLeadPin').value='';
+}
+
+function deletePin(pin) {
+  if(!confirm('Delete PIN '+pin+'?')) return;
+  store.pins = store.pins.filter(p => p.pin !== pin);
+  saveStore(store);
+  renderAdminPins();
+  showToast('PIN deleted.');
+}
+
+function renderAdminPins() {
+  const tbody = document.getElementById('pinTableBody');
+  if(!tbody) return;
+  tbody.innerHTML = '';
+  store.pins.forEach(p => {
+    const now = Date.now();
+    let statusBadge = '';
+    let isExpired = p.expiry !== '0' && now > p.created + parseInt(p.expiry)*86400000;
+    const status = isExpired ? 'expired' : p.status;
+    if(status==='active') statusBadge = '<span class="badge badge-active">ACTIVE</span>';
+    else if(status==='used') statusBadge = '<span class="badge badge-used">USED</span>';
+    else statusBadge = '<span class="badge badge-expired">EXPIRED</span>';
+
+    const expStr = p.expiry === '0' ? 'Never' : new Date(p.created + parseInt(p.expiry)*86400000).toLocaleDateString();
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="pin-code">${p.pin}</span></td>
+      <td>${p.name}</td>
+      <td>${p.phone||'—'}</td>
+      <td>${p.city||'—'}</td>
+      <td>${expStr}</td>
+      <td>${statusBadge}</td>
+      <td>${p.logins||0}</td>
+      <td><button class="btn-danger" onclick="deletePin('${p.pin}')">Delete</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Content figures
+function saveContentFigures() {
+  store.figures = {
+    totalInv: document.getElementById('cfTotalInv').value,
+    franFee: document.getElementById('cfFranFee').value,
+    royalty: document.getElementById('cfRoyalty').value,
+    revenue: document.getElementById('cfRevenue').value,
+    profit: document.getElementById('cfProfit').value,
+    roi: document.getElementById('cfROI').value,
+  };
+  saveStore(store);
+  showToast('✅ Figures saved!');
+}
+
+function saveContactDetails() {
+  store.contact = {
+    phone: document.getElementById('cfPhone').value,
+    wa: document.getElementById('cfWA').value,
+    email: document.getElementById('cfEmail').value,
+  };
+  saveStore(store);
+  showToast('✅ Contact saved!');
+}
+
+// Video/Audio admin
+const videoSections = [
+  { key:'overview', label:'Overview — Founder Video' },
+  { key:'investment', label:'Investment Details Video' },
+  { key:'returns', label:'Returns / Earnings Video' },
+  { key:'setup', label:'Setup Process Video' },
+  { key:'support', label:'Ongoing Support Video' },
+];
+
+const audioSections = [
+  { key:'overview', label:'Overview Audio' },
+  { key:'investment', label:'Investment Audio' },
+  { key:'returns', label:'Returns Audio' },
+];
+
+const langs = ['en','te','hi','ta','kn'];
+const langLabels = { en:'English', te:'Telugu', hi:'Hindi', ta:'Tamil', kn:'Kannada' };
+
+function renderVideoAdmin() {
+  const container = document.getElementById('videoAdminSections');
+  if(!container) return;
+  container.innerHTML = '';
+
+  videoSections.forEach(sec => {
+    const div = document.createElement('div');
+    div.className = 'segment-editor';
+    let langFields = langs.map(l => `
+      <div class="form-group">
+        <label>${langLabels[l]}</label>
+        <div class="url-input-wrap">
+          <input type="text" class="form-input" id="vid_${sec.key}_${l}" value="${store.videos[sec.key]?.[l]||''}" placeholder="YouTube or Drive URL">
+        </div>
+      </div>
+    `).join('');
+    div.innerHTML = `
+      <div class="segment-editor-header">
+        <div class="segment-editor-title">🎬 ${sec.label}</div>
+        <button class="btn-sm" onclick="saveVideoSec('${sec.key}')">SAVE</button>
+      </div>
+      <div class="form-grid">${langFields}</div>
+    `;
+    container.appendChild(div);
+  });
+
+  audioSections.forEach(sec => {
+    const div = document.createElement('div');
+    div.className = 'segment-editor';
+    let langFields = langs.map(l => `
+      <div class="form-group">
+        <label>${langLabels[l]}</label>
+        <input type="text" class="form-input" id="aud_${sec.key}_${l}" value="${store.audio?.[sec.key]?.[l]||''}" placeholder="MP3 / audio URL">
+      </div>
+    `).join('');
+    div.innerHTML = `
+      <div class="segment-editor-header">
+        <div class="segment-editor-title">🎙️ ${sec.label}</div>
+        <button class="btn-sm" onclick="saveAudioSec('${sec.key}')">SAVE</button>
+      </div>
+      <div class="form-grid">${langFields}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function saveVideoSec(key) {
+  if(!store.videos[key]) store.videos[key] = {};
+  langs.forEach(l => {
+    store.videos[key][l] = document.getElementById('vid_'+key+'_'+l)?.value || '';
+  });
+  saveStore(store);
+  showToast('✅ Video URLs saved for ' + key);
+}
+
+function saveAudioSec(key) {
+  if(!store.audio) store.audio = {};
+  if(!store.audio[key]) store.audio[key] = {};
+  langs.forEach(l => {
+    store.audio[key][l] = document.getElementById('aud_'+key+'_'+l)?.value || '';
+  });
+  saveStore(store);
+  showToast('✅ Audio URLs saved for ' + key);
+}
+
+// FAQ admin
+function addFaq() {
+  const q = document.getElementById('faqQ').value.trim();
+  const a = document.getElementById('faqA').value.trim();
+  if(!q||!a) { showToast('Both question and answer are required'); return; }
+  store.faqs.push({q,a});
+  saveStore(store);
+  renderFaqAdmin();
+  renderFaqs();
+  document.getElementById('faqQ').value='';
+  document.getElementById('faqA').value='';
+  showToast('✅ FAQ added!');
+}
+
+function deleteFaq(i) {
+  store.faqs.splice(i,1);
+  saveStore(store);
+  renderFaqAdmin();
+  renderFaqs();
+  showToast('FAQ deleted.');
+}
+
+function renderFaqAdmin() {
+  const container = document.getElementById('faqAdminList');
+  if(!container) return;
+  container.innerHTML = '';
+  store.faqs.forEach((faq,i) => {
+    const div = document.createElement('div');
+    div.className = 'segment-editor';
+    div.innerHTML = `
+      <div class="segment-editor-header">
+        <div class="segment-editor-title">Q${i+1}</div>
+        <button class="btn-danger" onclick="deleteFaq(${i})">Delete</button>
+      </div>
+      <div style="font-weight:600;font-size:14px;margin-bottom:6px;">${faq.q}</div>
+      <div style="font-size:13px;color:var(--bb-muted);">${faq.a}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// Leads admin
+function renderLeadsAdmin() {
+  const tbody = document.getElementById('leadsTableBody');
+  if(!tbody) return;
+  tbody.innerHTML = '';
+  if(store.leads.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--bb-muted);padding:24px;">No leads yet</td></tr>';
+    return;
+  }
+  store.leads.forEach(l => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${l.name}</td><td>${l.phone}</td><td>${l.city}</td><td>${l.budget||'—'}</td><td>${l.question||'—'}</td><td>${l.time}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// Settings
+function changeAdminPass() {
+  const old = document.getElementById('oldPass').value;
+  const nw = document.getElementById('newPass').value;
+  if(old !== store.adminPass) { showToast('Current password incorrect'); return; }
+  if(nw.length < 6) { showToast('New password must be at least 6 characters'); return; }
+  store.adminPass = nw;
+  saveStore(store);
+  showToast('✅ Password changed!');
+  document.getElementById('oldPass').value='';
+  document.getElementById('newPass').value='';
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(store, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'budgetbarber-portal-data.json';
+  a.click();
+}
+
+function resetData() {
+  store = getDefaultStore();
+  saveStore(store);
+  showToast('All data reset to defaults.');
+  renderAdminPins();
+  renderVideoAdmin();
+  renderFaqAdmin();
+  renderLeadsAdmin();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+
+window.onload = function() {
+  renderFaqs();
+  setLang('en');
+
+  // Populate admin video/audio fields from store
+  // (done on adminTab click)
+
+  // Close video modal on backdrop click
+  document.getElementById('videoModal').addEventListener('click', function(e) {
+    if(e.target === this) closeVideo();
+  });
+
+  // Escape key closes modal
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape') closeVideo();
+  });
+};
+</script>
+</body>
+</html>
