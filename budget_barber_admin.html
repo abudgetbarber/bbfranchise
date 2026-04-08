@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Budget Barber — Admin Portal</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --brand-green:#0D3B2E;
+  --brand-yellow:#F5D100;
+  --bg:#F5F5F2;--surf:#FFFFFF;--surf2:#F0F0EC;--surf3:#E6E6E2;
+  --bdr:rgba(0,0,0,0.09);--bdr2:rgba(0,0,0,0.15);
+  --txt:#1A1A1A;--mut:#5F5E5A;--hnt:#9A9890;
+  --ok-bg:#EAF3DE;--ok-tx:#3B6D11;
+  --no-bg:#FCEBEB;--no-tx:#A32D2D;
+  --inf-bg:#E6F1FB;--inf-tx:#185FA5;
+  --wrn-bg:#FAEEDA;--wrn-tx:#854F0B;
+  --hi:#0D3B2E;
+  --rad:8px;--rad-lg:12px;--rad-xl:16px;
+  --sidebar-w:230px;
+}
+html,body{height:100%;background:var(--bg);}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--txt);min-height:100vh;}
+
+/* ── LAYOUT ── */
+.admin-wrap{display:flex;min-height:100vh;}
+
+/* ── SIDEBAR ── */
+.admin-sidebar{
+  width:var(--sidebar-w);min-width:var(--sidebar-w);
+  background:var(--brand-green);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;height:100vh;z-index:20;
+}
+.sidebar-logo{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,0.1);}
+.sidebar-logo-sub{font-size:11px;color:rgba(255,255,255,0.5);margin-top:6px;letter-spacing:0.03em;}
+.adm-nav{flex:1;padding:10px 0;overflow-y:auto;}
+.adm-nav-item{
+  display:flex;align-items:center;gap:10px;padding:9px 16px;
+  font-size:13px;font-weight:500;color:rgba(255,255,255,0.6);
+  cursor:pointer;transition:all .15s;border-left:3px solid transparent;
+}
+.adm-nav-item:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.9);}
+.adm-nav-item.active{background:rgba(245,209,0,0.12);color:var(--brand-yellow);border-left-color:var(--brand-yellow);}
+.adm-nav-icon{font-size:15px;width:18px;text-align:center;}
+.adm-nav-group{font-size:10px;font-weight:700;color:rgba(255,255,255,0.28);letter-spacing:.12em;text-transform:uppercase;padding:12px 16px 5px;}
+.admin-sidebar-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.1);}
+
+/* ── MAIN CONTENT ── */
+.admin-main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.admin-topbar{background:var(--surf);border-bottom:0.5px solid var(--bdr);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+.admin-topbar-title{font-size:15px;font-weight:700;}
+.admin-content{padding:24px 28px;flex:1;}
+
+.admin-tab{display:none;}
+.admin-tab.active{display:block;}
+
+/* ── SHARED ── */
+.btn{padding:9px 16px;font-size:13px;font-weight:600;border-radius:var(--rad);cursor:pointer;border:0.5px solid var(--bdr2);background:var(--surf2);color:var(--txt);font-family:inherit;transition:all .15s;display:inline-block;text-align:center;}
+.btn:hover{background:var(--surf3);}
+.btn:active{transform:scale(.98);}
+.btn-p{background:var(--brand-green);color:#fff;border-color:var(--brand-green);}
+.btn-p:hover{background:#0a2e22;border-color:#0a2e22;}
+.btn-d{background:var(--no-bg);color:var(--no-tx);border-color:transparent;}
+.btn-s{background:var(--ok-bg);color:var(--ok-tx);border-color:transparent;}
+.btn-i{background:var(--inf-bg);color:var(--inf-tx);border-color:transparent;}
+.btn-w{background:var(--wrn-bg);color:var(--wrn-tx);border-color:transparent;}
+.btn-f{width:100%;display:block;}
+.btn-sm{padding:5px 11px;font-size:12px;}
+.btn-xs{padding:4px 9px;font-size:11px;font-weight:600;}
+
+.pill{display:inline-flex;align-items:center;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700;}
+.p-ok{background:var(--ok-bg);color:var(--ok-tx);}
+.p-no{background:var(--no-bg);color:var(--no-tx);}
+.p-inf{background:var(--inf-bg);color:var(--inf-tx);}
+.p-wrn{background:var(--wrn-bg);color:var(--wrn-tx);}
+
+.fl{font-size:12px;font-weight:700;color:var(--mut);margin-bottom:5px;display:block;}
+input[type=text],input[type=tel],input[type=email],input[type=password],input[type=url],input[type=number],select,textarea{
+  width:100%;padding:8px 11px;font-size:13px;border:0.5px solid var(--bdr2);
+  border-radius:var(--rad);background:var(--surf2);color:var(--txt);
+  outline:none;font-family:inherit;transition:border-color .15s,box-shadow .15s;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--hi);box-shadow:0 0 0 3px rgba(13,59,46,0.1);}
+textarea{resize:vertical;min-height:80px;line-height:1.5;}
+.fr{margin-bottom:12px;}
+
+/* ── CARDS ── */
+.adm-page-title{font-size:22px;font-weight:700;margin-bottom:4px;}
+.adm-page-sub{font-size:13px;color:var(--mut);margin-bottom:22px;}
+
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.stat-card{background:var(--surf);border:0.5px solid var(--bdr);border-radius:var(--rad-lg);padding:16px 18px;}
+.stat-num{font-size:26px;font-weight:700;margin-bottom:3px;}
+.stat-lbl{font-size:12px;color:var(--mut);}
+.stat-delta{font-size:11px;margin-top:5px;}
+
+.adm-card{background:var(--surf);border:0.5px solid var(--bdr);border-radius:var(--rad-lg);padding:18px 20px;margin-bottom:16px;}
+.adm-card-title{font-size:15px;font-weight:700;margin-bottom:4px;}
+.adm-card-sub{font-size:12px;color:var(--mut);margin-bottom:16px;}
+
+/* ── LEAD TABLE ── */
+.lead-table{width:100%;border-collapse:collapse;}
+.lead-table th{font-size:11px;font-weight:700;color:var(--hnt);text-transform:uppercase;letter-spacing:.07em;padding:9px 14px;text-align:left;border-bottom:0.5px solid var(--bdr2);background:var(--surf2);}
+.lead-table td{font-size:13px;padding:10px 14px;border-bottom:0.5px solid var(--bdr);vertical-align:middle;}
+.lead-table tr:last-child td{border-bottom:none;}
+.lead-table tr:hover td{background:var(--surf2);}
+.lead-table .act-btns{display:flex;gap:6px;}
+
+/* ── TABS ── */
+.adm-tabs{display:flex;gap:4px;border-bottom:0.5px solid var(--bdr);margin-bottom:20px;overflow-x:auto;}
+.adm-tab-btn{padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;color:var(--mut);white-space:nowrap;transition:all .15s;font-family:inherit;}
+.adm-tab-btn.active{color:var(--hi);border-bottom-color:var(--hi);}
+
+/* ── FORMS ── */
+.form-2col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.irow{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:0.5px solid var(--bdr);}
+.irow:last-child{border-bottom:none;}
+.ilbl{color:var(--mut);}
+.ival{font-weight:600;}
+.divdr{height:0.5px;background:var(--bdr);margin:14px 0;}
+.sec{font-size:11px;font-weight:700;color:var(--hnt);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+
+/* ── ACTIVITY ── */
+.activity-item{display:flex;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--bdr);font-size:12px;align-items:flex-start;}
+.activity-item:last-child{border-bottom:none;}
+.ai-dot{width:8px;height:8px;border-radius:50%;background:var(--hi);flex-shrink:0;margin-top:3px;}
+.ai-info{flex:1;}
+.ai-txt{line-height:1.5;}
+.ai-time{color:var(--hnt);margin-top:2px;}
+
+/* ── PBWRAP ── */
+.pbwrap{background:var(--surf2);border-radius:99px;height:6px;overflow:hidden;margin:8px 0 4px;}
+.pbfill{height:100%;background:var(--hi);border-radius:99px;}
+
+/* ── MODAL ── */
+.lead-detail-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;align-items:flex-start;justify-content:center;padding:24px;}
+.lead-detail-modal.open{display:flex;}
+.ldm-box{background:var(--surf);border-radius:var(--rad-xl);border:0.5px solid var(--bdr2);width:100%;max-width:660px;max-height:90vh;overflow-y:auto;margin-top:20px;}
+.ldm-hdr{padding:18px 20px;border-bottom:0.5px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surf);z-index:1;}
+.ldm-body{padding:20px;}
+.card{background:var(--surf);border:0.5px solid var(--bdr);border-radius:var(--rad-lg);padding:14px 16px;margin-bottom:12px;}
+
+/* ── SWITCH ── */
+.switch{position:relative;display:inline-block;width:36px;height:20px;}
+.switch input{opacity:0;width:0;height:0;}
+.slider{position:absolute;cursor:pointer;inset:0;background:var(--bdr2);border-radius:99px;transition:.3s;}
+.slider:before{position:absolute;content:"";height:14px;width:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;}
+input:checked + .slider{background:var(--hi);}
+input:checked + .slider:before{transform:translateX(16px);}
+
+/* ── VID CARD ── */
+.vid-card{background:var(--surf2);border:0.5px solid var(--bdr);border-radius:var(--rad-lg);padding:14px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start;}
+.vid-thumb{width:80px;height:50px;background:var(--surf3);border-radius:var(--rad);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;border:0.5px solid var(--bdr);}
+.vid-info{flex:1;}
+.vid-name{font-size:13px;font-weight:700;margin-bottom:3px;}
+.vid-meta{font-size:11px;color:var(--mut);}
+.vid-url{font-size:11px;color:var(--inf-tx);margin-top:4px;word-break:break-all;}
+.vid-actions{display:flex;gap:6px;margin-top:8px;}
+
+/* ── CONTENT SECTION ── */
+.content-section{margin-bottom:28px;}
+.content-section-title{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+
+/* ── GUIDELINE ADMIN ── */
+.guideline-admin-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--bdr);font-size:13px;}
+.guideline-admin-item:last-child{border-bottom:none;}
+.gai-num{font-size:11px;font-weight:700;color:var(--hnt);width:20px;flex-shrink:0;}
+.gai-txt{flex:1;}
+.gai-acts{display:flex;gap:6px;}
+
+/* ── UPLOAD ZONE ── */
+.video-upload-zone{border:1.5px dashed var(--bdr2);border-radius:var(--rad-lg);padding:24px;text-align:center;cursor:pointer;transition:all .15s;background:var(--surf2);}
+.video-upload-zone:hover{border-color:var(--hi);background:#edf5f1;}
+.vuz-icon{font-size:32px;margin-bottom:8px;}
+.vuz-txt{font-size:14px;font-weight:600;color:var(--mut);}
+.vuz-sub{font-size:12px;color:var(--hnt);margin-top:4px;}
+
+/* ── SEARCH ── */
+.search-box{position:relative;margin-bottom:14px;}
+.search-box input{padding-left:36px;}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--hnt);}
+
+.filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.filter-chip{padding:5px 12px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;border:0.5px solid var(--bdr2);background:var(--surf2);color:var(--mut);transition:all .15s;}
+.filter-chip.active{background:#edf5f1;color:var(--hi);border-color:var(--hi);}
+
+.note-input{width:100%;padding:8px 12px;font-size:13px;border:0.5px solid var(--bdr2);border-radius:var(--rad);background:var(--surf2);color:var(--txt);outline:none;font-family:inherit;resize:none;min-height:60px;}
+.note-input:focus{border-color:var(--hi);}
+
+.tl-item{display:flex;gap:12px;margin-bottom:4px;}
+.tl-line{display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
+.tl-dot{width:10px;height:10px;border-radius:50%;background:var(--hi);flex-shrink:0;margin-top:3px;}
+.tl-conn{width:1px;flex:1;background:var(--bdr2);min-height:24px;margin-top:3px;}
+.tl-ct{flex:1;padding-bottom:16px;}
+.tl-d{font-size:11px;color:var(--hnt);margin-bottom:2px;}
+.tl-l{font-size:13px;font-weight:700;}
+.tl-s{font-size:12px;color:var(--mut);margin-top:2px;}
+
+@media(max-width:900px){
+  .admin-sidebar{position:relative;width:100%;height:auto;flex-direction:row;flex-wrap:wrap;}
+  .admin-main{margin-left:0;}
+  .stat-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+<div class="admin-wrap">
+
+<!-- SIDEBAR -->
+<div class="admin-sidebar">
+  <div class="sidebar-logo">
+    <svg width="150" height="38" viewBox="0 0 150 38" xmlns="http://www.w3.org/2000/svg">
+      <rect width="150" height="38" rx="4" fill="#0D3B2E"/>
+      <rect y="22" width="150" height="16" rx="0" fill="#0D3B2E"/>
+      <rect y="20" width="150" height="3" fill="#F5D100"/>
+      <text x="75" y="14" font-family="Arial Black,Arial" font-weight="900" font-size="15" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text>
+      <text x="75" y="31" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text>
+    </svg>
+    <div class="sidebar-logo-sub">Admin Portal</div>
+  </div>
+  <nav class="adm-nav">
+    <div class="adm-nav-group">Overview</div>
+    <div class="adm-nav-item active" onclick="aTab(this,'at-dashboard')"><span class="adm-nav-icon">📊</span>Dashboard</div>
+    <div class="adm-nav-group">Leads</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-leads')"><span class="adm-nav-icon">👥</span>All Leads</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-newlead')"><span class="adm-nav-icon">➕</span>Create Lead</div>
+    <div class="adm-nav-group">Content</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-videos')"><span class="adm-nav-icon">🎬</span>Videos</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-invest-content')"><span class="adm-nav-icon">💰</span>Investment Info</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-guidelines')"><span class="adm-nav-icon">📋</span>Guidelines</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-support-content')"><span class="adm-nav-icon">🛠</span>Support Info</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-ops-content')"><span class="adm-nav-icon">⚙️</span>Operations Info</div>
+    <div class="adm-nav-group">Finance</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-payments')"><span class="adm-nav-icon">💳</span>Payment Tracking</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-royalty-mgmt')"><span class="adm-nav-icon">📈</span>Royalty Management</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-pay-settings')"><span class="adm-nav-icon">🪙</span>Payment Settings</div>
+    <div class="adm-nav-group">System</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-settings')"><span class="adm-nav-icon">⚙</span>Portal Settings</div>
+  </nav>
+  <div class="admin-sidebar-footer">
+    <a href="budget_barber_franchise_lead.html" target="_blank" style="text-decoration:none;">
+      <button class="btn btn-sm btn-f" style="background:rgba(245,209,0,0.15);color:var(--brand-yellow);border-color:rgba(245,209,0,0.3);margin-bottom:8px;">↗ Open Franchise App</button>
+    </a>
+    <a href="index.html" style="text-decoration:none;">
+      <button class="btn btn-sm btn-f" style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);border-color:rgba(255,255,255,0.12);margin-bottom:8px;">🏠 Back to Home</button>
+    </a>
+    <button class="btn btn-sm btn-f" style="background:rgba(163,45,45,0.15);color:#f28b8b;border-color:rgba(163,45,45,0.3);" onclick="if(confirm('Logout from Admin Portal?'))window.location='index.html'">⎋ Logout</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="admin-main">
+  <div class="admin-topbar">
+    <div class="admin-topbar-title">Budget Barber Admin</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span style="font-size:12px;color:var(--mut);">Admin User</span>
+      <a href="index.html" style="text-decoration:none;"><button class="btn btn-sm" style="background:var(--no-bg);color:var(--no-tx);border-color:transparent;" onclick="return confirm('Logout from Admin Portal?')">⎋ Logout</button></a>
+      <div style="width:30px;height:30px;background:#edf5f1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;">👤</div>
+    </div>
+  </div>
+  <div class="admin-content">
+
+    <!-- DASHBOARD -->
+    <div id="at-dashboard" class="admin-tab active">
+      <div class="adm-page-title">Dashboard</div>
+      <div class="adm-page-sub">Overview of all franchise leads and portal activity</div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-num" style="color:var(--hi);">18</div><div class="stat-lbl">Total Leads</div><div class="stat-delta" style="color:var(--ok-tx);">↑ 3 this week</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--ok-tx);">4</div><div class="stat-lbl">Active Projects</div><div class="stat-delta" style="color:var(--ok-tx);">Token paid</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--wrn-tx);">9</div><div class="stat-lbl">In Progress</div><div class="stat-delta" style="color:var(--mut);">Watching videos</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--no-tx);">5</div><div class="stat-lbl">Closed</div><div class="stat-delta" style="color:var(--mut);">Not interested</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div class="adm-card" style="margin:0;">
+          <div class="adm-card-title">Recent Activity</div>
+          <div class="adm-card-sub">Latest franchise lead actions</div>
+          <div class="activity-item"><div class="ai-dot"></div><div class="ai-info"><div class="ai-txt"><strong>Rajesh Kumar</strong> completed Vision Video</div><div class="ai-time">2 mins ago</div></div></div>
+          <div class="activity-item"><div class="ai-dot" style="background:var(--ok-tx);"></div><div class="ai-info"><div class="ai-txt"><strong>Priya Sharma</strong> paid token ₹20,000</div><div class="ai-time">1 hr ago</div></div></div>
+          <div class="activity-item"><div class="ai-dot" style="background:var(--no-tx);"></div><div class="ai-info"><div class="ai-txt"><strong>Suresh Babu</strong> marked Not Interested</div><div class="ai-time">3 hrs ago</div></div></div>
+          <div class="activity-item"><div class="ai-dot" style="background:var(--inf-tx);"></div><div class="ai-info"><div class="ai-txt"><strong>Arun Reddy</strong> accepted all guidelines</div><div class="ai-time">5 hrs ago</div></div></div>
+          <div class="activity-item" style="border:none;"><div class="ai-dot" style="background:var(--wrn-tx);"></div><div class="ai-info"><div class="ai-txt"><strong>Meena Iyer</strong> registered as new lead</div><div class="ai-time">Yesterday</div></div></div>
+        </div>
+        <div class="adm-card" style="margin:0;">
+          <div class="adm-card-title">Video Completion Rates</div>
+          <div class="adm-card-sub">% of leads who watched each video</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>Vision Video</span><span style="font-weight:700;">94%</span></div><div class="pbwrap" style="margin:0;"><div class="pbfill" style="width:94%;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>Salon 360°</span><span style="font-weight:700;">88%</span></div><div class="pbwrap" style="margin:0;"><div class="pbfill" style="width:88%;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>Investment</span><span style="font-weight:700;">76%</span></div><div class="pbwrap" style="margin:0;"><div class="pbfill" style="width:76%;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>ROI</span><span style="font-weight:700;">71%</span></div><div class="pbwrap" style="margin:0;"><div class="pbfill" style="width:71%;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>Royalty</span><span style="font-weight:700;">58%</span></div><div class="pbwrap" style="margin:0;"><div class="pbfill" style="width:58%;"></div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="adm-card">
+        <div class="adm-card-title">Quick Actions</div>
+        <div class="adm-card-sub">Common admin tasks</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-p" onclick="aTab(null,'at-newlead')">+ Create New Lead</button>
+          <button class="btn btn-i" onclick="aTab(null,'at-videos')">🎬 Manage Videos</button>
+          <button class="btn btn-w" onclick="aTab(null,'at-payments')">💳 View Payments</button>
+          <button class="btn" onclick="aTab(null,'at-leads')">👥 All Leads</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALL LEADS -->
+    <div id="at-leads" class="admin-tab">
+      <div class="adm-page-title">All Leads</div>
+      <div class="adm-page-sub">Manage and track all franchise leads</div>
+      <div class="adm-card" style="padding:0;overflow:hidden;">
+        <div style="padding:16px 20px;border-bottom:0.5px solid var(--bdr);display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <div class="search-box" style="flex:1;min-width:200px;margin:0;"><span class="search-icon">🔍</span><input type="text" placeholder="Search by name, phone, city…"/></div>
+          <div class="filter-row" style="margin:0;gap:6px;">
+            <div class="filter-chip active">All (18)</div>
+            <div class="filter-chip" onclick="this.closest('.filter-row').querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));this.classList.add('active')">New (3)</div>
+            <div class="filter-chip" onclick="this.closest('.filter-row').querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));this.classList.add('active')">In Progress (9)</div>
+            <div class="filter-chip" onclick="this.closest('.filter-row').querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));this.classList.add('active')">Project Active (4)</div>
+            <div class="filter-chip" onclick="this.closest('.filter-row').querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));this.classList.add('active')">Closed (5)</div>
+          </div>
+        </div>
+        <table class="lead-table">
+          <thead><tr><th>Lead</th><th>City</th><th>Progress</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="lead-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CREATE LEAD -->
+    <div id="at-newlead" class="admin-tab">
+      <div class="adm-page-title">Create New Lead</div>
+      <div class="adm-page-sub">Manually add a new franchise prospect to the portal</div>
+      <div class="adm-card">
+        <div class="adm-card-title">Lead Information</div>
+        <div class="form-2col">
+          <div class="fr"><label class="fl">Full Name</label><input type="text" placeholder="Rajesh Kumar"/></div>
+          <div class="fr"><label class="fl">Phone Number</label><input type="tel" placeholder="+91 98765 43210"/></div>
+          <div class="fr"><label class="fl">Email Address</label><input type="email" placeholder="rajesh@email.com"/></div>
+          <div class="fr"><label class="fl">City</label><input type="text" placeholder="Hyderabad"/></div>
+          <div class="fr"><label class="fl">Lead Source</label><select><option>Direct</option><option>Referral</option><option>Social Media</option><option>Website</option><option>Exhibition</option><option>WhatsApp</option></select></div>
+          <div class="fr"><label class="fl">Preferred Language</label><select><option>English</option><option>Telugu</option><option>Hindi</option><option>Tamil</option><option>Kannada</option><option>Malayalam</option></select></div>
+        </div>
+        <div class="fr"><label class="fl">Set 6-Digit PIN</label><input type="text" placeholder="e.g. 123456" maxlength="6" style="max-width:200px;"/></div>
+        <div class="fr"><label class="fl">Initial Admin Note</label><textarea placeholder="Add any notes about this lead…"></textarea></div>
+        <button class="btn btn-p" onclick="alert('✓ Lead created successfully! They can now log in with their phone + PIN.')">Create Lead &amp; Generate Access</button>
+      </div>
+    </div>
+
+    <!-- VIDEOS -->
+    <div id="at-videos" class="admin-tab">
+      <div class="adm-page-title">Video Management</div>
+      <div class="adm-page-sub">Upload and manage franchise presentation videos by language and step</div>
+      <div class="adm-tabs">
+        <button class="adm-tab-btn active" onclick="avTab(this,'av-upload')">Upload Video</button>
+        <button class="adm-tab-btn" onclick="avTab(this,'av-manage');buildVidList();">Manage Videos</button>
+        <button class="adm-tab-btn" onclick="avTab(this,'av-lang');buildLangCoverage();">Language Coverage</button>
+      </div>
+      <div id="av-upload">
+        <div class="adm-card">
+          <div class="adm-card-title">Upload New Video</div>
+          <div class="form-2col" style="margin-bottom:16px;">
+            <div class="fr"><label class="fl">Presentation Step</label>
+              <select id="vid-step-sel">
+                <option value="vision">Step 2 — Vision Video</option>
+                <option value="salon">Step 3 — Salon 360°</option>
+                <option value="invest">Step 4 — Investment</option>
+                <option value="roi">Step 5 — ROI</option>
+                <option value="support">Step 6 — Support</option>
+                <option value="ops">Step 7 — Operations</option>
+                <option value="staff">Step 8 — Staff</option>
+                <option value="royalty">Step 9 — Royalty</option>
+              </select>
+            </div>
+            <div class="fr"><label class="fl">Language</label><select><option>All Languages (Default)</option><option>English</option><option>Telugu</option><option>Hindi</option><option>Tamil</option><option>Kannada</option><option>Malayalam</option></select></div>
+          </div>
+          <div class="fr"><label class="fl">Video Title</label><input type="text" id="vid-title-inp" placeholder="e.g. Founder's Vision — Telugu"/></div>
+          <div class="fr"><label class="fl">Video URL</label><input type="url" id="vid-url-inp" placeholder="https://youtube.com/embed/... or CDN URL"/></div>
+          <div class="video-upload-zone" style="margin-bottom:16px;">
+            <div class="vuz-icon">🎬</div>
+            <div class="vuz-txt">Drag &amp; drop video file here, or click to browse</div>
+            <div class="vuz-sub">MP4, MOV, AVI · Max 2GB · Or use URL above</div>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button class="btn btn-p" onclick="saveVideo()">Save &amp; Publish Video</button>
+            <button class="btn">Preview</button>
+          </div>
+        </div>
+      </div>
+      <div id="av-manage" style="display:none;">
+        <div class="content-section">
+          <div class="content-section-title">All Uploaded Videos <button class="btn btn-sm btn-p" onclick="avTab(document.querySelector('.adm-tab-btn'),'av-upload')">+ Add Video</button></div>
+          <div id="vid-list-container"></div>
+        </div>
+      </div>
+      <div id="av-lang" style="display:none;">
+        <div class="adm-card">
+          <div class="adm-card-title">Language-wise Video Coverage</div>
+          <div class="adm-card-sub">Track which steps have videos uploaded for each language</div>
+          <div id="lang-coverage-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVESTMENT CONTENT -->
+    <div id="at-invest-content" class="admin-tab">
+      <div class="adm-page-title">Investment Information</div>
+      <div class="adm-page-sub">Edit pricing, inclusions, and all investment details shown to franchise leads</div>
+      <div class="adm-tabs">
+        <button class="adm-tab-btn active" onclick="avTab(this,'ic3')">3 Chair</button>
+        <button class="adm-tab-btn" onclick="avTab(this,'ic4')">4 Chair</button>
+        <button class="adm-tab-btn" onclick="avTab(this,'ic5')">5 Chair</button>
+        <button class="adm-tab-btn" onclick="avTab(this,'ic-roi')">ROI Data</button>
+        <button class="adm-tab-btn" onclick="avTab(this,'ic-royalty')">Royalty</button>
+        <button class="adm-tab-btn" onclick="avTab(this,'ic-payments')">Payment Steps</button>
+      </div>
+      <div id="ic3">
+        <div class="adm-card">
+          <div class="adm-card-title">3 Chair Model</div>
+          <div class="form-2col">
+            <div class="fr"><label class="fl">Total Area</label><input type="text" id="e-a3c" value="250 sq ft"/></div>
+            <div class="fr"><label class="fl">Display Price</label><input type="text" id="e-p3c" value="₹8.5L"/></div>
+            <div class="fr"><label class="fl">Franchise Fee</label><input type="text" id="e-i3fee" value="₹2,50,000"/></div>
+            <div class="fr"><label class="fl">Interior Setup</label><input type="text" id="e-i3int" value="₹3,00,000"/></div>
+            <div class="fr"><label class="fl">Equipment &amp; Tech</label><input type="text" id="e-i3eq" value="₹2,00,000"/></div>
+            <div class="fr"><label class="fl">Initial Stock</label><input type="text" id="e-i3stk" value="₹50,000"/></div>
+            <div class="fr"><label class="fl">Working Capital</label><input type="text" id="e-i3wc" value="₹50,000"/></div>
+          </div>
+          <div class="fr"><label class="fl">Package Inclusions</label><textarea id="e-i3inc" style="min-height:100px;">3 Marc Salon Chairs · Digital Mirror · POS System · AC Unit · Branding Kit · Uniforms ×6 · AI Tablet · 1-Year License</textarea></div>
+          <button class="btn btn-p" onclick="alert('✓ Investment info for 3 Chair saved and published to franchise portal!')">Save &amp; Publish Changes</button>
+        </div>
+      </div>
+      <div id="ic4" style="display:none;">
+        <div class="adm-card">
+          <div class="adm-card-title">4 Chair Model</div>
+          <div class="form-2col">
+            <div class="fr"><label class="fl">Total Area</label><input type="text" value="350 sq ft"/></div>
+            <div class="fr"><label class="fl">Display Price</label><input type="text" value="₹11L"/></div>
+            <div class="fr"><label class="fl">Franchise Fee</label><input type="text" value="₹3,00,000"/></div>
+            <div class="fr"><label class="fl">Interior Setup</label><input type="text" value="₹4,50,000"/></div>
+            <div class="fr"><label class="fl">Equipment &amp; Tech</label><input type="text" value="₹2,50,000"/></div>
+            <div class="fr"><label class="fl">Initial Stock</label><input type="text" value="₹60,000"/></div>
+            <div class="fr"><label class="fl">Working Capital</label><input type="text" value="₹40,000"/></div>
+          </div>
+          <div class="fr"><label class="fl">Package Inclusions</label><textarea style="min-height:100px;">4 Marc Chairs · 2 Digital Mirrors · POS · 2 ACs · Branding Kit · Uniforms ×8 · AI Tablets ×2 · Priority Support · 1-Year License</textarea></div>
+          <button class="btn btn-p" onclick="alert('✓ Investment info for 4 Chair saved!')">Save &amp; Publish Changes</button>
+        </div>
+      </div>
+      <div id="ic5" style="display:none;">
+        <div class="adm-card">
+          <div class="adm-card-title">5 Chair Model</div>
+          <div class="form-2col">
+            <div class="fr"><label class="fl">Total Area</label><input type="text" value="450 sq ft"/></div>
+            <div class="fr"><label class="fl">Display Price</label><input type="text" value="₹14L"/></div>
+            <div class="fr"><label class="fl">Franchise Fee</label><input type="text" value="₹4,00,000"/></div>
+            <div class="fr"><label class="fl">Interior Setup</label><input type="text" value="₹6,00,000"/></div>
+            <div class="fr"><label class="fl">Equipment &amp; Tech</label><input type="text" value="₹3,00,000"/></div>
+            <div class="fr"><label class="fl">Initial Stock</label><input type="text" value="₹60,000"/></div>
+            <div class="fr"><label class="fl">Working Capital</label><input type="text" value="₹40,000"/></div>
+          </div>
+          <div class="fr"><label class="fl">Package Inclusions</label><textarea style="min-height:100px;">5 Marc Chairs · 3 Digital Mirrors · 2 POS · 3 ACs · Premium Branding · Uniforms ×10 · AI Tablets ×3 · Account Manager · 1-Year License</textarea></div>
+          <button class="btn btn-p" onclick="alert('✓ Investment info for 5 Chair saved!')">Save &amp; Publish Changes</button>
+        </div>
+      </div>
+      <div id="ic-roi" style="display:none;">
+        <div class="adm-card">
+          <div class="adm-card-title">ROI Data — 3 Chair</div>
+          <div class="form-3col">
+            <div class="fr"><label class="fl">Avg Customers/Day</label><input type="number" id="e-r3cust" value="40"/></div>
+            <div class="fr"><label class="fl">Avg Ticket (₹)</label><input type="number" id="e-r3tick" value="120"/></div>
+            <div class="fr"><label class="fl">Staff Salaries (₹)</label><input type="number" id="e-r3sal" value="54000"/></div>
+            <div class="fr"><label class="fl">Rent &amp; Utilities (₹)</label><input type="number" id="e-r3rent" value="25000"/></div>
+            <div class="fr"><label class="fl">Products &amp; Misc (₹)</label><input type="number" id="e-r3misc" value="10000"/></div>
+            <div class="fr"><label class="fl">ROI Period</label><input type="text" id="e-r3roi" value="18–22 months"/></div>
+          </div>
+          <button class="btn btn-p" onclick="alert('✓ ROI data saved!')">Save &amp; Publish ROI</button>
+        </div>
+      </div>
+      <div id="ic-royalty" style="display:none;">
+        <div class="adm-card">
+          <div class="adm-card-title">Royalty Structure</div>
+          <div class="form-2col">
+            <div class="fr"><label class="fl">Royalty Rate</label><input type="text" value="8% of Revenue"/></div>
+            <div class="fr"><label class="fl">Due Date</label><input type="text" value="5th of every month"/></div>
+            <div class="fr"><label class="fl">On-Time Benefit</label><input type="text" value="Priority Staff Replacement"/></div>
+            <div class="fr"><label class="fl">Late Penalty (1–7 days)</label><input type="text" value="₹500 penalty / day"/></div>
+            <div class="fr"><label class="fl">Non-payment (&gt;30 days)</label><input type="text" value="Franchise Review + Termination"/></div>
+          </div>
+          <button class="btn btn-p" onclick="alert('✓ Royalty structure saved!')">Save &amp; Publish</button>
+        </div>
+      </div>
+      <div id="ic-payments" style="display:none;">
+        <div class="adm-card">
+          <div class="adm-card-title">Payment Schedule Steps</div>
+          <div class="adm-card-sub">Edit the payment steps shown in the franchise presentation</div>
+          <div id="pay-steps-editor"></div>
+          <button class="btn btn-p" style="margin-top:8px;" onclick="alert('✓ Payment steps saved!')">Save Payment Steps</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUIDELINES MANAGEMENT -->
+    <div id="at-guidelines" class="admin-tab">
+      <div class="adm-page-title">Guidelines Management</div>
+      <div class="adm-page-sub">Add, edit, remove, and reorder franchise guidelines shown to leads</div>
+      <div class="adm-card">
+        <div class="content-section-title">Current Guidelines <button class="btn btn-sm btn-p" onclick="addGuideline()">+ Add</button></div>
+        <div id="gl-admin-list"></div>
+      </div>
+      <div class="adm-card">
+        <div class="adm-card-title">Add New Guideline</div>
+        <div class="fr"><label class="fl">Guideline Text</label><textarea id="new-gl-text" placeholder="Enter new guideline for franchise leads…"></textarea></div>
+        <div class="form-2col">
+          <div class="fr"><label class="fl">Category</label><select><option>Operational</option><option>Staff</option><option>Financial</option><option>Compliance</option></select></div>
+          <div class="fr"><label class="fl">Mandatory</label>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:8px;"><label class="switch"><input type="checkbox" checked/><span class="slider"></span></label><span style="font-size:13px;color:var(--mut);">Lead must accept</span></div>
+          </div>
+        </div>
+        <button class="btn btn-p" onclick="addGuideline()">Add Guideline</button>
+      </div>
+    </div>
+
+    <!-- SUPPORT CONTENT -->
+    <div id="at-support-content" class="admin-tab">
+      <div class="adm-page-title">Support Information</div>
+      <div class="adm-page-sub">Edit the support details and highlight text shown in the franchise portal</div>
+      <div class="adm-card">
+        <div class="adm-card-title">Support Section Highlight</div>
+        <div class="fr"><label class="fl">Highlight Text (shown in alert bar)</label><input type="text" id="e-sup-hl" value="⭐ Staff Support is our strongest pillar — recruitment, training &amp; replacement handled"/></div>
+      </div>
+      <div class="adm-card">
+        <div class="adm-card-title">Support Items</div>
+        <div id="support-items-editor"></div>
+      </div>
+      <button class="btn btn-p" onclick="alert('✓ Support info saved and published!')">Save &amp; Publish Support Info</button>
+    </div>
+
+    <!-- OPERATIONS CONTENT -->
+    <div id="at-ops-content" class="admin-tab">
+      <div class="adm-page-title">Operations Information</div>
+      <div class="adm-page-sub">Edit operational details, timings, and standards shown to leads</div>
+      <div class="adm-card">
+        <div class="adm-card-title">Salon Timings &amp; Operations</div>
+        <div class="form-2col">
+          <div class="fr"><label class="fl">Salon Hours</label><input type="text" id="e-ophrs" value="8:00 AM – 9:00 PM"/></div>
+          <div class="fr"><label class="fl">Operating Days</label><input type="text" id="e-opdays" value="7 Days / Week"/></div>
+          <div class="fr"><label class="fl">Break Policy</label><input type="text" id="e-opbreaks" value="Staggered — no closure"/></div>
+          <div class="fr"><label class="fl">OT Allowance</label><input type="text" id="e-opot" value="₹80 / hr post 9 PM"/></div>
+          <div class="fr"><label class="fl">Max Customer Wait</label><input type="text" id="e-opwait" value="15 minutes"/></div>
+        </div>
+        <div class="fr"><label class="fl">Service &amp; Staff Standards</label><textarea id="e-opstd" style="min-height:100px;">✓ Greet every customer within 30 seconds · ✓ No phone usage during service · ✓ Uniform dress code enforced · ✓ Zero tolerance for rude behavior · ✓ Feedback collected after every visit</textarea></div>
+        <button class="btn btn-p" onclick="alert('✓ Operations info saved!')">Save &amp; Publish Operations Info</button>
+      </div>
+      <div class="adm-card">
+        <div class="adm-card-title">Staff Welfare Content</div>
+        <div class="fr"><label class="fl">Initial Setup (by Budget Barber)</label><textarea style="min-height:90px;">✓ Uniforms (2 sets/staff) · ✓ 5-day bootcamp training · ✓ Tool &amp; grooming kit · ✓ Product training · ✓ SOP manual · ✓ ID cards · ✓ AI system training</textarea></div>
+        <div class="fr"><label class="fl">Ongoing (by Franchisee)</label><textarea style="min-height:90px;">✓ Monthly salary by 5th · ✓ 1 day off/week · ✓ Accommodation support · ✓ Festival bonus · ✓ Refresher training (quarterly) · ✓ Meals during shift</textarea></div>
+        <button class="btn btn-p" onclick="alert('✓ Staff info saved!')">Save &amp; Publish Staff Info</button>
+      </div>
+    </div>
+
+    <!-- PAYMENT TRACKING -->
+    <div id="at-payments" class="admin-tab">
+      <div class="adm-page-title">Payment Tracking</div>
+      <div class="adm-page-sub">Track all token payments, milestones, and pending dues across all leads</div>
+      <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-card"><div class="stat-num" style="color:var(--ok-tx);">₹80K</div><div class="stat-lbl">Token Payments Collected</div><div class="stat-delta" style="color:var(--ok-tx);">4 leads × ₹20K</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--wrn-tx);">₹7.5L</div><div class="stat-lbl">Pending Dues (30 days)</div><div class="stat-delta" style="color:var(--wrn-tx);">3 leads overdue</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--hi);">₹34L</div><div class="stat-lbl">Total Collected (All)</div><div class="stat-delta" style="color:var(--mut);">Across 4 projects</div></div>
+      </div>
+      <div class="adm-card" style="padding:0;overflow:hidden;">
+        <table class="lead-table">
+          <thead><tr><th>Lead</th><th>Model</th><th>Token</th><th>Cheque</th><th>Cash</th><th>Marc Chairs</th><th>Total Paid</th></tr></thead>
+          <tbody>
+            <tr><td><div style="font-weight:600;">Priya Sharma</div><div style="font-size:11px;color:var(--mut);">Hyderabad</div></td><td>3 Chair</td><td><span class="pill p-ok">✓ Paid</span></td><td><span class="pill p-wrn">Pending</span></td><td><span class="pill p-no">—</span></td><td><span class="pill p-no">—</span></td><td style="font-weight:700;">₹20,000</td></tr>
+            <tr><td><div style="font-weight:600;">Arun Reddy</div><div style="font-size:11px;color:var(--mut);">Vijayawada</div></td><td>4 Chair</td><td><span class="pill p-ok">✓ Paid</span></td><td><span class="pill p-ok">✓ Paid</span></td><td><span class="pill p-wrn">Pending</span></td><td><span class="pill p-no">—</span></td><td style="font-weight:700;">₹2,70,000</td></tr>
+            <tr><td><div style="font-weight:600;">Meena Iyer</div><div style="font-size:11px;color:var(--mut);">Chennai</div></td><td>3 Chair</td><td><span class="pill p-ok">✓ Paid</span></td><td><span class="pill p-ok">✓ Paid</span></td><td><span class="pill p-ok">✓ Paid</span></td><td><span class="pill p-wrn">Pending</span></td><td style="font-weight:700;">₹8,70,000</td></tr>
+            <tr><td><div style="font-weight:600;">Vikram Nair</div><div style="font-size:11px;color:var(--mut);">Kochi</div></td><td>5 Chair</td><td><span class="pill p-ok">✓ Paid</span></td><td><span class="pill p-ok">✓ Paid</span></td><td><span class="pill p-ok">✓ Paid</span></td><td><span class="pill p-ok">✓ Paid</span></td><td style="font-weight:700;">₹14,20,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ROYALTY MANAGEMENT -->
+    <div id="at-royalty-mgmt" class="admin-tab">
+      <div class="adm-page-title">Royalty Management</div>
+      <div class="adm-page-sub">Track monthly royalty payments across all active franchise projects</div>
+      <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-card"><div class="stat-num" style="color:var(--ok-tx);">₹1.2L</div><div class="stat-lbl">This Month Collected</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--no-tx);">2</div><div class="stat-lbl">Overdue Royalties</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--hi);">₹9.6L</div><div class="stat-lbl">Total YTD Royalties</div></div>
+      </div>
+      <div class="adm-card" style="padding:0;overflow:hidden;">
+        <table class="lead-table">
+          <thead><tr><th>Franchise</th><th>Model</th><th>Apr 2026</th><th>Mar 2026</th><th>Feb 2026</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td><div style="font-weight:600;">Meena Iyer</div><div style="font-size:11px;color:var(--mut);">Chennai</div></td><td>3 Chair</td><td><span class="pill p-ok">✓ ₹11,520</span></td><td><span class="pill p-ok">✓ ₹10,800</span></td><td><span class="pill p-ok">✓ ₹9,600</span></td><td><span class="pill p-ok">On Time</span></td><td><div class="act-btns"><button class="btn btn-xs">View</button></div></td></tr>
+            <tr><td><div style="font-weight:600;">Vikram Nair</div><div style="font-size:11px;color:var(--mut);">Kochi</div></td><td>5 Chair</td><td><span class="pill p-no">Overdue ₹20,160</span></td><td><span class="pill p-ok">✓ ₹18,400</span></td><td><span class="pill p-ok">✓ ₹17,200</span></td><td><span class="pill p-no">Overdue 3d</span></td><td><div class="act-btns"><button class="btn btn-xs btn-w">Remind</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="at-settings" class="admin-tab">
+      <div class="adm-page-title">Portal Settings</div>
+      <div class="adm-page-sub">Configure portal-wide settings, branding, and access controls</div>
+      <div class="adm-card">
+        <div class="adm-card-title">Branding</div>
+        <div class="form-2col">
+          <div class="fr"><label class="fl">Portal Name</label><input type="text" value="Budget Barber — Franchise Portal"/></div>
+          <div class="fr"><label class="fl">Token Amount (₹)</label><input type="number" value="20000"/></div>
+          <div class="fr"><label class="fl">Franchise Steps Count</label><input type="number" value="10"/></div>
+          <div class="fr"><label class="fl">Royalty Rate (%)</label><input type="number" value="8"/></div>
+        </div>
+      </div>
+      <div class="adm-card">
+        <div class="adm-card-title">Lead Portal Controls</div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:14px;font-weight:600;">Lead Self-Registration</div><div style="font-size:12px;color:var(--mut);">Allow leads to register themselves</div></div><label class="switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:14px;font-weight:600;">Mandatory Video Watch</div><div style="font-size:12px;color:var(--mut);">Block next step until video is played</div></div><label class="switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:14px;font-weight:600;">Mandatory Guidelines Accept</div><div style="font-size:12px;color:var(--mut);">All checkboxes must be ticked</div></div><label class="switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:14px;font-weight:600;">SMS Notifications</div><div style="font-size:12px;color:var(--mut);">Send SMS on key lead actions</div></div><label class="switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+        </div>
+      </div>
+      <button class="btn btn-p" onclick="alert('✓ Settings saved!')">Save Settings</button>
+    </div>
+
+    <!-- PAYMENT SETTINGS -->
+    <div id="at-pay-settings" class="admin-tab">
+      <div class="adm-page-title">Payment Settings</div>
+      <div class="adm-page-sub">Configure UPI ID, QR code, and bank details shown to franchise leads for token payment</div>
+
+      <!-- UPI -->
+      <div class="adm-card">
+        <div class="adm-card-title">UPI Payment Details</div>
+        <div class="adm-card-sub">These details appear on the franchise app payment screen</div>
+        <div class="form-2col">
+          <div class="fr"><label class="fl">Primary UPI ID</label><input type="text" id="upi-id" placeholder="budgetbarber@paytm" value="budgetbarber@paytm"/></div>
+          <div class="fr"><label class="fl">Registered Name</label><input type="text" id="upi-name" placeholder="Budget Barber Pvt Ltd" value="Budget Barber Pvt Ltd"/></div>
+          <div class="fr"><label class="fl">Backup UPI ID</label><input type="text" id="upi-id2" placeholder="budgetbarber@okicici"/></div>
+          <div class="fr"><label class="fl">Token Amount (₹)</label><input type="number" id="upi-amount" value="20000"/></div>
+        </div>
+        <div class="fr"><label class="fl">Payment Instructions (shown to lead)</label><textarea id="upi-note" style="min-height:80px;">Pay ₹20,000 token via UPI to block your location. Screenshot the payment and upload below. Our team will confirm within 2–4 hours.</textarea></div>
+      </div>
+
+      <!-- QR CODE -->
+      <div class="adm-card">
+        <div class="adm-card-title">QR Code</div>
+        <div class="adm-card-sub">Upload a UPI QR code image that leads can scan directly</div>
+        <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
+          <div id="qr-preview-box" style="width:160px;height:160px;background:var(--surf2);border:0.5px solid var(--bdr2);border-radius:var(--rad-lg);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;">
+            <img id="qr-preview-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:contain;border-radius:var(--rad-lg);"/>
+            <div id="qr-placeholder">
+              <div style="font-size:32px;margin-bottom:6px;">📱</div>
+              <div style="font-size:11px;color:var(--hnt);text-align:center;">No QR uploaded</div>
+            </div>
+          </div>
+          <div style="flex:1;min-width:220px;">
+            <div class="fr"><label class="fl">Upload QR Code Image</label>
+              <input type="file" accept="image/*" id="qr-upload" style="font-size:13px;padding:6px 10px;" onchange="previewQR(this)"/>
+            </div>
+            <div class="fr"><label class="fl">Or enter QR Image URL</label>
+              <input type="url" id="qr-url" placeholder="https://your-cdn.com/upi-qr.png" oninput="previewQRUrl(this.value)"/>
+            </div>
+            <div style="font-size:12px;color:var(--hnt);line-height:1.6;">Recommended: Export QR from PhonePe / Paytm / Google Pay business dashboard as PNG. Minimum 300×300px.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BANK TRANSFER -->
+      <div class="adm-card">
+        <div class="adm-card-title">Bank Transfer Details</div>
+        <div class="adm-card-sub">Shown as an alternative payment method for leads who prefer NEFT/RTGS</div>
+        <div class="form-2col">
+          <div class="fr"><label class="fl">Account Holder Name</label><input type="text" id="bank-name" placeholder="Budget Barber Pvt Ltd" value="Budget Barber Pvt Ltd"/></div>
+          <div class="fr"><label class="fl">Account Number</label><input type="text" id="bank-acc" placeholder="12345678901234"/></div>
+          <div class="fr"><label class="fl">IFSC Code</label><input type="text" id="bank-ifsc" placeholder="HDFC0001234"/></div>
+          <div class="fr"><label class="fl">Bank Name &amp; Branch</label><input type="text" id="bank-branch" placeholder="HDFC Bank — Madhapur, Hyderabad"/></div>
+        </div>
+      </div>
+
+      <!-- PAYMENT CONFIRMATION -->
+      <div class="adm-card">
+        <div class="adm-card-title">Payment Confirmation Settings</div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:14px;font-weight:600;">Require Screenshot Upload</div><div style="font-size:12px;color:var(--mut);">Lead must upload payment screenshot to proceed</div></div><label class="switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:14px;font-weight:600;">Show QR Code to Leads</div><div style="font-size:12px;color:var(--mut);">Display QR code on franchise app payment screen</div></div><label class="switch"><input type="checkbox" checked id="toggle-qr"/><span class="slider"></span></label></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:14px;font-weight:600;">Show Bank Transfer Option</div><div style="font-size:12px;color:var(--mut);">Show NEFT/RTGS details as an alternative</div></div><label class="switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:14px;font-weight:600;">Auto-notify on Payment Upload</div><div style="font-size:12px;color:var(--mut);">Send WhatsApp/SMS to admin when a lead uploads proof</div></div><label class="switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+        </div>
+      </div>
+
+      <!-- PREVIEW -->
+      <div class="adm-card" style="background:#edf5f1;border-color:rgba(13,59,46,0.15);">
+        <div class="adm-card-title" style="color:var(--brand-green);">📱 How It Looks in Franchise App</div>
+        <div style="background:#fff;border-radius:var(--rad-lg);padding:16px;margin-top:12px;border:0.5px solid var(--bdr);max-width:340px;">
+          <div style="font-size:11px;font-weight:700;color:var(--hnt);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Pay Token Amount</div>
+          <div style="background:#E6F1FB;border-radius:var(--rad);padding:14px;margin-bottom:12px;">
+            <div style="font-size:11px;font-weight:700;color:#185FA5;margin-bottom:4px;text-transform:uppercase;">Token — Location Blocking</div>
+            <div style="font-size:26px;font-weight:700;color:#185FA5;">₹20,000</div>
+          </div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Scan &amp; Pay</div>
+          <div style="width:80px;height:80px;background:var(--surf2);border-radius:var(--rad);display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:28px;">📱</div>
+          <div style="font-size:12px;color:var(--mut);margin-bottom:8px;line-height:1.5;">UPI ID: <strong id="preview-upi">budgetbarber@paytm</strong></div>
+          <div style="font-size:11px;color:var(--hnt);">After payment, upload screenshot below for confirmation</div>
+        </div>
+      </div>
+
+      <button class="btn btn-p" onclick="savePaySettings()">💾 Save &amp; Publish Payment Settings</button>
+    </div>
+
+  </div><!-- admin-content -->
+</div><!-- admin-main -->
+</div><!-- admin-wrap -->
+
+<!-- LEAD DETAIL MODAL -->
+<div id="lead-modal" class="lead-detail-modal">
+  <div class="ldm-box">
+    <div class="ldm-hdr">
+      <div><div style="font-size:16px;font-weight:700;" id="ldm-name">Lead Name</div><div style="font-size:12px;color:var(--mut);" id="ldm-meta">+91 XXXXX · City · Status</div></div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span id="ldm-pill" class="pill p-wrn">In Progress</span>
+        <button class="btn btn-sm" onclick="closeLDM()">✕ Close</button>
+      </div>
+    </div>
+    <div class="ldm-body">
+      <div class="adm-tabs" style="margin-bottom:16px;">
+        <button class="adm-tab-btn active" onclick="ldmTab(this,'ldm-overview')">Overview</button>
+        <button class="adm-tab-btn" onclick="ldmTab(this,'ldm-journey')">Journey</button>
+        <button class="adm-tab-btn" onclick="ldmTab(this,'ldm-project')">Project</button>
+        <button class="adm-tab-btn" onclick="ldmTab(this,'ldm-notes')">Notes</button>
+        <button class="adm-tab-btn" onclick="ldmTab(this,'ldm-control')">Controls</button>
+      </div>
+      <div id="ldm-overview" class="admin-tab active">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+          <div class="card" style="margin:0;"><div class="sec">Contact</div><div class="irow"><span class="ilbl">Phone</span><span class="ival">+91 98765 43210</span></div><div class="irow" style="border:none;"><span class="ilbl">Email</span><span class="ival" style="font-size:12px;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d3a1b2b9b6a0bb93b6beb2babffdb0bcbe">[email&#160;protected]</a></span></div></div>
+          <div class="card" style="margin:0;"><div class="sec">Lead Info</div><div class="irow"><span class="ilbl">City</span><span class="ival">Hyderabad</span></div><div class="irow" style="border:none;"><span class="ilbl">Source</span><span class="ival">Referral</span></div></div>
+        </div>
+        <div class="card"><div class="sec">Current Progress</div>
+          <div class="irow"><span class="ilbl">Current Step</span><span class="ival">Step 5 — ROI Video</span></div>
+          <div class="irow"><span class="ilbl">Language Selected</span><span class="ival">Telugu</span></div>
+          <div class="irow"><span class="ilbl">Videos Watched</span><span class="ival">4 of 8</span></div>
+          <div class="irow"><span class="ilbl">Guidelines Accepted</span><span class="ival" style="color:var(--no-tx);">Not yet</span></div>
+          <div class="irow" style="border:none;"><span class="ilbl">Last Active</span><span class="ival">2 mins ago</span></div>
+          <div class="pbwrap"><div class="pbfill" style="width:45%;"></div></div>
+          <div style="font-size:11px;color:var(--hnt);margin-top:4px;">45% of onboarding complete</div>
+        </div>
+        <div class="card"><div class="sec">Interested Model</div><div class="irow"><span class="ilbl">Model</span><span><span class="pill p-inf">3 Chair</span></span></div><div class="irow" style="border:none;"><span class="ilbl">Investment</span><span class="ival">₹8,50,000</span></div></div>
+      </div>
+      <div id="ldm-journey" class="admin-tab">
+        <div class="card"><div class="sec">Onboarding Journey</div>
+          <div class="tl-item"><div class="tl-line"><div class="tl-dot" style="background:var(--ok-tx);"></div><div class="tl-conn"></div></div><div class="tl-ct"><div class="tl-d">Apr 6, 2026 · 10:15 AM</div><div class="tl-l">Registered</div><div class="tl-s">Self-registered via portal</div></div></div>
+          <div class="tl-item"><div class="tl-line"><div class="tl-dot" style="background:var(--ok-tx);"></div><div class="tl-conn"></div></div><div class="tl-ct"><div class="tl-d">Apr 6, 2026 · 10:18 AM</div><div class="tl-l">Language Selected</div><div class="tl-s">Telugu</div></div></div>
+          <div class="tl-item"><div class="tl-line"><div class="tl-dot" style="background:var(--ok-tx);"></div><div class="tl-conn"></div></div><div class="tl-ct"><div class="tl-d">Apr 6, 2026 · 10:22 AM</div><div class="tl-l">Vision Video Watched</div></div></div>
+          <div class="tl-item"><div class="tl-line"><div class="tl-dot" style="background:var(--ok-tx);"></div><div class="tl-conn"></div></div><div class="tl-ct"><div class="tl-d">Apr 6, 2026 · 10:30 AM</div><div class="tl-l">Salon 360° Watched</div></div></div>
+          <div class="tl-item"><div class="tl-line"><div class="tl-dot" style="background:var(--hi);"></div></div><div class="tl-ct"><div class="tl-d">Apr 8, 2026 · 2:15 PM</div><div class="tl-l">ROI Video — In Progress</div></div></div>
+        </div>
+      </div>
+      <div id="ldm-project" class="admin-tab">
+        <div class="card"><div class="sec">Project Status</div><div class="irow"><span class="ilbl">Token Payment</span><span><span class="pill p-no">Not Paid</span></span></div><div class="irow"><span class="ilbl">Location</span><span><span class="pill p-no">Not Submitted</span></span></div><div class="irow" style="border:none;"><span class="ilbl">Project Phase</span><span><span class="pill p-wrn">Pre-Token</span></span></div></div>
+        <div class="card"><div class="sec">Update Project Status</div>
+          <div class="fr"><label class="fl">Payment Step</label><select><option>Token Not Paid</option><option>Token Paid</option><option>Cheque Received</option><option>Cash Received</option><option>All Payments Done</option></select></div>
+          <div class="fr"><label class="fl">Location Status</label><select><option>Not Submitted</option><option>Submitted — Searching</option><option>Location Confirmed</option><option>Interior Started</option><option>Ready to Open</option><option>Open</option></select></div>
+          <div class="fr"><label class="fl">Admin Note</label><textarea class="note-input" placeholder="Add note for this status change…"></textarea></div>
+          <button class="btn btn-p" onclick="alert('✓ Project status updated!')">Update Project Status</button>
+        </div>
+      </div>
+      <div id="ldm-notes" class="admin-tab">
+        <div class="card"><div class="sec">Admin Notes</div>
+          <div class="activity-item"><div class="ai-dot"></div><div class="ai-info"><div class="ai-txt">Lead is very interested in 3-chair model. Budget constraint was mentioned.</div><div class="ai-time">Apr 6 · Added by Admin</div></div></div>
+          <div class="activity-item" style="border:none;"><div class="ai-dot"></div><div class="ai-info"><div class="ai-txt">Follow-up call scheduled for Apr 12.</div><div class="ai-time">Apr 8 · Added by Admin</div></div></div>
+        </div>
+        <div class="fr"><label class="fl">Add New Note</label><textarea class="note-input" placeholder="Add a note about this lead…"></textarea></div>
+        <button class="btn btn-p" onclick="alert('✓ Note saved!')">Save Note</button>
+      </div>
+      <div id="ldm-control" class="admin-tab">
+        <div class="card"><div class="sec">Lead Controls</div>
+          <div class="fr"><label class="fl">Jump Lead to Step</label>
+            <select><option>Step 1 — Language</option><option>Step 2 — Vision</option><option>Step 3 — Salon 360°</option><option>Step 4 — Investment</option><option>Step 5 — ROI</option><option>Step 6 — Support</option><option>Step 7 — Operations</option><option>Step 8 — Staff</option><option>Step 9 — Royalty</option><option>Step 10 — Interest Check</option><option>Guidelines</option><option>Token Payment</option><option>Project Dashboard</option></select>
+          </div>
+          <button class="btn btn-i btn-f" style="margin-bottom:10px;" onclick="alert('✓ Lead jumped to step!')">Jump to Step</button>
+          <div style="height:0.5px;background:var(--bdr);margin:14px 0;"></div>
+          <div class="fr"><label class="fl">Change Lead Status</label>
+            <select><option>Active — In Progress</option><option>Interested — Awaiting Payment</option><option>Project Active</option><option>Closed — Not Interested</option><option>On Hold</option></select>
+          </div>
+          <button class="btn btn-p btn-f" style="margin-bottom:10px;" onclick="alert('✓ Status updated!')">Update Status</button>
+          <div style="height:0.5px;background:var(--bdr);margin:14px 0;"></div>
+          <div class="fr"><label class="fl">Reset PIN</label><input type="text" placeholder="Enter new 6-digit PIN" maxlength="6"/></div>
+          <button class="btn btn-w btn-f" style="margin-bottom:10px;" onclick="alert('✓ PIN reset!')">Reset Lead PIN</button>
+          <div style="height:0.5px;background:var(--bdr);margin:14px 0;"></div>
+          <button class="btn btn-d btn-f" onclick="if(confirm('Delete this lead?'))closeLDM();">Delete Lead</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const APP_VIDEOS={vision:'',salon:'',invest:'',roi:'',support:'',ops:'',staff:'',royalty:''};
+const LEADS=[
+  {id:1,name:'Rajesh Kumar',phone:'+91 98765 43210',city:'Hyderabad',step:5,status:'in-progress',lang:'Telugu',model:'3 Chair',source:'Direct'},
+  {id:2,name:'Priya Sharma',phone:'+91 87654 32109',city:'Bengaluru',step:10,status:'project',lang:'Kannada',model:'4 Chair',source:'Social Media'},
+  {id:3,name:'Arun Reddy',phone:'+91 76543 21098',city:'Vijayawada',step:8,status:'in-progress',lang:'Telugu',model:'4 Chair',source:'Referral'},
+  {id:4,name:'Meena Iyer',phone:'+91 65432 10987',city:'Chennai',step:10,status:'project',lang:'Tamil',model:'3 Chair',source:'Website'},
+  {id:5,name:'Vikram Nair',phone:'+91 54321 09876',city:'Kochi',step:10,status:'project',lang:'Malayalam',model:'5 Chair',source:'Exhibition'},
+  {id:6,name:'Suresh Babu',phone:'+91 43210 98765',city:'Tirupati',step:10,status:'closed',lang:'Telugu',model:'—',source:'Direct'},
+  {id:7,name:'Deepa Krishnan',phone:'+91 32109 87654',city:'Coimbatore',step:3,status:'new',lang:'Tamil',model:'—',source:'Social Media'},
+  {id:8,name:'Ramesh Gupta',phone:'+91 21098 76543',city:'Hyderabad',step:6,status:'in-progress',lang:'Hindi',model:'3 Chair',source:'Referral'},
+];
+const GUIDELINES=[
+  'I will operate the salon 7 days a week as per Budget Barber standards.',
+  'All pricing will strictly follow the Budget Barber rate card at all times.',
+  'Only the authorized Budget Barber POS system will be used for all billing.',
+  'Monthly royalty of 8% will be paid by the 5th of every month without exception.',
+  'Staff salaries will be paid on time, by the 5th of each calendar month.',
+  'All staff will receive a minimum of 1 day off per week.',
+  'No unapproved third-party products will be sold in the salon.',
+  'Monthly cleanliness and operations audit standards will be maintained.',
+  'Customer feedback will be acknowledged and actioned within 48 hours.',
+  'No physical or verbal abuse of staff or customers will be tolerated.',
+  'All marketing activities will follow Budget Barber brand guidelines.',
+  'I understand non-compliance may result in franchise agreement termination.'
+];
+
+function aTab(btn,tabId){
+  document.querySelectorAll('.adm-nav-item').forEach(b=>b.classList.remove('active'));
+  const navItem=document.querySelector(`[onclick*="${tabId}"]`);
+  if(navItem&&navItem.classList.contains('adm-nav-item'))navItem.classList.add('active');
+  document.querySelectorAll('#at-dashboard,#at-leads,#at-newlead,#at-videos,#at-invest-content,#at-guidelines,#at-support-content,#at-ops-content,#at-payments,#at-royalty-mgmt,#at-settings,#at-pay-settings').forEach(t=>t.classList.remove('active'));
+  const el=document.getElementById(tabId);if(el)el.classList.add('active');
+  if(tabId==='at-leads')buildLeadTable();
+  if(tabId==='at-guidelines')buildGLAdmin();
+  if(tabId==='at-invest-content')buildPayStepsEditor();
+  if(tabId==='at-support-content')buildSupportEditor();
+}
+function previewQR(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=document.getElementById('qr-preview-img');
+    const ph=document.getElementById('qr-placeholder');
+    img.src=e.target.result;img.style.display='block';
+    if(ph)ph.style.display='none';
+  };
+  reader.readAsDataURL(file);
+}
+function previewQRUrl(url){
+  if(!url)return;
+  const img=document.getElementById('qr-preview-img');
+  const ph=document.getElementById('qr-placeholder');
+  img.src=url;img.style.display='block';
+  if(ph)ph.style.display='none';
+}
+function savePaySettings(){
+  const upi=document.getElementById('upi-id').value;
+  const preview=document.getElementById('preview-upi');
+  if(preview)preview.textContent=upi||'—';
+  alert('✓ Payment settings saved and published to franchise app!');
+}
+// Live UPI preview
+document.addEventListener('DOMContentLoaded',()=>{
+  const upiInput=document.getElementById('upi-id');
+  if(upiInput){upiInput.addEventListener('input',()=>{const p=document.getElementById('preview-upi');if(p)p.textContent=upiInput.value||'—';});}
+});
+function avTab(btn,tabId){
+  const allIds=['av-upload','av-manage','av-lang','ic3','ic4','ic5','ic-roi','ic-royalty','ic-payments'];
+  allIds.forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+  const parent=btn?btn.closest('.admin-tab'):null;
+  if(parent){parent.querySelectorAll('.adm-tab-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+  const t=document.getElementById(tabId);if(t)t.style.display='block';
+}
+function buildLeadTable(){
+  const tbody=document.getElementById('lead-tbody');if(!tbody)return;tbody.innerHTML='';
+  const statusMap={'new':{lbl:'New',cls:'p-inf'},'in-progress':{lbl:'In Progress',cls:'p-wrn'},'project':{lbl:'Project Active',cls:'p-ok'},'closed':{lbl:'Closed',cls:'p-no'}};
+  LEADS.forEach(l=>{
+    const st=statusMap[l.status]||{lbl:l.status,cls:'p-inf'};
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><div style="font-weight:600;">${l.name}</div><div style="font-size:11px;color:var(--mut);">${l.phone}</div></td>
+      <td>${l.city}</td>
+      <td><div style="font-size:13px;">Step ${l.step}/10</div><div style="font-size:11px;color:var(--mut);">${l.lang}</div></td>
+      <td><span class="pill ${st.cls}">${st.lbl}</span></td>
+      <td><div class="act-btns">
+        <button class="btn btn-xs btn-i" onclick="openLDM(${l.id})">View</button>
+        <button class="btn btn-xs btn-d" onclick="closeLdBtn(${l.id})">Close</button>
+      </div></td>`;
+    tbody.appendChild(tr);
+  });
+}
+function openLDM(id){
+  const l=LEADS.find(x=>x.id===id);if(!l)return;
+  document.getElementById('ldm-name').textContent=l.name;
+  document.getElementById('ldm-meta').textContent=l.phone+' · '+l.city+' · '+l.model;
+  const stMap={'new':'p-inf','in-progress':'p-wrn','project':'p-ok','closed':'p-no'};
+  const pill=document.getElementById('ldm-pill');
+  pill.className='pill '+(stMap[l.status]||'p-inf');
+  pill.textContent=l.status.replace('-',' ').replace(/\b\w/g,c=>c.toUpperCase());
+  document.getElementById('lead-modal').classList.add('open');
+  document.querySelectorAll('.ldm-body .adm-tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.ldm-body .adm-tab-btn').classList.add('active');
+  document.querySelectorAll('.ldm-body .admin-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('ldm-overview').classList.add('active');
+}
+function closeLDM(){document.getElementById('lead-modal').classList.remove('open');}
+function ldmTab(btn,tabId){
+  document.querySelectorAll('.ldm-body .adm-tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('.ldm-body .admin-tab').forEach(t=>t.classList.remove('active'));
+  const el=document.getElementById(tabId);if(el)el.classList.add('active');
+}
+function closeLdBtn(id){const l=LEADS.find(x=>x.id===id);if(l){l.status='closed';buildLeadTable();alert(l.name+' marked as Closed.');}}
+
+function buildGLAdmin(){
+  const list=document.getElementById('gl-admin-list');if(!list)return;list.innerHTML='';
+  GUIDELINES.forEach((g,i)=>{
+    const div=document.createElement('div');div.className='guideline-admin-item';
+    div.innerHTML=`<div class="gai-num">${i+1}.</div><div class="gai-txt">${g}</div><div class="gai-acts"><button class="btn btn-xs" onclick="editGL(${i})">Edit</button><button class="btn btn-xs btn-d" onclick="delGL(${i})">Delete</button></div>`;
+    list.appendChild(div);
+  });
+}
+function addGuideline(){
+  const txt=document.getElementById('new-gl-text');
+  if(txt&&txt.value.trim()){GUIDELINES.push(txt.value.trim());txt.value='';buildGLAdmin();alert('✓ Guideline added!');}
+}
+function delGL(i){if(confirm('Delete this guideline?')){GUIDELINES.splice(i,1);buildGLAdmin();}}
+function editGL(i){const txt=prompt('Edit guideline:',GUIDELINES[i]);if(txt){GUIDELINES[i]=txt;buildGLAdmin();}}
+
+function buildVidList(){
+  const c=document.getElementById('vid-list-container');if(!c)return;
+  const steps=[{key:'vision',label:'Step 2 — Vision Video'},{key:'salon',label:'Step 3 — Salon 360°'},{key:'invest',label:'Step 4 — Investment'},{key:'roi',label:'Step 5 — ROI'},{key:'support',label:'Step 6 — Support'},{key:'ops',label:'Step 7 — Operations'},{key:'staff',label:'Step 8 — Staff'},{key:'royalty',label:'Step 9 — Royalty'}];
+  c.innerHTML='';
+  steps.forEach(s=>{
+    const url=APP_VIDEOS[s.key]||'';
+    const div=document.createElement('div');div.className='vid-card';
+    div.innerHTML=`<div class="vid-thumb">🎬</div>
+      <div class="vid-info">
+        <div class="vid-name">${s.label}</div>
+        <div class="vid-meta">Default Language · ${url?'URL Set':'No URL set'}</div>
+        ${url?`<div class="vid-url">${url}</div>`:'<div style="font-size:11px;color:var(--no-tx);margin-top:4px;">⚠ No video uploaded</div>'}
+        <div class="vid-actions">
+          <button class="btn btn-xs btn-p" onclick="editVid('${s.key}')">Edit URL</button>
+          <button class="btn btn-xs">Preview</button>
+          ${url?`<button class="btn btn-xs btn-d" onclick="delVid('${s.key}')">Remove</button>`:''}
+        </div>
+      </div>`;
+    c.appendChild(div);
+  });
+}
+function editVid(key){const url=prompt('Enter video URL for '+key+':',APP_VIDEOS[key]||'');if(url!==null){APP_VIDEOS[key]=url;buildVidList();}}
+function delVid(key){if(confirm('Remove video?')){APP_VIDEOS[key]='';buildVidList();}}
+function saveVideo(){
+  const step=document.getElementById('vid-step-sel').value;
+  const url=document.getElementById('vid-url-inp').value.trim();
+  if(!url){alert('Please enter a video URL.');return;}
+  APP_VIDEOS[step]=url;
+  alert('✓ Video saved for step: '+step);
+  document.getElementById('vid-url-inp').value='';
+  document.getElementById('vid-title-inp').value='';
+}
+
+function buildLangCoverage(){
+  const g=document.getElementById('lang-coverage-grid');if(!g)return;
+  const langs=['English','Telugu','Hindi','Tamil','Kannada','Malayalam'];
+  const steps=['Vision','Salon','Investment','ROI','Support','Ops','Staff','Royalty'];
+  let html='<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;">';
+  html+='<tr><th style="padding:8px;text-align:left;border-bottom:0.5px solid var(--bdr);color:var(--hnt);">Language</th>';
+  steps.forEach(s=>html+=`<th style="padding:8px;text-align:center;border-bottom:0.5px solid var(--bdr);color:var(--hnt);">${s}</th>`);
+  html+='</tr>';
+  langs.forEach(l=>{
+    html+=`<tr><td style="padding:8px;font-weight:600;border-bottom:0.5px solid var(--bdr);">${l}</td>`;
+    steps.forEach((s,i)=>{
+      const has=l==='English'||(l==='Telugu'&&i<3)||(l==='Hindi'&&i<2);
+      html+=`<td style="padding:8px;text-align:center;border-bottom:0.5px solid var(--bdr);">${has?'<span class="pill p-ok" style="font-size:10px;padding:2px 6px;">✓</span>':'<span class="pill p-no" style="font-size:10px;padding:2px 6px;">—</span>'}</td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</table></div>';g.innerHTML=html;
+}
+
+function buildPayStepsEditor(){
+  const c=document.getElementById('pay-steps-editor');if(!c||c.children.length>0)return;
+  const steps=[
+    {id:'pay1',name:'Token Amount — ₹20,000',note:'UPI / Bank Transfer · Location blocking'},
+    {id:'pay2',name:'Cheque — ₹2,50,000',note:'At franchise agreement signing'},
+    {id:'pay3',name:'Cash — ₹6,00,000',note:'On commencement of interior setup'},
+    {id:'pay4',name:'Marc Salon Chairs — ₹1,50,000',note:'Direct payment to supplier'}
+  ];
+  steps.forEach((s,i)=>{
+    const div=document.createElement('div');div.className='fr';
+    div.innerHTML=`<label class="fl">Step ${i+1} — Label</label><input type="text" id="e-${s.id}name" value="${s.name}" style="margin-bottom:6px;"/><label class="fl">Note</label><input type="text" id="e-${s.id}note" value="${s.note}"/>`;
+    c.appendChild(div);
+  });
+}
+
+function buildSupportEditor(){
+  const c=document.getElementById('support-items-editor');if(!c||c.children.length>0)return;
+  const items=[
+    {id:1,t:'Staff Recruitment & Training',d:'Trained barbers deployed at launch. Replacement within 7 days guaranteed.'},
+    {id:2,t:'Marketing Support',d:'Digital ads, local campaigns & grand opening promotion included.'},
+    {id:3,t:'Billing & POS System',d:'Cloud POS with real-time reporting, inventory & daily revenue dashboard.'},
+    {id:4,t:'Monthly Performance Reviews',d:'Dedicated franchise manager reviews KPIs monthly with action plan.'},
+    {id:5,t:'Technical & Equipment Support',d:'48-hour response SLA for all equipment & technology issues.'}
+  ];
+  items.forEach(item=>{
+    const div=document.createElement('div');div.className='fr';div.style.borderBottom='0.5px solid var(--bdr)';div.style.paddingBottom='12px';div.style.marginBottom='12px';
+    div.innerHTML=`<div class="form-2col"><div><label class="fl">Item ${item.id} Title</label><input type="text" id="sup-t${item.id}" value="${item.t}"/></div><div><label class="fl">Description</label><input type="text" id="sup-d${item.id}" value="${item.d}
