@@ -220,18 +220,8 @@ input:checked + .slider:before{transform:translateX(16px);}
       <div style="font-size:13px;color:var(--mut);margin-bottom:20px;">Enter your credentials to access the portal</div>
       <div class="fr"><label class="fl">Username</label><input type="text" id="adm-user" placeholder="admin" autocomplete="username"/></div>
       <div class="fr"><label class="fl">Password</label><input type="password" id="adm-pass" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAdminLogin()"/></div>
-      <div class="fr"><label class="fl">6-Digit PIN</label>
-        <div style="display:flex;gap:8px;justify-content:center;margin:8px 0;">
-          <input class="pin-i" maxlength="1" type="password" id="ap1" oninput="apm(this,1)" style="width:42px;height:50px;text-align:center;font-size:20px;font-weight:700;border:0.5px solid var(--bdr2);border-radius:var(--rad);background:var(--surf2);color:var(--txt);outline:none;"/>
-          <input class="pin-i" maxlength="1" type="password" id="ap2" oninput="apm(this,2)" style="width:42px;height:50px;text-align:center;font-size:20px;font-weight:700;border:0.5px solid var(--bdr2);border-radius:var(--rad);background:var(--surf2);color:var(--txt);outline:none;"/>
-          <input class="pin-i" maxlength="1" type="password" id="ap3" oninput="apm(this,3)" style="width:42px;height:50px;text-align:center;font-size:20px;font-weight:700;border:0.5px solid var(--bdr2);border-radius:var(--rad);background:var(--surf2);color:var(--txt);outline:none;"/>
-          <input class="pin-i" maxlength="1" type="password" id="ap4" oninput="apm(this,4)" style="width:42px;height:50px;text-align:center;font-size:20px;font-weight:700;border:0.5px solid var(--bdr2);border-radius:var(--rad);background:var(--surf2);color:var(--txt);outline:none;"/>
-          <input class="pin-i" maxlength="1" type="password" id="ap5" oninput="apm(this,5)" style="width:42px;height:50px;text-align:center;font-size:20px;font-weight:700;border:0.5px solid var(--bdr2);border-radius:var(--rad);background:var(--surf2);color:var(--txt);outline:none;"/>
-          <input class="pin-i" maxlength="1" type="password" id="ap6" oninput="apm(this,6)" style="width:42px;height:50px;text-align:center;font-size:20px;font-weight:700;border:0.5px solid var(--bdr2);border-radius:var(--rad);background:var(--surf2);color:var(--txt);outline:none;"/>
-        </div>
-      </div>
       <div id="adm-err" style="display:none;background:var(--no-bg);color:var(--no-tx);border-radius:8px;padding:9px 12px;font-size:13px;margin-bottom:12px;">❌ Incorrect credentials. Please try again.</div>
-      <div style="background:#edf5f1;border-radius:8px;padding:10px 14px;font-size:12px;color:#1a5c44;margin-bottom:14px;"><strong>Demo Credentials:</strong><br/>Username: <strong>admin</strong> · Password: <strong>Admin@2026</strong><br/>PIN: <strong>7 3 9 1 4 2</strong></div>
+      <div style="background:#edf5f1;border-radius:8px;padding:10px 14px;font-size:12px;color:#1a5c44;margin-bottom:14px;"><strong>Demo Credentials:</strong><br/>Username: <strong>admin</strong> · Password: <strong>Admin@2026</strong></div>
       <button class="btn btn-p btn-f" onclick="doAdminLogin()">Sign In to Admin Portal →</button>
       <div style="text-align:center;margin-top:12px;"><a href="index.html" style="font-size:12px;color:var(--mut);text-decoration:none;">← Back to Home</a></div>
     </div>
@@ -268,6 +258,11 @@ input:checked + .slider:before{transform:translateX(16px);}
     <div class="adm-nav-item" onclick="aTab(this,'at-payments')"><span class="adm-nav-icon">💳</span>Payment Tracking</div>
     <div class="adm-nav-item" onclick="aTab(this,'at-royalty-mgmt')"><span class="adm-nav-icon">📈</span>Royalty Management</div>
     <div class="adm-nav-item" onclick="aTab(this,'at-pay-settings')"><span class="adm-nav-icon">🪙</span>Payment Settings</div>
+    <div class="adm-nav-group">Master Franchise</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-mf-overview')"><span class="adm-nav-icon">🏢</span>MF Overview</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-mf-accounts')"><span class="adm-nav-icon">👥</span>MF Accounts</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-mf-create')"><span class="adm-nav-icon">➕</span>Create MF Login</div>
+    <div class="adm-nav-item" onclick="aTab(this,'at-mf-regions')"><span class="adm-nav-icon">🗺</span>Regions</div>
     <div class="adm-nav-group">System</div>
     <div class="adm-nav-item" onclick="aTab(this,'at-settings')"><span class="adm-nav-icon">⚙</span>Portal Settings</div>
   </nav>
@@ -660,6 +655,199 @@ input:checked + .slider:before{transform:translateX(16px);}
     </div>
 
 
+    <!-- MASTER FRANCHISE OVERVIEW -->
+    <div id="at-mf-overview" class="admin-tab">
+      <div class="adm-page-title">Master Franchise Overview</div>
+      <div class="adm-page-sub">All Master Franchise partners across regions at a glance</div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-num" style="color:var(--hi);">4</div><div class="stat-lbl">Active MF Partners</div><div class="stat-delta" style="color:var(--ok-tx);">↑ 1 this month</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--ok-tx);">23</div><div class="stat-lbl">Total Leads (All MF)</div><div class="stat-delta" style="color:var(--mut);">Across all regions</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--wrn-tx);">2</div><div class="stat-lbl">Pending Approvals</div><div class="stat-delta" style="color:var(--mut);">MF account requests</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--inf-tx);">6</div><div class="stat-lbl">Regions Covered</div><div class="stat-delta" style="color:var(--mut);">AP, TS, KA, TN, KL, MH</div></div>
+      </div>
+      <div class="adm-card" style="padding:0;overflow:hidden;">
+        <div style="padding:14px 20px;border-bottom:0.5px solid var(--bdr);font-size:13px;font-weight:700;">Master Franchise Partner Summary</div>
+        <table class="lead-table">
+          <thead><tr><th>MF Name</th><th>Region</th><th>Cities</th><th>Leads</th><th>Active Projects</th><th>Royalty Due</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="mf-summary-tbody">
+            <tr><td><div style="font-weight:600;">Srinivas Rao</div><div style="font-size:11px;color:var(--mut);">srinivas@mf.budgetbarber</div></td><td>Andhra Pradesh</td><td>Vijayawada, Guntur, Nellore</td><td>8</td><td>3</td><td><span class="pill p-ok">✓ Paid</span></td><td><span class="pill p-ok">Active</span></td><td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="aTab(null,'at-mf-accounts')">View</button><button class="btn btn-xs btn-w">Suspend</button></div></td></tr>
+            <tr><td><div style="font-weight:600;">Anitha Reddy</div><div style="font-size:11px;color:var(--mut);">anitha@mf.budgetbarber</div></td><td>Telangana</td><td>Hyderabad, Warangal</td><td>7</td><td>2</td><td><span class="pill p-wrn">Pending</span></td><td><span class="pill p-ok">Active</span></td><td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="aTab(null,'at-mf-accounts')">View</button><button class="btn btn-xs btn-w">Suspend</button></div></td></tr>
+            <tr><td><div style="font-weight:600;">Kiran Kumar</div><div style="font-size:11px;color:var(--mut);">kiran@mf.budgetbarber</div></td><td>Karnataka</td><td>Bengaluru, Mysuru</td><td>5</td><td>1</td><td><span class="pill p-ok">✓ Paid</span></td><td><span class="pill p-ok">Active</span></td><td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="aTab(null,'at-mf-accounts')">View</button><button class="btn btn-xs btn-w">Suspend</button></div></td></tr>
+            <tr><td><div style="font-weight:600;">Priyanka Menon</div><div style="font-size:11px;color:var(--mut);">priyanka@mf.budgetbarber</div></td><td>Kerala</td><td>Kochi, Trivandrum</td><td>3</td><td>0</td><td><span class="pill p-no">Overdue</span></td><td><span class="pill p-wrn">Review</span></td><td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="aTab(null,'at-mf-accounts')">View</button><button class="btn btn-xs btn-d">Deactivate</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-p" onclick="aTab(null,'at-mf-create')">+ Create New MF Login</button>
+        <button class="btn btn-i" onclick="aTab(null,'at-mf-regions')">🗺 Manage Regions</button>
+      </div>
+    </div>
+
+    <!-- MASTER FRANCHISE ACCOUNTS -->
+    <div id="at-mf-accounts" class="admin-tab">
+      <div class="adm-page-title">MF Account Management</div>
+      <div class="adm-page-sub">View, edit, and manage all Master Franchise logins and access</div>
+      <div class="adm-card" style="padding:0;overflow:hidden;">
+        <div style="padding:14px 20px;border-bottom:0.5px solid var(--bdr);display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <div class="search-box" style="flex:1;min-width:200px;margin:0;"><span class="search-icon">🔍</span><input type="text" placeholder="Search by name, region, email…"/></div>
+          <button class="btn btn-p btn-sm" onclick="aTab(null,'at-mf-create')">+ New MF</button>
+        </div>
+        <table class="lead-table">
+          <thead><tr><th>MF Partner</th><th>Region</th><th>Email / Login</th><th>Password</th><th>Assigned Cities</th><th>Leads</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div style="font-weight:600;">Srinivas Rao</div><div style="font-size:11px;color:var(--mut);">+91 98765 11111</div></td>
+              <td><span class="pill p-inf">Andhra Pradesh</span></td>
+              <td style="font-size:12px;">srinivas@mf.budgetbarber</td>
+              <td><div style="display:flex;align-items:center;gap:6px;"><span id="pw-mf1" style="font-size:12px;letter-spacing:2px;">••••••••</span><button class="btn btn-xs" onclick="togglePw('pw-mf1','MF@AP2026')">Show</button></div></td>
+              <td style="font-size:12px;">Vijayawada, Guntur, Nellore</td>
+              <td>8</td>
+              <td><span class="pill p-ok">Active</span></td>
+              <td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="openMFDetail(1)">Edit</button><button class="btn btn-xs btn-d">Remove</button></div></td>
+            </tr>
+            <tr>
+              <td><div style="font-weight:600;">Anitha Reddy</div><div style="font-size:11px;color:var(--mut);">+91 87654 22222</div></td>
+              <td><span class="pill p-wrn">Telangana</span></td>
+              <td style="font-size:12px;">anitha@mf.budgetbarber</td>
+              <td><div style="display:flex;align-items:center;gap:6px;"><span id="pw-mf2" style="font-size:12px;letter-spacing:2px;">••••••••</span><button class="btn btn-xs" onclick="togglePw('pw-mf2','MF@TS2026')">Show</button></div></td>
+              <td style="font-size:12px;">Hyderabad, Warangal</td>
+              <td>7</td>
+              <td><span class="pill p-ok">Active</span></td>
+              <td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="openMFDetail(2)">Edit</button><button class="btn btn-xs btn-d">Remove</button></div></td>
+            </tr>
+            <tr>
+              <td><div style="font-weight:600;">Kiran Kumar</div><div style="font-size:11px;color:var(--mut);">+91 76543 33333</div></td>
+              <td><span class="pill p-ok">Karnataka</span></td>
+              <td style="font-size:12px;">kiran@mf.budgetbarber</td>
+              <td><div style="display:flex;align-items:center;gap:6px;"><span id="pw-mf3" style="font-size:12px;letter-spacing:2px;">••••••••</span><button class="btn btn-xs" onclick="togglePw('pw-mf3','MF@KA2026')">Show</button></div></td>
+              <td style="font-size:12px;">Bengaluru, Mysuru</td>
+              <td>5</td>
+              <td><span class="pill p-ok">Active</span></td>
+              <td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="openMFDetail(3)">Edit</button><button class="btn btn-xs btn-d">Remove</button></div></td>
+            </tr>
+            <tr>
+              <td><div style="font-weight:600;">Priyanka Menon</div><div style="font-size:11px;color:var(--mut);">+91 65432 44444</div></td>
+              <td><span class="pill p-no">Kerala</span></td>
+              <td style="font-size:12px;">priyanka@mf.budgetbarber</td>
+              <td><div style="display:flex;align-items:center;gap:6px;"><span id="pw-mf4" style="font-size:12px;letter-spacing:2px;">••••••••</span><button class="btn btn-xs" onclick="togglePw('pw-mf4','MF@KL2026')">Show</button></div></td>
+              <td style="font-size:12px;">Kochi, Trivandrum</td>
+              <td>3</td>
+              <td><span class="pill p-wrn">Review</span></td>
+              <td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="openMFDetail(4)">Edit</button><button class="btn btn-xs btn-d">Remove</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CREATE MF LOGIN -->
+    <div id="at-mf-create" class="admin-tab">
+      <div class="adm-page-title">Create Master Franchise Login</div>
+      <div class="adm-page-sub">Set up a new Master Franchise partner account with region and city assignments</div>
+      <div class="adm-card">
+        <div class="adm-card-title">Personal Details</div>
+        <div class="form-2col">
+          <div class="fr"><label class="fl">Full Name</label><input type="text" id="mf-name" placeholder="Srinivas Rao"/></div>
+          <div class="fr"><label class="fl">Phone Number</label><input type="tel" id="mf-phone" placeholder="+91 98765 00000"/></div>
+          <div class="fr"><label class="fl">Email Address</label><input type="email" id="mf-email" placeholder="name@mf.budgetbarber"/></div>
+          <div class="fr"><label class="fl">Aadhar / PAN</label><input type="text" id="mf-pan" placeholder="PAN or Aadhar number"/></div>
+        </div>
+      </div>
+      <div class="adm-card">
+        <div class="adm-card-title">Region & City Assignment</div>
+        <div class="form-2col">
+          <div class="fr"><label class="fl">Primary State / Region</label>
+            <select id="mf-region">
+              <option value="">— Select State —</option>
+              <option>Andhra Pradesh</option>
+              <option>Telangana</option>
+              <option>Karnataka</option>
+              <option>Tamil Nadu</option>
+              <option>Kerala</option>
+              <option>Maharashtra</option>
+              <option>Odisha</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="fr"><label class="fl">MF Portal Username</label><input type="text" id="mf-username" placeholder="e.g. srinivas_ap"/></div>
+        </div>
+        <div class="fr"><label class="fl">Assigned Cities (comma separated)</label><input type="text" id="mf-cities" placeholder="Vijayawada, Guntur, Nellore, Ongole"/></div>
+        <div class="fr"><label class="fl">Additional Notes / Territory Restrictions</label><textarea id="mf-notes" placeholder="e.g. Exclude Krishna district; focus on Tier-2 cities…"></textarea></div>
+      </div>
+      <div class="adm-card">
+        <div class="adm-card-title">Login Credentials</div>
+        <div class="form-2col">
+          <div class="fr"><label class="fl">Set Password</label><input type="password" id="mf-pass" placeholder="Minimum 8 characters"/></div>
+          <div class="fr"><label class="fl">Confirm Password</label><input type="password" id="mf-pass2" placeholder="Re-enter password"/></div>
+        </div>
+        <div style="background:var(--wrn-bg);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--wrn-tx);margin-bottom:14px;">⚠️ The MF partner will use their email and this password to log into the Master Franchise Portal. Share credentials securely.</div>
+      </div>
+      <div class="adm-card">
+        <div class="adm-card-title">Access Permissions</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">View Own Region Leads</div><div style="font-size:12px;color:var(--mut);">See all leads in their assigned cities</div></div><label class="switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">Create New Leads</div><div style="font-size:12px;color:var(--mut);">Add franchise leads directly</div></div><label class="switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">Edit Lead Status</div><div style="font-size:12px;color:var(--mut);">Update progress and notes</div></div><label class="switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">View Payment Records</div><div style="font-size:12px;color:var(--mut);">See token and installment payments</div></div><label class="switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">Manage Videos &amp; Content</div><div style="font-size:12px;color:var(--mut);">Upload/edit videos and guidelines</div></div><label class="switch"><input type="checkbox"/><span class="slider"></span></label></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">Royalty Reports Access</div><div style="font-size:12px;color:var(--mut);">View royalty tracking for their region</div></div><label class="switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-p" onclick="createMFLogin()">✓ Create MF Login &amp; Send Credentials</button>
+        <button class="btn">Cancel</button>
+      </div>
+    </div>
+
+    <!-- MF REGIONS -->
+    <div id="at-mf-regions" class="admin-tab">
+      <div class="adm-page-title">Region Management</div>
+      <div class="adm-page-sub">Define and manage geographic territories assigned to each Master Franchise partner</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div class="adm-card" style="margin:0;">
+          <div class="adm-card-title" style="margin-bottom:12px;">Andhra Pradesh <span class="pill p-ok" style="margin-left:6px;">Active</span></div>
+          <div class="irow"><span class="ilbl">MF Partner</span><span class="ival">Srinivas Rao</span></div>
+          <div class="irow"><span class="ilbl">Cities</span><span class="ival" style="font-size:12px;">Vijayawada, Guntur, Nellore</span></div>
+          <div class="irow"><span class="ilbl">Active Leads</span><span class="ival">8</span></div>
+          <div class="irow"><span class="ilbl">Projects</span><span class="ival">3</span></div>
+          <div style="display:flex;gap:6px;margin-top:12px;"><button class="btn btn-xs btn-i">Edit Cities</button><button class="btn btn-xs">Reassign MF</button></div>
+        </div>
+        <div class="adm-card" style="margin:0;">
+          <div class="adm-card-title" style="margin-bottom:12px;">Telangana <span class="pill p-ok" style="margin-left:6px;">Active</span></div>
+          <div class="irow"><span class="ilbl">MF Partner</span><span class="ival">Anitha Reddy</span></div>
+          <div class="irow"><span class="ilbl">Cities</span><span class="ival" style="font-size:12px;">Hyderabad, Warangal</span></div>
+          <div class="irow"><span class="ilbl">Active Leads</span><span class="ival">7</span></div>
+          <div class="irow"><span class="ilbl">Projects</span><span class="ival">2</span></div>
+          <div style="display:flex;gap:6px;margin-top:12px;"><button class="btn btn-xs btn-i">Edit Cities</button><button class="btn btn-xs">Reassign MF</button></div>
+        </div>
+        <div class="adm-card" style="margin:0;">
+          <div class="adm-card-title" style="margin-bottom:12px;">Karnataka <span class="pill p-ok" style="margin-left:6px;">Active</span></div>
+          <div class="irow"><span class="ilbl">MF Partner</span><span class="ival">Kiran Kumar</span></div>
+          <div class="irow"><span class="ilbl">Cities</span><span class="ival" style="font-size:12px;">Bengaluru, Mysuru</span></div>
+          <div class="irow"><span class="ilbl">Active Leads</span><span class="ival">5</span></div>
+          <div class="irow"><span class="ilbl">Projects</span><span class="ival">1</span></div>
+          <div style="display:flex;gap:6px;margin-top:12px;"><button class="btn btn-xs btn-i">Edit Cities</button><button class="btn btn-xs">Reassign MF</button></div>
+        </div>
+        <div class="adm-card" style="margin:0;">
+          <div class="adm-card-title" style="margin-bottom:12px;">Kerala <span class="pill p-wrn" style="margin-left:6px;">Review</span></div>
+          <div class="irow"><span class="ilbl">MF Partner</span><span class="ival">Priyanka Menon</span></div>
+          <div class="irow"><span class="ilbl">Cities</span><span class="ival" style="font-size:12px;">Kochi, Trivandrum</span></div>
+          <div class="irow"><span class="ilbl">Active Leads</span><span class="ival">3</span></div>
+          <div class="irow"><span class="ilbl">Projects</span><span class="ival">0</span></div>
+          <div style="display:flex;gap:6px;margin-top:12px;"><button class="btn btn-xs btn-i">Edit Cities</button><button class="btn btn-xs btn-d">Deactivate</button></div>
+        </div>
+      </div>
+      <div class="adm-card">
+        <div class="adm-card-title">Add New Region</div>
+        <div class="form-2col">
+          <div class="fr"><label class="fl">State / Region Name</label><select><option value="">— Select State —</option><option>Tamil Nadu</option><option>Maharashtra</option><option>Odisha</option><option>West Bengal</option><option>Gujarat</option></select></div>
+          <div class="fr"><label class="fl">Assign MF Partner</label><select><option>— Assign existing MF —</option><option>Srinivas Rao (AP)</option><option>Anitha Reddy (TS)</option><option>+ Create New MF</option></select></div>
+        </div>
+        <div class="fr"><label class="fl">Cities to Include</label><input type="text" placeholder="Chennai, Coimbatore, Madurai…"/></div>
+        <button class="btn btn-p" onclick="alert('✓ Region added!')">Add Region</button>
+      </div>
+    </div>
+
     <!-- PAYMENT SETTINGS -->
     <div id="at-pay-settings" class="admin-tab">
       <div class="adm-page-title">Payment Settings</div>
@@ -844,7 +1032,7 @@ function aTab(btn,tabId){
     const oc=b.getAttribute('onclick')||'';
     if(oc.includes("'"+tabId+"'"))b.classList.add('active');
   });
-  const ALL_TABS=['at-dashboard','at-leads','at-newlead','at-videos','at-invest-content','at-guidelines','at-support-content','at-ops-content','at-payments','at-royalty-mgmt','at-settings','at-pay-settings'];
+  const ALL_TABS=['at-dashboard','at-leads','at-newlead','at-videos','at-invest-content','at-guidelines','at-support-content','at-ops-content','at-payments','at-royalty-mgmt','at-settings','at-pay-settings','at-mf-overview','at-mf-accounts','at-mf-create','at-mf-regions'];
   ALL_TABS.forEach(id=>{const t=document.getElementById(id);if(t)t.classList.remove('active');});
   const el=document.getElementById(tabId);if(el)el.classList.add('active');
   if(tabId==='at-leads')buildLeadTable();
@@ -1030,20 +1218,16 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 });
 
+function togglePw(id,pw){var el=document.getElementById(id);if(!el)return;if(el.textContent.includes('•')){el.textContent=pw;el.nextElementSibling.textContent='Hide';}else{el.textContent='••••••••';el.nextElementSibling.textContent='Show';}}
+function openMFDetail(id){alert('Editing MF partner #'+id+' — full edit modal would open here.');}
+function createMFLogin(){var n=(document.getElementById('mf-name')||{}).value||'';var e=(document.getElementById('mf-email')||{}).value||'';var r=(document.getElementById('mf-region')||{}).value||'';var p=(document.getElementById('mf-pass')||{}).value||'';var p2=(document.getElementById('mf-pass2')||{}).value||'';if(!n||!e||!r){alert('Please fill in Name, Email and Region.');return;}if(p!==p2){alert('Passwords do not match.');return;}if(p.length<8){alert('Password must be at least 8 characters.');return;}alert('✓ Master Franchise login created for '+n+' ('+r+')!\nCredentials sent to: '+e);}
+
 // ── ADMIN LOGIN ──
-function apm(el,idx){
-  if(el.value.length===1&&idx<6){
-    var next=document.getElementById('ap'+(idx+1));
-    if(next)next.focus();
-  }
-}
 function doAdminLogin(){
   var user=(document.getElementById('adm-user')||{}).value||'';
   var pass=(document.getElementById('adm-pass')||{}).value||'';
-  var pin='';
-  for(var i=1;i<=6;i++){var p=document.getElementById('ap'+i);if(p)pin+=p.value;}
   var err=document.getElementById('adm-err');
-  if(user.trim().toLowerCase()==='admin' && pass==='Admin@2026' && pin==='739142'){
+  if(user.trim().toLowerCase()==='admin' && pass==='Admin@2026'){
     if(err)err.style.display='none';
     document.getElementById('admin-login-screen').style.display='none';
     document.getElementById('admin-main-wrap').style.display='flex';

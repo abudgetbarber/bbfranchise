@@ -23,7 +23,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1
 .hero-title span{color:var(--yellow);}
 .hero-sub{font-size:15px;color:rgba(255,255,255,0.62);max-width:480px;margin:0 auto;line-height:1.7;}
 
-.portal-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:860px;margin:0 auto;padding:48px 32px;}
+.portal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;max-width:1160px;margin:0 auto;padding:48px 32px;}
 
 .portal-card{background:var(--surf);border-radius:20px;border:0.5px solid var(--bdr);overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06);transition:transform .2s,box-shadow .2s;text-decoration:none;display:flex;flex-direction:column;}
 .portal-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.12);}
@@ -54,10 +54,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1
 .pc-btn.franchise-btn{background:#1a3a6b;color:#fff;}
 .pc-btn.franchise-btn:hover{background:#142d57;}
 
-.divider{width:100%;max-width:860px;margin:0 auto 0;padding:0 32px;}
+.divider{width:100%;max-width:1160px;margin:0 auto 0;padding:0 32px;}
 .divider-line{height:0.5px;background:var(--bdr);}
 
-.info-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:860px;margin:0 auto;padding:32px 32px 48px;}
+.info-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1160px;margin:0 auto;padding:32px 32px 48px;}
 .is-item{text-align:center;padding:20px;}
 .is-num{font-size:28px;font-weight:800;color:var(--green);margin-bottom:4px;}
 .is-lbl{font-size:12px;color:#7a7a75;font-weight:500;}
@@ -65,6 +65,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1
 footer{background:var(--green);padding:20px 32px;text-align:center;margin-top:auto;}
 footer p{font-size:12px;color:rgba(255,255,255,0.45);}
 
+@media(max-width:900px){
+  .portal-grid{grid-template-columns:1fr 1fr;}
+}
 @media(max-width:640px){
   .portal-grid{grid-template-columns:1fr;padding:28px 18px;}
   .hero{padding:44px 18px 64px;}
@@ -89,8 +92,8 @@ footer p{font-size:12px;color:rgba(255,255,255,0.45);}
 
 <section class="hero">
   <div class="hero-eyebrow">Budget Barber Franchise System</div>
-  <h1 class="hero-title">One Brand,<br/><span>Two Powerful Portals</span></h1>
-  <p class="hero-sub">Complete franchise management — from admin controls to lead onboarding — all in one place.</p>
+  <h1 class="hero-title">One Brand,<br/><span>Three Powerful Portals</span></h1>
+  <p class="hero-sub">Complete franchise management — Admin, Master Franchise &amp; Lead onboarding — all in one unified system.</p>
 </section>
 
 <div class="portal-grid">
@@ -113,6 +116,27 @@ footer p{font-size:12px;color:rgba(255,255,255,0.45);}
         <li class="admin-li">Edit guidelines, support &amp; operations content</li>
       </ul>
       <div class="pc-btn admin-btn">Open Admin Portal →</div>
+    </div>
+  </a>
+
+  <!-- MASTER FRANCHISE PORTAL -->
+  <a href="budget_barber_master_franchise.html" class="portal-card">
+    <div class="pc-header" style="background:linear-gradient(135deg,#1a3a6b 0%,#2956a8 100%);">
+      <div class="pc-badge" style="background:rgba(255,255,255,0.18);color:#fff;">🏢 MF Access</div>
+      <div class="pc-icon" style="background:rgba(255,255,255,0.15);">🗺</div>
+      <div class="pc-title">Master Franchise Portal</div>
+      <div class="pc-sub">Regional management dashboard — leads, payments &amp; content for your assigned territory.</div>
+    </div>
+    <div class="pc-body">
+      <ul class="pc-features">
+        <li style="--dot:#2956a8" class="franchise-li">View &amp; manage only your region's leads</li>
+        <li class="franchise-li">Create new leads within assigned cities</li>
+        <li class="franchise-li">Videos, guidelines &amp; content management</li>
+        <li class="franchise-li">Payment tracking &amp; royalty reports</li>
+        <li class="franchise-li">Operations &amp; support content editing</li>
+        <li class="franchise-li">Secure login per MF partner account</li>
+      </ul>
+      <div class="pc-btn franchise-btn">Open MF Portal →</div>
     </div>
   </a>
 
@@ -143,7 +167,7 @@ footer p{font-size:12px;color:rgba(255,255,255,0.45);}
 
 <div class="info-strip">
   <div class="is-item"><div class="is-num">6</div><div class="is-lbl">Supported Languages</div></div>
-  <div class="is-item"><div class="is-num">10</div><div class="is-lbl">Onboarding Steps</div></div>
+  <div class="is-item"><div class="is-num">3</div><div class="is-lbl">Portals</div></div>
   <div class="is-item"><div class="is-num">3</div><div class="is-lbl">Franchise Models</div></div>
 </div>
 
