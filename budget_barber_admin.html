@@ -558,9 +558,9 @@ input:checked + .slider:before{transform:translateX(16px);}
       </div>
       <div id="ic-payments" style="display:none;">
         <div class="adm-tabs" style="margin-bottom:0;">
-          <button class="adm-tab-btn active" onclick="avTab(this,'ic-pay3')">3 Chair</button>
-          <button class="adm-tab-btn" onclick="avTab(this,'ic-pay4')">4 Chair</button>
-          <button class="adm-tab-btn" onclick="avTab(this,'ic-pay5')">5 Chair</button>
+          <button class="adm-tab-btn active" onclick="payTab(this,'ic-pay3')">3 Chair</button>
+          <button class="adm-tab-btn" onclick="payTab(this,'ic-pay4')">4 Chair</button>
+          <button class="adm-tab-btn" onclick="payTab(this,'ic-pay5')">5 Chair</button>
         </div>
         <!-- 3 Chair Payment Steps -->
         <div id="ic-pay3">
@@ -1249,11 +1249,11 @@ function aTab(btn,tabId){
   const el=document.getElementById(tabId);if(el)el.classList.add('active');
   if(tabId==='at-leads')buildLeadTable();
   if(tabId==='at-guidelines')buildGLAdmin();
-  if(tabId==='at-invest-content')buildPayStepsEditor();
+  if(tabId==='at-invest-content'){buildPayStepsEditor();const p=document.getElementById('ic-pay3');if(p)p.style.display='block';}
   if(tabId==='at-support-content')buildSupportEditor();
 }
 function avTab(btn,tabId){
-  const allIds=['av-upload','av-manage','av-lang','ic3','ic4','ic5','ic-roi','ic-royalty','ic-payments','ic-pay3','ic-pay4','ic-pay5'];
+  const allIds=['av-upload','av-manage','av-lang','ic3','ic4','ic5','ic-roi','ic-royalty','ic-payments'];
   allIds.forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
   const parent=btn?btn.closest('.admin-tab'):null;
   if(parent){parent.querySelectorAll('.adm-tab-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
@@ -1372,6 +1372,13 @@ function buildLangCoverage(){
   html+='</table></div>';g.innerHTML=html;
 }
 
+function payTab(btn,tabId){
+  ['ic-pay3','ic-pay4','ic-pay5'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+  document.querySelectorAll('#ic-payments .adm-tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const t=document.getElementById(tabId);if(t)t.style.display='block';
+  buildPayStepsEditor();
+}
 function buildPayStepsEditor(){
   const models=[
     {suffix:'3', title:'3 Chair', steps:[
