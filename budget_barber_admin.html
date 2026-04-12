@@ -557,11 +557,37 @@ input:checked + .slider:before{transform:translateX(16px);}
         </div>
       </div>
       <div id="ic-payments" style="display:none;">
-        <div class="adm-card">
-          <div class="adm-card-title">Payment Schedule Steps</div>
-          <div class="adm-card-sub">Edit the payment steps shown in the franchise presentation</div>
-          <div id="pay-steps-editor"></div>
-          <button class="btn btn-p" style="margin-top:8px;" onclick="alert('✓ Payment steps saved!')">Save Payment Steps</button>
+        <div class="adm-tabs" style="margin-bottom:0;">
+          <button class="adm-tab-btn active" onclick="avTab(this,'ic-pay3')">3 Chair</button>
+          <button class="adm-tab-btn" onclick="avTab(this,'ic-pay4')">4 Chair</button>
+          <button class="adm-tab-btn" onclick="avTab(this,'ic-pay5')">5 Chair</button>
+        </div>
+        <!-- 3 Chair Payment Steps -->
+        <div id="ic-pay3">
+          <div class="adm-card">
+            <div class="adm-card-title">Payment Schedule — 3 Chair (₹8.5L)</div>
+            <div class="adm-card-sub">Edit the 4 payment steps shown to 3 Chair leads in the franchise app</div>
+            <div id="pay-steps-editor-3"></div>
+            <button class="btn btn-p" style="margin-top:8px;" onclick="alert('✓ 3 Chair payment steps saved!')">Save 3 Chair Payment Steps</button>
+          </div>
+        </div>
+        <!-- 4 Chair Payment Steps -->
+        <div id="ic-pay4" style="display:none;">
+          <div class="adm-card">
+            <div class="adm-card-title">Payment Schedule — 4 Chair (₹11L)</div>
+            <div class="adm-card-sub">Edit the 4 payment steps shown to 4 Chair leads in the franchise app</div>
+            <div id="pay-steps-editor-4"></div>
+            <button class="btn btn-p" style="margin-top:8px;" onclick="alert('✓ 4 Chair payment steps saved!')">Save 4 Chair Payment Steps</button>
+          </div>
+        </div>
+        <!-- 5 Chair Payment Steps -->
+        <div id="ic-pay5" style="display:none;">
+          <div class="adm-card">
+            <div class="adm-card-title">Payment Schedule — 5 Chair (₹14L)</div>
+            <div class="adm-card-sub">Edit the 4 payment steps shown to 5 Chair leads in the franchise app</div>
+            <div id="pay-steps-editor-5"></div>
+            <button class="btn btn-p" style="margin-top:8px;" onclick="alert('✓ 5 Chair payment steps saved!')">Save 5 Chair Payment Steps</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1227,7 +1253,7 @@ function aTab(btn,tabId){
   if(tabId==='at-support-content')buildSupportEditor();
 }
 function avTab(btn,tabId){
-  const allIds=['av-upload','av-manage','av-lang','ic3','ic4','ic5','ic-roi','ic-royalty','ic-payments'];
+  const allIds=['av-upload','av-manage','av-lang','ic3','ic4','ic5','ic-roi','ic-royalty','ic-payments','ic-pay3','ic-pay4','ic-pay5'];
   allIds.forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
   const parent=btn?btn.closest('.admin-tab'):null;
   if(parent){parent.querySelectorAll('.adm-tab-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
@@ -1347,17 +1373,35 @@ function buildLangCoverage(){
 }
 
 function buildPayStepsEditor(){
-  const c=document.getElementById('pay-steps-editor');if(!c||c.children.length>0)return;
-  const steps=[
-    {id:'pay1',name:'Token Amount — ₹20,000',note:'UPI / Bank Transfer · Location blocking'},
-    {id:'pay2',name:'Cheque — ₹2,50,000',note:'At franchise agreement signing'},
-    {id:'pay3',name:'Marc Salon Chairs — ₹1,50,000',note:'Direct payment to supplier'},
-    {id:'pay4',name:'Cash — ₹6,00,000',note:'On commencement of interior setup'}
+  const models=[
+    {suffix:'3', title:'3 Chair', steps:[
+      {id:'p3-1',name:'Token Amount — ₹20,000',note:'UPI / Bank Transfer · Location blocking'},
+      {id:'p3-2',name:'Cheque — ₹2,50,000',note:'At franchise agreement signing'},
+      {id:'p3-3',name:'Marc Salon Chairs — ₹1,50,000',note:'Direct payment to supplier'},
+      {id:'p3-4',name:'Cash — ₹4,80,000',note:'On commencement of interior setup'}
+    ]},
+    {suffix:'4', title:'4 Chair', steps:[
+      {id:'p4-1',name:'Token Amount — ₹20,000',note:'UPI / Bank Transfer · Location blocking'},
+      {id:'p4-2',name:'Cheque — ₹3,00,000',note:'At franchise agreement signing'},
+      {id:'p4-3',name:'Marc Salon Chairs — ₹1,50,000',note:'Direct payment to supplier'},
+      {id:'p4-4',name:'Cash — ₹6,30,000',note:'On commencement of interior setup'}
+    ]},
+    {suffix:'5', title:'5 Chair', steps:[
+      {id:'p5-1',name:'Token Amount — ₹20,000',note:'UPI / Bank Transfer · Location blocking'},
+      {id:'p5-2',name:'Cheque — ₹4,00,000',note:'At franchise agreement signing'},
+      {id:'p5-3',name:'Marc Salon Chairs — ₹1,50,000',note:'Direct payment to supplier'},
+      {id:'p5-4',name:'Cash — ₹8,30,000',note:'On commencement of interior setup'}
+    ]}
   ];
-  steps.forEach((s,i)=>{
-    const div=document.createElement('div');div.className='fr';
-    div.innerHTML=`<label class="fl">Step ${i+1} — Label</label><input type="text" id="e-${s.id}name" value="${s.name}" style="margin-bottom:6px;"/><label class="fl">Note</label><input type="text" id="e-${s.id}note" value="${s.note}"/>`;
-    c.appendChild(div);
+  models.forEach(m=>{
+    const c=document.getElementById('pay-steps-editor-'+m.suffix);
+    if(!c||c.children.length>0)return;
+    m.steps.forEach((s,i)=>{
+      const div=document.createElement('div');div.className='fr';
+      div.style.cssText='border-bottom:0.5px solid var(--bdr);padding-bottom:12px;margin-bottom:12px;';
+      div.innerHTML=`<label class="fl">Step ${i+1} — Label</label><input type="text" id="e-${s.id}name" value="${s.name}" style="margin-bottom:6px;"/><label class="fl">Note</label><input type="text" id="e-${s.id}note" value="${s.note}"/>`;
+      c.appendChild(div);
+    });
   });
 }
 
