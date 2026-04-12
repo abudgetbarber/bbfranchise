@@ -178,6 +178,30 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 }
 
 @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+/* ── BACK BAR ── */
+.back-bar{display:flex;align-items:center;gap:8px;padding:7px 16px;border-bottom:0.5px solid var(--bdr);background:var(--surf2);flex-shrink:0;}
+.back-bar-btn{padding:4px 12px;font-size:12px;font-weight:600;border-radius:var(--rad);cursor:pointer;border:0.5px solid var(--bdr2);background:var(--surf);color:var(--mut);font-family:inherit;transition:all .15s;}
+.back-bar-btn:hover{background:var(--surf3);}
+.back-bar-label{font-size:11px;color:var(--hnt);}
+
+/* ── DESKTOP RESPONSIVE ── */
+@media(min-width:860px){
+  body{background:#E8E8E4;display:flex;justify-content:center;}
+  #franchise-app{
+    width:480px;min-height:100vh;
+    box-shadow:0 0 60px rgba(0,0,0,0.15);
+    border-left:0.5px solid var(--bdr2);border-right:0.5px solid var(--bdr2);
+  }
+  .sbody{padding:22px 26px 28px;}
+  .stitle{font-size:22px;}
+  .vmock{max-width:100%;}
+  .lang-grid{grid-template-columns:repeat(3,1fr);}
+}
+@media(min-width:1200px){
+  body{align-items:flex-start;}
+  #franchise-app{width:520px;}
+}
 </style>
 </head>
 <body>
@@ -258,6 +282,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <div id="s-lang" class="fscreen">
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><span style="font-size:12px;color:var(--mut);" data-i18n="step1">Step 1 of 10</span><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
   <div class="step-bar" id="sb1"></div>
+  <div class="back-bar"><button class="back-btn" onclick="fs('s-login')">← Back</button><span class="back-bar-label" data-i18n="step1">Step 1 of 10</span></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">Select Language</div>
     <div class="ssub">Choose your preferred language for the franchise presentation</div>
@@ -277,6 +302,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <div id="s-vision" class="fscreen">
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><span style="font-size:12px;color:var(--mut);" data-i18n="step2">Step 2 of 10</span><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
   <div class="step-bar" id="sb2"></div>
+  <div class="back-bar"><button class="back-btn" onclick="fstep('s-lang')">← Back</button><span class="back-bar-label" data-i18n="step2">Step 2 of 10</span></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">Founder's Vision</div>
     <div class="ssub" id="vgreet">Hi Rajesh! A personal message from our Founder</div>
@@ -301,6 +327,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <div id="s-salon360" class="fscreen">
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><span style="font-size:12px;color:var(--mut);" data-i18n="step3">Step 3 of 10</span><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
   <div class="step-bar" id="sb3"></div>
+  <div class="back-bar"><button class="back-btn" onclick="fstep('s-vision')">← Back</button><span class="back-bar-label" data-i18n="step3">Step 3 of 10</span></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">Salon 360° Tour</div>
     <div class="ssub">Experience the complete Budget Barber salon — technology, design &amp; amenities</div>
@@ -333,6 +360,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <div id="s-invest" class="fscreen">
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><span style="font-size:12px;color:var(--mut);" data-i18n="step4">Step 4 of 10</span><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
   <div class="step-bar" id="sb4"></div>
+  <div class="back-bar"><button class="back-btn" onclick="fstep('s-salon360')">← Back</button><span class="back-bar-label" data-i18n="step4">Step 4 of 10</span></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">Investment Details</div>
     <div class="ssub">Complete breakdown per franchise model with all inclusions</div>
@@ -383,6 +411,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <div id="s-roi" class="fscreen">
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><span style="font-size:12px;color:var(--mut);" data-i18n="step5">Step 5 of 10</span><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
   <div class="step-bar" id="sb5"></div>
+  <div class="back-bar"><button class="back-btn" onclick="fstep('s-invest')">← Back</button><span class="back-bar-label" data-i18n="step5">Step 5 of 10</span></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">ROI &amp; Profitability</div>
     <div class="ssub">Revenue projections, operational expenses, and monthly profit estimates</div>
@@ -439,6 +468,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <div id="s-support" class="fscreen">
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><span style="font-size:12px;color:var(--mut);" data-i18n="step6">Step 6 of 10</span><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
   <div class="step-bar" id="sb6"></div>
+  <div class="back-bar"><button class="back-btn" onclick="fstep('s-roi')">← Back</button><span class="back-bar-label" data-i18n="step6">Step 6 of 10</span></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">Franchise Support System</div>
     <div class="ssub">End-to-end support ensuring your success from day one</div>
@@ -459,6 +489,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <div id="s-ops" class="fscreen">
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><span style="font-size:12px;color:var(--mut);" data-i18n="step7">Step 7 of 10</span><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
   <div class="step-bar" id="sb7"></div>
+  <div class="back-bar"><button class="back-btn" onclick="fstep('s-support')">← Back</button><span class="back-bar-label" data-i18n="step7">Step 7 of 10</span></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">Salon Operations</div>
     <div class="ssub">Standard operating procedures, timings, and service culture</div>
@@ -483,6 +514,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <div id="s-staff" class="fscreen">
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><span style="font-size:12px;color:var(--mut);" data-i18n="step8">Step 8 of 10</span><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
   <div class="step-bar" id="sb8"></div>
+  <div class="back-bar"><button class="back-btn" onclick="fstep('s-ops')">← Back</button><span class="back-bar-label" data-i18n="step8">Step 8 of 10</span></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">Staff Setup &amp; Welfare</div>
     <div class="ssub">Provided at initial setup and ongoing franchisee obligations</div>
@@ -503,6 +535,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <div id="s-royalty" class="fscreen">
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><span style="font-size:12px;color:var(--mut);" data-i18n="step9">Step 9 of 10</span><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
   <div class="step-bar" id="sb9"></div>
+  <div class="back-bar"><button class="back-btn" onclick="fstep('s-staff')">← Back</button><span class="back-bar-label" data-i18n="step9">Step 9 of 10</span></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">Royalty &amp; Payment Timeline</div>
     <div class="ssub">Royalty structure, incentives, and full project payment schedule</div>
@@ -530,6 +563,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <div id="s-interest" class="fscreen">
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><span style="font-size:12px;color:var(--mut);" data-i18n="step10">Step 10 of 10</span><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
   <div class="step-bar" id="sb10"></div>
+  <div class="back-bar"><button class="back-btn" onclick="fstep('s-royalty')">← Back</button><span class="back-bar-label" data-i18n="step10">Step 10 of 10</span></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">Are You Interested?</div>
     <div class="ssub">You've seen everything — investment, ROI, support, operations. What's your decision?</div>
@@ -547,6 +581,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 
 <!-- NOT INTERESTED -->
 <div id="s-notinterested" class="fscreen">
+  <div class="back-bar"><button class="back-btn" onclick="fstep('s-interest')">← Back</button></div>
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><div class="pill p-no">Closing Lead</div><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">We're Sorry to Hear That</div>
@@ -569,6 +604,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <!-- GUIDELINES -->
 <div id="s-guidelines" class="fscreen">
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><span style="font-size:12px;color:var(--mut);">Guidelines</span><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
+  <div class="back-bar"><button class="back-btn" onclick="fstep('s-interest')">← Back</button></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">Franchise Guidelines</div>
     <div class="ssub">Read and accept each guideline. All must be checked to proceed.</div>
@@ -580,6 +616,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <!-- CONFIRM -->
 <div id="s-confirm" class="fscreen">
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><span style="font-size:12px;color:var(--mut);">Confirmation</span><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
+  <div class="back-bar"><button class="back-btn" onclick="fstep('s-guidelines')">← Back</button></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">Final Confirmation</div>
     <div class="ssub">Review all selections and confirm your franchise application</div>
@@ -597,6 +634,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <!-- TOKEN PAYMENT -->
 <div id="s-payment" class="fscreen">
   <div class="hdr"><svg class="bb-logo-svg" width="130" height="32" viewBox="0 0 130 32" xmlns="http://www.w3.org/2000/svg"><rect width="130" height="32" rx="3" fill="#0D3B2E"/><rect y="18" width="130" height="14" fill="#0D3B2E"/><rect y="16" width="130" height="3" fill="#F5D100"/><text x="65" y="12" font-family="Arial Black,Arial" font-weight="900" font-size="13" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BUDGET</text><text x="65" y="26" font-family="Arial Black,Arial" font-weight="900" font-size="11" fill="#F5D100" text-anchor="middle" dominant-baseline="middle">BARBER</text></svg><span style="font-size:12px;color:var(--mut);">Token Payment</span><button class="logout-btn" onclick="doLogout()">⎋ Logout</button></div>
+  <div class="back-bar"><button class="back-btn" onclick="fstep('s-confirm')">← Back</button></div>
   <div class="fscreen-scroll"><div class="sbody">
     <div class="stitle">Token Amount</div>
     <div class="ssub">Pay ₹20,000 to block your preferred location. Project dashboard activates after payment.</div>
