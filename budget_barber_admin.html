@@ -918,7 +918,7 @@ input:checked + .slider:before{transform:translateX(16px);}
               <td style="font-size:12px;">Vijayawada, Guntur, Nellore</td>
               <td>8</td>
               <td><span class="pill p-ok">Active</span></td>
-              <td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="openMFDetail(1)">Edit</button><button class="btn btn-xs btn-d">Remove</button></div></td>
+              <td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="openMFDetail(1)">Edit</button><button class="btn btn-xs btn-d" onclick="removeMFAccount(1)">Remove</button></div></td>
             </tr>
             <tr>
               <td><div style="font-weight:600;">Anitha Reddy</div><div style="font-size:11px;color:var(--mut);">+91 87654 22222</div></td>
@@ -928,7 +928,7 @@ input:checked + .slider:before{transform:translateX(16px);}
               <td style="font-size:12px;">Hyderabad, Warangal</td>
               <td>7</td>
               <td><span class="pill p-ok">Active</span></td>
-              <td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="openMFDetail(2)">Edit</button><button class="btn btn-xs btn-d">Remove</button></div></td>
+              <td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="openMFDetail(2)">Edit</button><button class="btn btn-xs btn-d" onclick="removeMFAccount(2)">Remove</button></div></td>
             </tr>
             <tr>
               <td><div style="font-weight:600;">Kiran Kumar</div><div style="font-size:11px;color:var(--mut);">+91 76543 33333</div></td>
@@ -938,7 +938,7 @@ input:checked + .slider:before{transform:translateX(16px);}
               <td style="font-size:12px;">Bengaluru, Mysuru</td>
               <td>5</td>
               <td><span class="pill p-ok">Active</span></td>
-              <td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="openMFDetail(3)">Edit</button><button class="btn btn-xs btn-d">Remove</button></div></td>
+              <td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="openMFDetail(3)">Edit</button><button class="btn btn-xs btn-d" onclick="removeMFAccount(3)">Remove</button></div></td>
             </tr>
             <tr>
               <td><div style="font-weight:600;">Priyanka Menon</div><div style="font-size:11px;color:var(--mut);">+91 65432 44444</div></td>
@@ -948,7 +948,7 @@ input:checked + .slider:before{transform:translateX(16px);}
               <td style="font-size:12px;">Kochi, Trivandrum</td>
               <td>3</td>
               <td><span class="pill p-wrn">Review</span></td>
-              <td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="openMFDetail(4)">Edit</button><button class="btn btn-xs btn-d">Remove</button></div></td>
+              <td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="openMFDetail(4)">Edit</button><button class="btn btn-xs btn-d" onclick="removeMFAccount(4)">Remove</button></div></td>
             </tr>
           </tbody>
         </table>
@@ -1244,6 +1244,105 @@ input:checked + .slider:before{transform:translateX(16px);}
   </div><!-- admin-content -->
 </div><!-- admin-main -->
 </div><!-- admin-wrap -->
+
+<!-- MF EDIT MODAL -->
+<div class="lead-detail-modal" id="mf-edit-modal">
+  <div class="ldm-box" style="max-width:700px;">
+    <div class="ldm-hdr">
+      <div>
+        <div style="font-size:16px;font-weight:700;">Edit Master Franchise Account</div>
+        <div style="font-size:12px;color:var(--mut);margin-top:3px;">Update details and permissions for this MF partner</div>
+      </div>
+      <button class="btn btn-sm" onclick="closeMFEditModal()">✕ Close</button>
+    </div>
+    <div class="ldm-body">
+      <input type="hidden" id="mfe-id"/>
+      <div class="adm-tabs">
+        <button class="adm-tab-btn active" onclick="mfeLdmTab(this,'mfed-details')">Details</button>
+        <button class="adm-tab-btn" onclick="mfeLdmTab(this,'mfed-perms')">Permissions</button>
+        <button class="adm-tab-btn" onclick="mfeLdmTab(this,'mfed-security')">Security</button>
+      </div>
+      <!-- Details Tab -->
+      <div id="mfed-details" class="admin-tab active">
+        <div class="card">
+          <div class="sec">Personal Details</div>
+          <div class="form-2col">
+            <div class="fr"><label class="fl">Full Name</label><input type="text" id="mfe-name"/></div>
+            <div class="fr"><label class="fl">Phone Number</label><input type="tel" id="mfe-phone"/></div>
+            <div class="fr"><label class="fl">Email / Login</label><input type="email" id="mfe-email"/></div>
+            <div class="fr"><label class="fl">Status</label>
+              <select id="mfe-status"><option>Active</option><option>Suspended</option><option>Review</option><option>Inactive</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sec">Territory</div>
+          <div class="fr"><label class="fl">State / Region</label>
+            <select id="mfe-region">
+              <option>Andhra Pradesh</option><option>Telangana</option><option>Karnataka</option>
+              <option>Tamil Nadu</option><option>Kerala</option><option>Maharashtra</option>
+            </select>
+          </div>
+          <div class="fr"><label class="fl">Assigned Cities</label><input type="text" id="mfe-cities" placeholder="e.g. Vijayawada, Guntur, Nellore"/></div>
+        </div>
+      </div>
+      <!-- Permissions Tab -->
+      <div id="mfed-perms" class="admin-tab">
+        <div class="card">
+          <div class="sec">Leads</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">View Own Region Leads</div><div style="font-size:12px;color:var(--mut);">See leads in assigned cities</div></div><label class="switch"><input type="checkbox" id="mfe-p-leads"/><span class="slider"></span></label></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">Create New Leads</div><div style="font-size:12px;color:var(--mut);">Add franchise leads directly</div></div><label class="switch"><input type="checkbox" id="mfe-p-create"/><span class="slider"></span></label></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">Edit Lead Status</div><div style="font-size:12px;color:var(--mut);">Update progress and notes</div></div><label class="switch"><input type="checkbox" id="mfe-p-edit"/><span class="slider"></span></label></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sec">Content Management</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">Manage Videos</div></div><label class="switch"><input type="checkbox" id="mfe-p-videos"/><span class="slider"></span></label></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">Edit Investment Info</div></div><label class="switch"><input type="checkbox" id="mfe-p-invest"/><span class="slider"></span></label></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">Edit Guidelines</div></div><label class="switch"><input type="checkbox" id="mfe-p-guidelines"/><span class="slider"></span></label></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">Edit Support Info</div></div><label class="switch"><input type="checkbox" id="mfe-p-support"/><span class="slider"></span></label></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">Edit Operations Info</div></div><label class="switch"><input type="checkbox" id="mfe-p-ops"/><span class="slider"></span></label></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sec">Finance</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">View Payment Records</div></div><label class="switch"><input type="checkbox" id="mfe-p-payments"/><span class="slider"></span></label></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">Royalty Reports Access</div></div><label class="switch"><input type="checkbox" id="mfe-p-royalty"/><span class="slider"></span></label></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:600;">Record Royalty Payments</div></div><label class="switch"><input type="checkbox" id="mfe-p-royalty-edit"/><span class="slider"></span></label></div>
+          </div>
+        </div>
+      </div>
+      <!-- Security Tab -->
+      <div id="mfed-security" class="admin-tab">
+        <div class="card">
+          <div class="sec">Login Credentials</div>
+          <div class="fr"><label class="fl">Current Password</label>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="password" id="mfe-password" style="flex:1;"/>
+              <button class="btn btn-sm" onclick="var el=document.getElementById('mfe-password');el.type=el.type==='password'?'text':'password';this.textContent=el.type==='password'?'Show':'Hide'">Show</button>
+            </div>
+          </div>
+          <div class="fr"><label class="fl">Set New Password (leave blank to keep current)</label><input type="password" id="mfe-newpass" placeholder="New password…"/></div>
+          <div style="background:var(--wrn-bg);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--wrn-tx);">⚠️ New password takes effect on MF partner's next login. Share securely.</div>
+        </div>
+        <div class="card">
+          <div class="sec">Danger Zone</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-w" onclick="alert('Account suspended!')">⏸ Suspend Account</button>
+            <button class="btn btn-d" onclick="removeMFAccount(parseInt(document.getElementById('mfe-id').value));closeMFEditModal()">🗑 Remove Account</button>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;padding:16px 0 4px;">
+        <button class="btn btn-p" onclick="saveMFDetail()">✓ Save All Changes</button>
+        <button class="btn" onclick="closeMFEditModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- LEAD DETAIL MODAL -->
 <div id="lead-modal" class="lead-detail-modal">
@@ -1585,6 +1684,13 @@ function markRoyaltyPaid(id){alert('✓ Royalty marked as paid for '+id+'!');}
 function openRoyaltyDetail(id){alert('Opening full royalty detail for '+id+'...');}
 function openFranchiseRoyaltyDetail(id){alert('Opening franchise royalty detail for '+id+'...');}
 
+const MF_ACCOUNTS_DATA=[
+  {id:1,name:'Srinivas Rao',phone:'+91 98765 11111',email:'srinivas@mf.budgetbarber',region:'Andhra Pradesh',cities:'Vijayawada, Guntur, Nellore',password:'MF@AP2026',status:'Active',leads:8,perms:{leads:true,createLeads:true,editLeads:true,videos:false,invest:false,guidelines:true,support:false,ops:false,payments:true,royalty:true,royaltyEdit:true}},
+  {id:2,name:'Anitha Reddy',phone:'+91 87654 22222',email:'anitha@mf.budgetbarber',region:'Telangana',cities:'Hyderabad, Warangal',password:'MF@TS2026',status:'Active',leads:7,perms:{leads:true,createLeads:true,editLeads:true,videos:false,invest:false,guidelines:true,support:false,ops:false,payments:true,royalty:true,royaltyEdit:true}},
+  {id:3,name:'Kiran Kumar',phone:'+91 76543 33333',email:'kiran@mf.budgetbarber',region:'Karnataka',cities:'Bengaluru, Mysuru',password:'MF@KA2026',status:'Active',leads:5,perms:{leads:true,createLeads:true,editLeads:true,videos:true,invest:true,guidelines:true,support:true,ops:true,payments:true,royalty:true,royaltyEdit:true}},
+  {id:4,name:'Priyanka Menon',phone:'+91 65432 44444',email:'priyanka@mf.budgetbarber',region:'Kerala',cities:'Kochi, Trivandrum',password:'MF@KL2026',status:'Review',leads:3,perms:{leads:true,createLeads:false,editLeads:false,videos:false,invest:false,guidelines:false,support:false,ops:false,payments:true,royalty:true,royaltyEdit:false}},
+];
+
 const FRANCHISES=[
   {id:1,name:'Meena Iyer',phone:'+91 65432 10987',city:'Chennai',model:'3 Chair',mf:'Tamil Nadu MF',launch:'Feb 15, 2026',revenue:'₹1,44,000',royaltyStatus:'paid',status:'active'},
   {id:2,name:'Vikram Nair',phone:'+91 54321 09876',city:'Kochi',model:'5 Chair',mf:'Kerala MF',launch:'Jan 10, 2026',revenue:'₹2,52,000',royaltyStatus:'overdue',status:'active'},
@@ -1625,6 +1731,63 @@ function openFranchiseDetail(id){
   alert('Franchise: '+f.name+'\nCity: '+f.city+'\nModel: '+f.model+'\nMF: '+f.mf+'\nLaunch: '+f.launch+'\nRevenue: '+f.revenue+'\nStatus: '+f.status);
 }
 function togglePw(id,pw){var el=document.getElementById(id);if(!el)return;if(el.textContent.includes('•')){el.textContent=pw;el.nextElementSibling.textContent='Hide';}else{el.textContent='••••••••';el.nextElementSibling.textContent='Show';}}
+function mfeLdmTab(btn,tabId){
+  document.querySelectorAll('#mf-edit-modal .adm-tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('#mf-edit-modal .admin-tab').forEach(t=>t.classList.remove('active'));
+  const el=document.getElementById(tabId);if(el)el.classList.add('active');
+}
+function openMFDetail(id){
+  const acc=MF_ACCOUNTS_DATA.find(x=>x.id===id);if(!acc)return;
+  document.getElementById('mfe-id').value=id;
+  document.getElementById('mfe-name').value=acc.name;
+  document.getElementById('mfe-phone').value=acc.phone;
+  document.getElementById('mfe-email').value=acc.email;
+  document.getElementById('mfe-region').value=acc.region;
+  document.getElementById('mfe-cities').value=acc.cities;
+  document.getElementById('mfe-password').value=acc.password;
+  document.getElementById('mfe-status').value=acc.status;
+  document.getElementById('mfe-p-leads').checked=acc.perms.leads;
+  document.getElementById('mfe-p-create').checked=acc.perms.createLeads;
+  document.getElementById('mfe-p-edit').checked=acc.perms.editLeads;
+  document.getElementById('mfe-p-videos').checked=acc.perms.videos;
+  document.getElementById('mfe-p-invest').checked=acc.perms.invest;
+  document.getElementById('mfe-p-guidelines').checked=acc.perms.guidelines;
+  document.getElementById('mfe-p-support').checked=acc.perms.support;
+  document.getElementById('mfe-p-ops').checked=acc.perms.ops;
+  document.getElementById('mfe-p-payments').checked=acc.perms.payments;
+  document.getElementById('mfe-p-royalty').checked=acc.perms.royalty;
+  document.getElementById('mfe-p-royalty-edit').checked=acc.perms.royaltyEdit;
+  document.getElementById('mf-edit-modal').classList.add('open');
+}
+function closeMFEditModal(){document.getElementById('mf-edit-modal').classList.remove('open');}
+function saveMFDetail(){
+  const id=parseInt(document.getElementById('mfe-id').value);
+  const acc=MF_ACCOUNTS_DATA.find(x=>x.id===id);if(!acc)return;
+  acc.name=document.getElementById('mfe-name').value;
+  acc.phone=document.getElementById('mfe-phone').value;
+  acc.email=document.getElementById('mfe-email').value;
+  acc.region=document.getElementById('mfe-region').value;
+  acc.cities=document.getElementById('mfe-cities').value;
+  acc.password=document.getElementById('mfe-password').value;
+  acc.status=document.getElementById('mfe-status').value;
+  acc.perms.leads=document.getElementById('mfe-p-leads').checked;
+  acc.perms.createLeads=document.getElementById('mfe-p-create').checked;
+  acc.perms.editLeads=document.getElementById('mfe-p-edit').checked;
+  acc.perms.videos=document.getElementById('mfe-p-videos').checked;
+  acc.perms.invest=document.getElementById('mfe-p-invest').checked;
+  acc.perms.guidelines=document.getElementById('mfe-p-guidelines').checked;
+  acc.perms.support=document.getElementById('mfe-p-support').checked;
+  acc.perms.ops=document.getElementById('mfe-p-ops').checked;
+  acc.perms.payments=document.getElementById('mfe-p-payments').checked;
+  acc.perms.royalty=document.getElementById('mfe-p-royalty').checked;
+  acc.perms.royaltyEdit=document.getElementById('mfe-p-royalty-edit').checked;
+  closeMFEditModal();
+  alert('✓ MF account updated for '+acc.name+'!\nPermission changes take effect on their next login.');
+}
+function removeMFAccount(id){
+  const acc=MF_ACCOUNTS_DATA.find(x=>x.id===id);if(!acc)return;
+  if(confirm('Remove MF account for '+acc.name+'? This cannot be undone.')){alert('✓ MF account for '+acc.name+' removed.');}
+}
 function createMFLogin(){var n=(document.getElementById('mf-name')||{}).value||'';var e=(document.getElementById('mf-email')||{}).value||'';var r=(document.getElementById('mf-region')||{}).value||'';var p=(document.getElementById('mf-pass')||{}).value||'';var p2=(document.getElementById('mf-pass2')||{}).value||'';if(!n||!e||!r){alert('Please fill in Name, Email and Region.');return;}if(p!==p2){alert('Passwords do not match.');return;}if(p.length<8){alert('Password must be at least 8 characters.');return;}alert('✓ Master Franchise login created for '+n+' ('+r+')!\nCredentials sent to: '+e);}
 
 function doAdminLogin(){
