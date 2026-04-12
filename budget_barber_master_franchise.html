@@ -198,7 +198,7 @@ input:checked + .slider:before{transform:translateX(16px);}
       <div id="mf-err" style="display:none;background:var(--no-bg);color:var(--no-tx);border-radius:8px;padding:9px 12px;font-size:13px;margin-bottom:12px;">❌ Incorrect credentials. Please try again.</div>
       <div style="background:#e8edf8;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--mf-blue);margin-bottom:14px;">
         <strong>Demo Credentials:</strong><br/>
-        Email: <strong>srinivas@mf.budgetbarber</strong><br/>
+        Email: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9be8e9f2f5f2edfae8dbf6fdb5f9eefffcfeeff9fae9f9fee9">[email&#160;protected]</a></strong><br/>
         Password: <strong>MF@AP2026</strong>
       </div>
       <button class="btn btn-p btn-f" onclick="doMFLogin()">Sign In to MF Portal →</button>
@@ -226,19 +226,21 @@ input:checked + .slider:before{transform:translateX(16px);}
     <div class="adm-nav-group">Overview</div>
     <div class="adm-nav-item active" onclick="mfTab(this,'mft-dashboard')"><span class="adm-nav-icon">📊</span>Dashboard</div>
     <div class="adm-nav-group">My Region Leads</div>
-    <div class="adm-nav-item" onclick="mfTab(this,'mft-leads')"><span class="adm-nav-icon">👥</span>All My Leads</div>
-    <div class="adm-nav-item" onclick="mfTab(this,'mft-newlead')"><span class="adm-nav-icon">➕</span>Create Lead</div>
+    <div class="adm-nav-item" id="nav-mft-leads" onclick="mfTab(this,'mft-leads')"><span class="adm-nav-icon">👥</span>All My Leads</div>
+    <div class="adm-nav-item" id="nav-mft-newlead" onclick="mfTab(this,'mft-newlead')"><span class="adm-nav-icon">➕</span>Create Lead</div>
     <div class="adm-nav-group">Content</div>
-    <div class="adm-nav-item" onclick="mfTab(this,'mft-videos')"><span class="adm-nav-icon">🎬</span>Videos</div>
-    <div class="adm-nav-item" onclick="mfTab(this,'mft-invest')"><span class="adm-nav-icon">💰</span>Investment Info</div>
-    <div class="adm-nav-item" onclick="mfTab(this,'mft-guidelines')"><span class="adm-nav-icon">📋</span>Guidelines</div>
-    <div class="adm-nav-item" onclick="mfTab(this,'mft-support')"><span class="adm-nav-icon">🛠</span>Support Info</div>
-    <div class="adm-nav-item" onclick="mfTab(this,'mft-ops')"><span class="adm-nav-icon">⚙️</span>Operations Info</div>
+    <div class="adm-nav-item" id="nav-mft-videos" onclick="mfTab(this,'mft-videos')"><span class="adm-nav-icon">🎬</span>Videos</div>
+    <div class="adm-nav-item" id="nav-mft-invest" onclick="mfTab(this,'mft-invest')"><span class="adm-nav-icon">💰</span>Investment Info</div>
+    <div class="adm-nav-item" id="nav-mft-guidelines" onclick="mfTab(this,'mft-guidelines')"><span class="adm-nav-icon">📋</span>Guidelines</div>
+    <div class="adm-nav-item" id="nav-mft-support" onclick="mfTab(this,'mft-support')"><span class="adm-nav-icon">🛠</span>Support Info</div>
+    <div class="adm-nav-item" id="nav-mft-ops" onclick="mfTab(this,'mft-ops')"><span class="adm-nav-icon">⚙️</span>Operations Info</div>
     <div class="adm-nav-group">Finance</div>
-    <div class="adm-nav-item" onclick="mfTab(this,'mft-payments')"><span class="adm-nav-icon">💳</span>Payment Tracking</div>
-    <div class="adm-nav-item" onclick="mfTab(this,'mft-royalty')"><span class="adm-nav-icon">📈</span>Royalty</div>
+    <div class="adm-nav-item" id="nav-mft-payments" onclick="mfTab(this,'mft-payments')"><span class="adm-nav-icon">💳</span>Payment Tracking</div>
+    <div class="adm-nav-item" id="nav-mft-royalty" onclick="mfTab(this,'mft-royalty')"><span class="adm-nav-icon">📈</span>Royalty</div>
     <div class="adm-nav-group">My Account</div>
     <div class="adm-nav-item" onclick="mfTab(this,'mft-profile')"><span class="adm-nav-icon">👤</span>My Profile</div>
+    <div class="adm-nav-group">Franchises</div>
+    <div class="adm-nav-item" id="nav-mft-franchises" onclick="mfTab(this,'mft-franchises')"><span class="adm-nav-icon">🏪</span>Franchises</div>
   </nav>
   <div class="admin-sidebar-footer">
     <a href="budget_barber_franchise_lead.html" target="_blank" style="text-decoration:none;display:block;margin-bottom:6px;">
@@ -560,20 +562,67 @@ input:checked + .slider:before{transform:translateX(16px);}
     <!-- ROYALTY -->
     <div id="mft-royalty" class="admin-tab">
       <div class="adm-page-title">Royalty — My Region</div>
-      <div class="adm-page-sub">Monthly royalty tracking for active franchises in <strong>Andhra Pradesh</strong></div>
-      <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
-        <div class="stat-card"><div class="stat-num" style="color:var(--ok-tx);">₹35K</div><div class="stat-lbl">This Month Collected</div></div>
-        <div class="stat-card"><div class="stat-num" style="color:var(--no-tx);">1</div><div class="stat-lbl">Overdue Royalty</div></div>
-        <div class="stat-card"><div class="stat-num" style="color:var(--hi);">₹2.8L</div><div class="stat-lbl">YTD Royalties</div></div>
+      <div class="adm-page-sub">Full royalty management for active franchises in <strong id="royalty-region-lbl">Andhra Pradesh</strong></div>
+      <div class="stat-grid" style="grid-template-columns:repeat(4,1fr);">
+        <div class="stat-card"><div class="stat-num" style="color:var(--ok-tx);">₹35K</div><div class="stat-lbl">This Month Collected</div><div class="stat-delta" style="color:var(--ok-tx);">2 paid</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--no-tx);">1</div><div class="stat-lbl">Overdue</div><div class="stat-delta" style="color:var(--no-tx);">Action needed</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--wrn-tx);">₹24,160</div><div class="stat-lbl">Pending Amount</div><div class="stat-delta" style="color:var(--wrn-tx);">+ penalties</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--hi);">₹2.8L</div><div class="stat-lbl">YTD Royalties</div><div class="stat-delta" style="color:var(--mut);">Jan–Apr 2026</div></div>
       </div>
+      <!-- Monthly tracker -->
       <div class="adm-card" style="padding:0;overflow:hidden;">
+        <div style="padding:14px 20px;border-bottom:0.5px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div style="font-size:14px;font-weight:700;">Monthly Royalty Tracker</div>
+          <div style="display:flex;gap:8px;">
+            <select style="font-size:12px;padding:5px 10px;border-radius:6px;border:0.5px solid var(--bdr2);background:var(--surf2);"><option>April 2026</option><option>March 2026</option><option>February 2026</option></select>
+            <button class="btn btn-sm btn-i">Export</button>
+          </div>
+        </div>
         <table class="lead-table">
-          <thead><tr><th>Franchise</th><th>Model</th><th>Apr 2026</th><th>Mar 2026</th><th>Feb 2026</th><th>Status</th></tr></thead>
+          <thead><tr><th>Franchise Owner</th><th>City</th><th>Model</th><th>Revenue</th><th>Royalty Due</th><th>Paid On</th><th>Penalty</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody>
-            <tr><td><div style="font-weight:600;">Lakshmi Rao</div><div style="font-size:11px;color:var(--mut);">Vijayawada</div></td><td>3 Chair</td><td><span class="pill p-ok">✓ ₹11,520</span></td><td><span class="pill p-ok">✓ ₹10,800</span></td><td><span class="pill p-ok">✓ ₹9,600</span></td><td><span class="pill p-ok">On Time</span></td></tr>
-            <tr><td><div style="font-weight:600;">Ramesh Naidu</div><div style="font-size:11px;color:var(--mut);">Vijayawada</div></td><td>4 Chair</td><td><span class="pill p-no">Overdue ₹18,400</span></td><td><span class="pill p-ok">✓ ₹17,200</span></td><td><span class="pill p-ok">✓ ₹16,000</span></td><td><span class="pill p-no">Overdue 5d</span></td></tr>
+            <tr><td><div style="font-weight:600;">Lakshmi Rao</div></td><td>Vijayawada</td><td>3 Chair</td><td>₹1,44,000</td><td>₹11,520</td><td style="color:var(--ok-tx);font-size:12px;">Apr 4, 2026</td><td>—</td><td><span class="pill p-ok">✓ Paid</span></td><td><div class="act-btns"><button class="btn btn-xs btn-i" onclick="openMFRoyaltyDetail('lakshmi')">Details</button><button class="btn btn-xs">Receipt</button></div></td></tr>
+            <tr><td><div style="font-weight:600;">Ramesh Naidu</div></td><td>Vijayawada</td><td>4 Chair</td><td>₹1,80,000</td><td>₹14,400</td><td style="color:var(--no-tx);font-size:12px;">Not paid</td><td style="color:var(--no-tx);font-weight:600;">₹7,000 (5d)</td><td><span class="pill p-no">Overdue 5d</span></td><td><div class="act-btns"><button class="btn btn-xs btn-w" onclick="alert('Reminder sent!')">📩 Remind</button><button class="btn btn-xs btn-s" onclick="alert('Marked paid!')">Mark Paid</button></div></td></tr>
+            <tr><td><div style="font-weight:600;">Sai Kiran</div></td><td>Nellore</td><td>3 Chair</td><td>₹1,32,000</td><td>₹10,560</td><td style="color:var(--wrn-tx);font-size:12px;">Due today</td><td>—</td><td><span class="pill p-wrn">Due Today</span></td><td><div class="act-btns"><button class="btn btn-xs btn-w" onclick="alert('Reminder sent!')">📩 Remind</button><button class="btn btn-xs btn-s" onclick="alert('Marked paid!')">Mark Paid</button></div></td></tr>
           </tbody>
         </table>
+      </div>
+      <!-- 6 Month History -->
+      <div class="adm-card" style="padding:0;overflow:hidden;">
+        <div style="padding:14px 20px;border-bottom:0.5px solid var(--bdr);font-size:14px;font-weight:700;">6-Month Collection History</div>
+        <table class="lead-table">
+          <thead><tr><th>Franchise</th><th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>Total</th><th>Trend</th></tr></thead>
+          <tbody>
+            <tr><td><div style="font-weight:600;">Lakshmi Rao</div><div style="font-size:11px;color:var(--mut);">Vijayawada · 3C</div></td><td><span class="pill p-ok" style="font-size:10px;">₹9,600</span></td><td><span class="pill p-ok" style="font-size:10px;">₹9,600</span></td><td><span class="pill p-ok" style="font-size:10px;">₹11,520</span></td><td><span class="pill p-ok" style="font-size:10px;">₹11,520</span></td><td style="font-weight:700;color:var(--ok-tx);">₹42,240</td><td style="color:var(--ok-tx);">↑ Steady</td></tr>
+            <tr><td><div style="font-weight:600;">Ramesh Naidu</div><div style="font-size:11px;color:var(--mut);">Vijayawada · 4C</div></td><td><span class="pill p-ok" style="font-size:10px;">₹12,800</span></td><td><span class="pill p-ok" style="font-size:10px;">₹13,600</span></td><td><span class="pill p-ok" style="font-size:10px;">₹14,400</span></td><td><span class="pill p-no" style="font-size:10px;">Overdue</span></td><td style="font-weight:700;color:var(--wrn-tx);">₹40,800</td><td style="color:var(--no-tx);">⚠ At risk</td></tr>
+            <tr><td><div style="font-weight:600;">Sai Kiran</div><div style="font-size:11px;color:var(--mut);">Nellore · 3C</div></td><td><span class="pill p-ok" style="font-size:10px;">₹8,000</span></td><td><span class="pill p-ok" style="font-size:10px;">₹9,600</span></td><td><span class="pill p-ok" style="font-size:10px;">₹10,560</span></td><td><span class="pill p-wrn" style="font-size:10px;">Due</span></td><td style="font-weight:700;color:var(--ok-tx);">₹28,160</td><td style="color:var(--ok-tx);">↑ Growing</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Record payment -->
+      <div class="adm-card" id="mf-royalty-record">
+        <div class="adm-card-title">Record Royalty Payment</div>
+        <div class="form-2col">
+          <div class="fr"><label class="fl">Franchise</label><select><option>Lakshmi Rao — Vijayawada</option><option>Ramesh Naidu — Vijayawada</option><option>Sai Kiran — Nellore</option></select></div>
+          <div class="fr"><label class="fl">Month</label><select><option>April 2026</option><option>March 2026</option></select></div>
+          <div class="fr"><label class="fl">Amount Received (₹)</label><input type="number" placeholder="e.g. 11520"/></div>
+          <div class="fr"><label class="fl">Payment Mode</label><select><option>UPI</option><option>NEFT/RTGS</option><option>Cheque</option><option>Cash</option></select></div>
+          <div class="fr"><label class="fl">Transaction Ref.</label><input type="text" placeholder="UTR / Cheque No."/></div>
+          <div class="fr"><label class="fl">Payment Date</label><input type="text" placeholder="DD/MM/YYYY"/></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-p" onclick="alert('✓ Payment recorded!')">Record Payment</button>
+          <button class="btn btn-w" onclick="alert('Penalty waived!')">Waive Penalty</button>
+        </div>
+      </div>
+      <!-- Reminders -->
+      <div class="adm-card">
+        <div class="adm-card-title">Reminders</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-w" onclick="alert('Overdue reminders sent!')">📩 Remind All Overdue</button>
+          <button class="btn btn-i" onclick="alert('Due-today reminders sent!')">🔔 Remind Due Today</button>
+          <button class="btn" onclick="alert('Report generated!')">📊 Generate Report</button>
+        </div>
       </div>
     </div>
 
@@ -609,6 +658,40 @@ input:checked + .slider:before{transform:translateX(16px);}
       </div>
     </div>
 
+    <!-- FRANCHISES TAB -->
+    <div id="mft-franchises" class="admin-tab">
+      <div class="adm-page-title">Franchises — My Region</div>
+      <div class="adm-page-sub">All active and setup franchise outlets in <strong id="franchise-region-lbl">Andhra Pradesh</strong></div>
+      <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-card"><div class="stat-num" style="color:var(--ok-tx);">3</div><div class="stat-lbl">Active Franchises</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--inf-tx);">1</div><div class="stat-lbl">Under Setup</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--wrn-tx);">1</div><div class="stat-lbl">Overdue Royalty</div></div>
+      </div>
+      <!-- Franchise list -->
+      <div class="adm-card" style="padding:0;overflow:hidden;">
+        <div style="padding:14px 20px;border-bottom:0.5px solid var(--bdr);font-size:14px;font-weight:700;">Franchise Outlets</div>
+        <table class="lead-table">
+          <thead><tr><th>Owner</th><th>City</th><th>Model</th><th>Launch Date</th><th>Monthly Revenue</th><th>Royalty</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="mf-franchise-tbody"></tbody>
+        </table>
+      </div>
+      <!-- Royalty sub-section -->
+      <div style="margin-top:8px;">
+        <div class="adm-page-title" style="font-size:18px;margin-bottom:4px;">Royalty Summary</div>
+        <div class="adm-page-sub">Quick royalty status for this month across your franchises</div>
+        <div class="adm-card" style="padding:0;overflow:hidden;">
+          <table class="lead-table">
+            <thead><tr><th>Franchise</th><th>Apr 2026</th><th>Mar 2026</th><th>Feb 2026</th><th>Total Paid</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><div style="font-weight:600;">Lakshmi Rao</div><div style="font-size:11px;color:var(--mut);">Vijayawada · 3 Chair</div></td><td><span class="pill p-ok">✓ ₹11,520</span></td><td><span class="pill p-ok">✓ ₹10,800</span></td><td><span class="pill p-ok">✓ ₹9,600</span></td><td style="font-weight:700;color:var(--ok-tx);">₹31,920</td><td><span class="pill p-ok">On Time</span></td><td><button class="btn btn-xs btn-i" onclick="openMFRoyaltyDetail('lakshmi')">Details</button></td></tr>
+              <tr><td><div style="font-weight:600;">Ramesh Naidu</div><div style="font-size:11px;color:var(--mut);">Vijayawada · 4 Chair</div></td><td><span class="pill p-no">Overdue ₹14,400</span></td><td><span class="pill p-ok">✓ ₹13,600</span></td><td><span class="pill p-ok">✓ ₹12,800</span></td><td style="font-weight:700;color:var(--wrn-tx);">₹26,400</td><td><span class="pill p-no">Overdue 5d</span></td><td><div class="act-btns"><button class="btn btn-xs btn-w" onclick="alert('Reminder sent!')">📩</button><button class="btn btn-xs btn-s" onclick="alert('Marked paid!')">Paid</button></div></td></tr>
+              <tr><td><div style="font-weight:600;">Sai Kiran</div><div style="font-size:11px;color:var(--mut);">Nellore · 3 Chair</div></td><td><span class="pill p-wrn">Due ₹10,560</span></td><td><span class="pill p-ok">✓ ₹9,600</span></td><td><span class="pill p-ok">✓ ₹8,000</span></td><td style="font-weight:700;color:var(--ok-tx);">₹17,600</td><td><span class="pill p-wrn">Due Today</span></td><td><div class="act-btns"><button class="btn btn-xs btn-w" onclick="alert('Reminder sent!')">📩</button><button class="btn btn-xs btn-s" onclick="alert('Marked paid!')">Paid</button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </div><!-- admin-content -->
 </div><!-- admin-main -->
 </div><!-- admin-wrap -->
@@ -630,7 +713,9 @@ input:checked + .slider:before{transform:translateX(16px);}
       <div class="adm-tabs">
         <button class="adm-tab-btn active" onclick="mfLdmTab(this,'mfldm-overview')">Overview</button>
         <button class="adm-tab-btn" onclick="mfLdmTab(this,'mfldm-progress')">Progress</button>
+        <button class="adm-tab-btn" onclick="mfLdmTab(this,'mfldm-payment')">Payment</button>
         <button class="adm-tab-btn" onclick="mfLdmTab(this,'mfldm-notes')">Notes</button>
+        <button class="adm-tab-btn" onclick="mfLdmTab(this,'mfldm-timeline')">Timeline</button>
       </div>
       <div id="mfldm-overview" class="admin-tab active">
         <div class="card"><div class="sec">Lead Info</div>
@@ -638,30 +723,70 @@ input:checked + .slider:before{transform:translateX(16px);}
           <div class="irow"><span class="ilbl">City</span><span class="ival" id="mf-ldm-city">—</span></div>
           <div class="irow"><span class="ilbl">Language</span><span class="ival" id="mf-ldm-lang">—</span></div>
           <div class="irow"><span class="ilbl">Model Interest</span><span class="ival" id="mf-ldm-model">—</span></div>
-          <div class="irow"><span class="ilbl">Source</span><span class="ival" id="mf-ldm-source">—</span></div>
+          <div class="irow"><span class="ilbl">Lead Source</span><span class="ival" id="mf-ldm-source">—</span></div>
+          <div class="irow"><span class="ilbl">Step Progress</span><span class="ival" id="mf-ldm-steplbl">—</span></div>
         </div>
-        <div style="display:flex;gap:8px;margin-top:8px;">
-          <button class="btn btn-sm btn-p" onclick="alert('Mark as Project Active')">✓ Mark Active</button>
-          <button class="btn btn-sm btn-d" onclick="alert('Close lead')">Close Lead</button>
+        <div class="card"><div class="sec">Update Status</div>
+          <div class="fr"><label class="fl">Change Status</label>
+            <select id="mf-ldm-status-sel">
+              <option value="new">New</option>
+              <option value="in-progress">In Progress</option>
+              <option value="project">Project Active</option>
+              <option value="closed">Closed</option>
+            </select>
+          </div>
+          <div class="fr"><label class="fl">Assigned Model</label>
+            <select id="mf-ldm-model-sel"><option>Not Decided</option><option>3 Chair</option><option>4 Chair</option><option>5 Chair</option></select>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button class="btn btn-sm btn-p" onclick="saveMFLdmStatus()">Save Changes</button>
+            <button class="btn btn-sm btn-d" onclick="closeMFLead_modal()">Close Lead</button>
+          </div>
         </div>
       </div>
       <div id="mfldm-progress" class="admin-tab">
-        <div class="card"><div class="sec">Step Progress</div>
+        <div class="card"><div class="sec">Step-by-Step Progress</div>
           <div id="mf-ldm-steps-list"></div>
         </div>
       </div>
+      <div id="mfldm-payment" class="admin-tab">
+        <div class="card"><div class="sec">Payment Status</div>
+          <div id="mf-ldm-payment-content">
+            <div class="irow"><span class="ilbl">Token (₹20,000)</span><span id="mf-ldm-pay1" class="ival">—</span></div>
+            <div class="irow"><span class="ilbl">Cheque</span><span id="mf-ldm-pay2" class="ival">—</span></div>
+            <div class="irow"><span class="ilbl">Marc Chairs</span><span id="mf-ldm-pay3" class="ival">—</span></div>
+            <div class="irow"><span class="ilbl">Cash</span><span id="mf-ldm-pay4" class="ival">—</span></div>
+          </div>
+        </div>
+        <div class="card"><div class="sec">Record Payment</div>
+          <div class="fr"><label class="fl">Payment Step</label>
+            <select><option>Token</option><option>Cheque</option><option>Marc Chairs</option><option>Cash</option></select>
+          </div>
+          <div class="fr"><label class="fl">Amount (₹)</label><input type="number" placeholder="Enter amount"/></div>
+          <div class="fr"><label class="fl">Mode</label><select><option>UPI</option><option>Cheque</option><option>Cash</option><option>NEFT</option></select></div>
+          <button class="btn btn-sm btn-p" onclick="alert('✓ Payment recorded!')">Record Payment</button>
+        </div>
+      </div>
       <div id="mfldm-notes" class="admin-tab">
+        <div class="card"><div class="sec">Activity Log</div>
+          <div id="mf-ldm-notes-log" style="font-size:12px;color:var(--mut);margin-bottom:10px;"></div>
+        </div>
         <div class="card">
           <div class="sec">Add Note</div>
-          <textarea style="width:100%;min-height:80px;margin-bottom:8px;" placeholder="Add a note about this lead…"></textarea>
-          <button class="btn btn-sm btn-p" onclick="alert('✓ Note saved!')">Save Note</button>
+          <textarea id="mf-ldm-note-input" style="width:100%;min-height:80px;margin-bottom:8px;font-family:inherit;font-size:13px;padding:8px;border:0.5px solid var(--bdr2);border-radius:var(--rad);background:var(--surf2);resize:vertical;" placeholder="Add a note about this lead…"></textarea>
+          <button class="btn btn-sm btn-p" onclick="saveMFNote()">Save Note</button>
+        </div>
+      </div>
+      <div id="mfldm-timeline" class="admin-tab">
+        <div class="card"><div class="sec">Lead Timeline</div>
+          <div id="mf-ldm-timeline-content"></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── MF LEAD DATA (region-filtered: Andhra Pradesh only) ──
 const MF_LEADS=[
   {id:1,name:'Ramesh Naidu',phone:'+91 91234 56789',city:'Vijayawada',step:8,status:'in-progress',lang:'Telugu',model:'4 Chair',source:'Referral'},
@@ -691,7 +816,7 @@ const MF_ACCOUNTS={
   'priyanka@mf.budgetbarber':{pass:'MF@KL2026',name:'Priyanka Menon',region:'Kerala',cities:'Kochi, Trivandrum'},
 };
 
-let MF_ALL_TABS=['mft-dashboard','mft-leads','mft-newlead','mft-videos','mft-invest','mft-guidelines','mft-support','mft-ops','mft-payments','mft-royalty','mft-profile'];
+let MF_ALL_TABS=['mft-dashboard','mft-leads','mft-newlead','mft-videos','mft-invest','mft-guidelines','mft-support','mft-ops','mft-payments','mft-royalty','mft-profile','mft-franchises'];
 let MF_AVID_TABS=['mfv-upload','mfv-manage','mfv-lang','mfi3','mfi4','mfi5','mfi-roi','mfi-pay'];
 
 function mfTab(btn,tabId){
@@ -702,6 +827,7 @@ function mfTab(btn,tabId){
   if(tabId==='mft-leads')buildMFLeadTable();
   if(tabId==='mft-guidelines')buildMFGL();
   if(tabId==='mft-videos')buildMFVidList();
+  if(tabId==='mft-franchises')buildMFFranchiseTable();
 }
 function mfAvTab(btn,tabId){
   MF_AVID_TABS.forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
@@ -731,24 +857,140 @@ function buildMFLeadTable(){
 function openMFLDM(id){
   const l=MF_LEADS.find(x=>x.id===id);if(!l)return;
   document.getElementById('mf-ldm-name').textContent=l.name;
-  document.getElementById('mf-ldm-meta').textContent=l.phone+' · '+l.city;
+  document.getElementById('mf-ldm-meta').textContent=l.phone+' · '+l.city+' · '+(l.model||'—');
   document.getElementById('mf-ldm-phone').textContent=l.phone;
   document.getElementById('mf-ldm-city').textContent=l.city;
   document.getElementById('mf-ldm-lang').textContent=l.lang;
   document.getElementById('mf-ldm-model').textContent=l.model;
   document.getElementById('mf-ldm-source').textContent=l.source;
+  document.getElementById('mf-ldm-steplbl').textContent='Step '+l.step+' / 10';
+  // status & model selects
+  const ss=document.getElementById('mf-ldm-status-sel');if(ss)ss.value=l.status;
+  const ms=document.getElementById('mf-ldm-model-sel');if(ms)ms.value=l.model||'Not Decided';
+  // pill
   const stMap={'new':'p-inf','in-progress':'p-wrn','project':'p-ok','closed':'p-no'};
   const pill=document.getElementById('mf-ldm-pill');
   pill.className='pill '+(stMap[l.status]||'p-inf');
   pill.textContent=l.status.replace('-',' ').replace(/\b\w/g,c=>c.toUpperCase());
+  // progress steps
   const steps=['Language Selection','Vision Video','Salon 360°','Investment Details','ROI Overview','Support','Operations','Staff Welfare','Royalty','Token Payment'];
   const sl=document.getElementById('mf-ldm-steps-list');
-  if(sl){sl.innerHTML='';steps.forEach((s,i)=>{const done=i<l.step;const div=document.createElement('div');div.style.cssText='display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:0.5px solid var(--bdr);font-size:13px;';div.innerHTML=`<span style="font-size:14px;">${done?'✅':'⬜'}</span><span style="${done?'color:var(--ok-tx);font-weight:600;':''}">${s}</span>`;sl.appendChild(div);});}
+  if(sl){sl.innerHTML='';steps.forEach((s,i)=>{const done=i<l.step;const div=document.createElement('div');div.style.cssText='display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:0.5px solid var(--bdr);font-size:13px;';div.innerHTML=`<span style="font-size:15px;">${done?'✅':'⬜'}</span><span style="${done?'color:var(--ok-tx);font-weight:600;':''}">${s}</span><span style="margin-left:auto;font-size:11px;color:var(--hnt);">Step ${i+1}</span>`;sl.appendChild(div);});}
+  // payment status
+  const payStatus=l.step>=10?'<span class="pill p-ok">✓ Paid</span>':'<span class="pill p-wrn">Pending</span>';
+  const el1=document.getElementById('mf-ldm-pay1');if(el1)el1.innerHTML=l.step>=10?'<span class="pill p-ok">✓ Paid</span>':'<span class="pill p-wrn">Pending</span>';
+  const el2=document.getElementById('mf-ldm-pay2');if(el2)el2.innerHTML=l.status==='project'?'<span class="pill p-ok">✓ Paid</span>':'<span class="pill p-no">—</span>';
+  const el3=document.getElementById('mf-ldm-pay3');if(el3)el3.innerHTML='<span class="pill p-no">—</span>';
+  const el4=document.getElementById('mf-ldm-pay4');if(el4)el4.innerHTML='<span class="pill p-no">—</span>';
+  // notes log
+  const nl=document.getElementById('mf-ldm-notes-log');
+  if(nl){nl.innerHTML=l.notes&&l.notes.length?l.notes.map(n=>`<div style="padding:6px 0;border-bottom:0.5px solid var(--bdr);"><div style="font-weight:600;font-size:12px;">${n.date}</div><div>${n.text}</div></div>`).join(''):'<div style="color:var(--hnt);font-size:12px;">No notes yet.</div>';}
+  // timeline
+  const tl=document.getElementById('mf-ldm-timeline-content');
+  if(tl){
+    const events=[
+      {date:'Registration',done:true,note:'Lead registered'},
+      {date:'Language Selected',done:l.step>=1,note:l.lang},
+      {date:'Vision Video',done:l.step>=2,note:'Watched'},
+      {date:'Investment Reviewed',done:l.step>=4,note:l.model||'—'},
+      {date:'Guidelines Accepted',done:l.step>=9,note:'All accepted'},
+      {date:'Token Payment',done:l.step>=10,note:'₹20,000 paid'},
+    ];
+    tl.innerHTML=events.map(e=>`<div class="tl-item"><div class="tl-line"><div class="tl-dot" style="background:${e.done?'var(--ok-tx)':'var(--bdr2)'};"></div></div><div class="tl-ct"><div class="tl-l" style="${e.done?'':'color:var(--hnt);'}">${e.date}</div><div class="tl-s">${e.note}</div></div></div>`).join('');
+  }
+  // open modal, reset tabs
   document.getElementById('mf-lead-modal').classList.add('open');
   document.querySelectorAll('.ldm-body .adm-tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelector('.ldm-body .adm-tab-btn').classList.add('active');
   document.querySelectorAll('.ldm-body .admin-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('mfldm-overview').classList.add('active');
+}
+function saveMFLdmStatus(){
+  const name=document.getElementById('mf-ldm-name').textContent;
+  const st=(document.getElementById('mf-ldm-status-sel')||{}).value||'';
+  const mo=(document.getElementById('mf-ldm-model-sel')||{}).value||'';
+  const l=MF_LEADS.find(x=>x.name===name);
+  if(l){l.status=st;l.model=mo;}
+  const stMap={'new':'p-inf','in-progress':'p-wrn','project':'p-ok','closed':'p-no'};
+  const pill=document.getElementById('mf-ldm-pill');
+  if(pill){pill.className='pill '+(stMap[st]||'p-inf');pill.textContent=st.replace('-',' ').replace(/\b\w/g,c=>c.toUpperCase());}
+  alert('✓ Lead updated!');buildMFLeadTable();
+}
+function closeMFLead_modal(){
+  const name=document.getElementById('mf-ldm-name').textContent;
+  const l=MF_LEADS.find(x=>x.name===name);
+  if(l&&confirm('Close lead for '+l.name+'?')){l.status='closed';buildMFLeadTable();closeMFLDM();alert(l.name+' marked as Closed.');}
+}
+function saveMFNote(){
+  const inp=document.getElementById('mf-ldm-note-input');if(!inp||!inp.value.trim())return;
+  const name=document.getElementById('mf-ldm-name').textContent;
+  const l=MF_LEADS.find(x=>x.name===name);
+  if(l){if(!l.notes)l.notes=[];l.notes.unshift({date:new Date().toLocaleDateString('en-IN'),text:inp.value.trim()});inp.value='';}
+  const nl=document.getElementById('mf-ldm-notes-log');
+  if(nl&&l&&l.notes){nl.innerHTML=l.notes.map(n=>`<div style="padding:6px 0;border-bottom:0.5px solid var(--bdr);"><div style="font-weight:600;font-size:12px;">${n.date}</div><div>${n.text}</div></div>`).join('');}
+  alert('✓ Note saved!');
+}
+function openMFRoyaltyDetail(id){alert('Royalty detail for '+id+'...');}
+
+// ── MF FRANCHISE TABLE ──
+const MF_FRANCHISES=[
+  {id:1,name:'Lakshmi Rao',phone:'+91 70901 23456',city:'Vijayawada',model:'3 Chair',launch:'Jan 20, 2026',revenue:'₹1,44,000',royalty:'paid',status:'active'},
+  {id:2,name:'Ramesh Naidu',phone:'+91 91234 56789',city:'Vijayawada',model:'4 Chair',launch:'Mar 10, 2026',revenue:'₹1,80,000',royalty:'overdue',status:'active'},
+  {id:3,name:'Sai Kiran',phone:'+91 44567 89012',city:'Nellore',model:'3 Chair',launch:'Feb 1, 2026',revenue:'₹1,32,000',royalty:'due',status:'active'},
+  {id:4,name:'Sunita Devi',phone:'+91 80123 45678',city:'Guntur',model:'3 Chair',launch:'—',revenue:'—',royalty:'—',status:'setup'},
+];
+function buildMFFranchiseTable(){
+  const tbody=document.getElementById('mf-franchise-tbody');if(!tbody)return;tbody.innerHTML='';
+  const statusMap={active:{lbl:'Active',cls:'p-ok'},setup:{lbl:'Under Setup',cls:'p-inf'}};
+  const royaltyMap={paid:{lbl:'✓ Paid',cls:'p-ok'},overdue:{lbl:'Overdue',cls:'p-no'},due:{lbl:'Due Today',cls:'p-wrn'},'—':{lbl:'—',cls:'p-inf'}};
+  MF_FRANCHISES.forEach(f=>{
+    const st=statusMap[f.status]||{lbl:f.status,cls:'p-inf'};
+    const ry=royaltyMap[f.royalty]||{lbl:f.royalty,cls:'p-inf'};
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><div style="font-weight:600;">${f.name}</div><div style="font-size:11px;color:var(--mut);">${f.phone}</div></td>
+      <td>${f.city}</td><td>${f.model}</td><td style="font-size:12px;">${f.launch}</td>
+      <td style="font-weight:600;">${f.revenue}</td>
+      <td><span class="pill ${ry.cls}">${ry.lbl}</span></td>
+      <td><span class="pill ${st.cls}">${st.lbl}</span></td>
+      <td><div class="act-btns">
+        <button class="btn btn-xs btn-i" onclick="openMFFranchiseDetail(${f.id})">View</button>
+        <button class="btn btn-xs btn-w" onclick="alert('Reminder sent!')">📩</button>
+      </div></td>`;
+    tbody.appendChild(tr);
+  });
+}
+function openMFFranchiseDetail(id){
+  const f=MF_FRANCHISES.find(x=>x.id===id);if(!f)return;
+  alert('Franchise: '+f.name+'\nCity: '+f.city+'\nModel: '+f.model+'\nLaunch: '+f.launch+'\nRevenue: '+f.revenue+'\nRoyalty: '+f.royalty);
+}
+
+// ── PERMISSION SYSTEM ──
+// MF_PERMS mirrors what admin sets. In production, loaded from server on login.
+const MF_PERMS={
+  'view-leads':true,'create-leads':true,'edit-leads':true,
+  'videos':false,'invest':false,'guidelines':true,'support':false,'ops':false,
+  'payments':true,'royalty':true,'royalty-edit':true
+};
+const PERM_NAV_MAP={
+  'view-leads':['nav-mft-leads'],'create-leads':['nav-mft-newlead'],'edit-leads':[],
+  'videos':['nav-mft-videos'],'invest':['nav-mft-invest'],
+  'guidelines':['nav-mft-guidelines'],'support':['nav-mft-support'],'ops':['nav-mft-ops'],
+  'payments':['nav-mft-payments'],'royalty':['nav-mft-royalty'],
+  'royalty-edit':[]
+};
+const PERM_CONTENT_MAP={
+  'royalty-edit':'mf-royalty-record'
+};
+function applyMFPermissions(){
+  Object.entries(MF_PERMS).forEach(([key,allowed])=>{
+    const navIds=PERM_NAV_MAP[key]||[];
+    navIds.forEach(navId=>{
+      const el=document.getElementById(navId);
+      if(el){el.style.display=allowed?'flex':'none';}
+    });
+    const contentId=PERM_CONTENT_MAP[key];
+    if(contentId){const el=document.getElementById(contentId);if(el)el.style.display=allowed?'block':'none';}
+  });
 }
 function closeMFLDM(){document.getElementById('mf-lead-modal').classList.remove('open');}
 function mfLdmTab(btn,tabId){
@@ -795,6 +1037,9 @@ function doMFLogin(){
     document.getElementById('mf-user-name').textContent=acc.name;
     document.getElementById('dash-region').textContent=acc.region;
     document.getElementById('prof-name').value=acc.name;
+    const rl=document.getElementById('royalty-region-lbl');if(rl)rl.textContent=acc.region;
+    const fl=document.getElementById('franchise-region-lbl');if(fl)fl.textContent=acc.region;
+    applyMFPermissions();
   } else {
     if(err)err.style.display='block';
   }
