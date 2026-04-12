@@ -1415,5 +1415,20 @@ function sendReminder(id){alert('📩 Royalty reminder sent to '+id+'!');}
 function markRoyaltyPaid(id){alert('✓ Royalty marked as paid for '+id+'!');}
 function openRoyaltyDetail(id){alert('Opening full royalty detail for '+id+'...');}
 function togglePw(id,pw){var el=document.getElementById(id);if(!el)return;if(el.textContent.includes('•')){el.textContent=pw;el.nextElementSibling.textContent='Hide';}else{el.textContent='••••••••';el.nextElementSibling.textContent='Show';}}
-function openMFDetail(id){alert('Editing MF partner #'+id+' — full edit modal would open here.');}
-function createMFLogin(){var n=(documen
+function createMFLogin(){var n=(document.getElementById('mf-name')||{}).value||'';var e=(document.getElementById('mf-email')||{}).value||'';var r=(document.getElementById('mf-region')||{}).value||'';var p=(document.getElementById('mf-pass')||{}).value||'';var p2=(document.getElementById('mf-pass2')||{}).value||'';if(!n||!e||!r){alert('Please fill in Name, Email and Region.');return;}if(p!==p2){alert('Passwords do not match.');return;}if(p.length<8){alert('Password must be at least 8 characters.');return;}alert('✓ Master Franchise login created for '+n+' ('+r+')!\nCredentials sent to: '+e);}
+
+function doAdminLogin(){
+  var user=(document.getElementById('adm-user')||{}).value||'';
+  var pass=(document.getElementById('adm-pass')||{}).value||'';
+  var err=document.getElementById('adm-err');
+  if(user.trim().toLowerCase()==='admin' && pass==='Admin@2026'){
+    if(err)err.style.display='none';
+    document.getElementById('admin-login-screen').style.display='none';
+    document.getElementById('admin-main-wrap').style.display='flex';
+  } else {
+    if(err)err.style.display='block';
+  }
+}
+</script>
+</body>
+</html>
